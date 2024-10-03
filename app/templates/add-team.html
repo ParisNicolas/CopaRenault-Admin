@@ -1,0 +1,138 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Agregar Equipo</title>
+</head>
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <form id="teamForm" action="/add_team" method="POST">
+                        <div class="form-group">
+                            <label for="Equipo">Equipo</label>
+                            <input type="text" class="form-control" id="Equipo" name="Equipo" placeholder="Equipo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="Colegio">Colegio</label>
+                            <input type="text" class="form-control" id="Colegio" name="Colegio" placeholder="Colegio" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="Deporte">Deporte</label>
+                            <select class="form-control" id="Deporte" name="Deporte" required>
+                                <option value="Futbol">Futbol</option>
+                                <option value="Basquet">Basquet</option>
+                                <option value="Voley">Voley</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="Categoria">Categoría</label>
+                            <select class="form-control" id="Categoria" name="Categoria" required>
+                                <option value="Masculino mayor">Masculino mayor</option>
+                                <option value="Masculino menor">Masculino menor</option>
+                                <option value="Femenino mayor">Femenino mayor</option>
+                                <option value="Femenino menor">Femenino menor</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="Telefono">Teléfono</label>
+                            <input type="tel" class="form-control" id="Telefono" name="Telefono" placeholder="Teléfono (sin guiones)" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="DNI">DNI</label>
+                            <input type="text" class="form-control" id="DNI" name="DNI" placeholder="DNI (sin puntos)" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="Correo">Correo</label>
+                            <input type="email" class="form-control" id="Correo" name="Correo" placeholder="Correo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="Miembros">Miembros</label>
+                            <input type="number" class="form-control" id="Miembros" name="Miembros" placeholder="Miembros (int)" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="Acompañantes">Acompañantes</label>
+                            <input type="number" class="form-control" id="Acompañantes" name="Acompañantes" placeholder="Acompañantes (int)" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="Vegetariano">Vegetariano</label>
+                            <select class="form-control" id="Vegetariano" name="Vegetariano" required>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="NO">NINGUNO</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="Celiaco">Celiaco</label>
+                            <select class="form-control" id="Celiaco" name="Celiaco" required>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="NO">NINGUNO</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="Diabetico">Diabético</label>
+                            <select class="form-control" id="Diabetico" name="Diabetico" required>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="NO">NINGUNO</option>
+                            </select>
+                        </div>
+                        <button type="submit" id="submitButton" class="btn btn-primary btn-block" disabled>Guardar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('teamForm');
+    const submitButton = document.getElementById('submitButton');
+    
+    // Verifica si todos los campos requeridos están completos
+    function checkFormCompletion() {
+        const requiredFields = form.querySelectorAll('input[required], select[required]');
+        let allFilled = true;
+
+        requiredFields.forEach(field => {
+            if (!field.value.trim()) {
+                allFilled = false;
+            }
+        });
+
+        submitButton.disabled = !allFilled;
+    }
+
+    // Mostrar alerta si el formulario no está completo
+    form.addEventListener('submit', function(event) {
+        if (submitButton.disabled) {
+            event.preventDefault();
+            alert('Por favor, completa todos los campos vacíos antes de enviar.');
+        }
+    });
+
+    // Revisa el formulario cada vez que cambia un campo
+    form.addEventListener('input', checkFormCompletion);
+
+    // Llama a la función una vez al cargar la página
+    checkFormCompletion();
+});
+</script>
+
+
+{% endblock %}

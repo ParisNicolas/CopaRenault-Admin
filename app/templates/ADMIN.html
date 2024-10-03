@@ -1,0 +1,315 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<style>
+    .table-container {
+        display: none;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 36px;
+        /* Reducción al 60% de 60px */
+        height: 20px;
+        /* Reducción al 60% de 34px */
+    }
+
+    /* Esconder el checkbox original */
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    /* Slider */
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 20px;
+        /* Ajustado para mantener proporciones */
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        /* Reducción al 60% de 26px */
+        width: 16px;
+        /* Reducción al 60% de 26px */
+        left: 2px;
+        /* Ajustado para mantener proporciones */
+        bottom: 2px;
+        /* Ajustado para mantener proporciones */
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
+
+    input:checked+.slider {
+        background-color: #4CAF50;
+    }
+
+    input:checked+.slider:before {
+        transform: translateX(16px);
+        /* Ajustado para el nuevo tamaño */
+    }
+
+    /* Estilo de las etiquetas */
+    .slider-label {
+        margin-left: 8px;
+        /* Ajustado para el nuevo tamaño */
+        font-size: 14px;
+        /* Ajustado para el nuevo tamaño */
+        vertical-align: middle;
+    }
+</style>
+
+
+<div class="col-md-16" style="margin: 40px;">
+    <div class="admin_bar"
+        style="border: 1px solid #ccc; padding: 20px; border-radius: 5px; display: flex; justify-content: space-between; align-items: flex-start;">
+        <div class="button-container" style="display: flex; flex-direction: row; margin-bottom: 10px;">
+            <a href="{{ url_for('add_team') }}" class="btn btn-success" style="margin-right: 10px;">Agregar un
+                equipo</a>
+            <a class="btn btn-info" style="margin-right: 10px;">NOTIFICACION</a>
+            <a class="btn btn-primary" href="{{ url_for('estadisticas') }}">ESTADISTICAS</a>
+        </div>
+        <div class="filter-container" style="display: flex; align-items: center; margin-bottom: 20px;">
+            <input type="text" id="searchInput" placeholder="Filtrar..." class="form-control" style="width: 160px;">
+            
+            <div class="dropdown" style="margin-left: 10px;width: 160px;">
+                <select id="categoriaFilter" class="form-control">
+                    <option value="">Todas las Categorías</option>
+                    <option value="Masculino mayor">Masculino mayor</option>
+                    <option value="Masculino menor">Masculino menor</option>
+                    <option value="Femenino mayor">Femenino mayor</option>
+                    <option value="Femenino menor">Femenino menor</option>
+                </select>
+            </div>
+
+            <div class="dropdown" style="margin-left: 10px;width: 160px;">
+                <select id="deporteFilter" class="form-control">
+                    <option value="">Todos los Deportes</option>
+                    <option value="Futbol">Futbol</option>
+                    <option value="Basquet">Basquet</option>
+                    <option value="Voley">Voley</option>
+                </select>
+            </div>
+
+            <button id="applyFiltersBtn" class="btn btn-primary" style="margin-left: 10px;">BUSCAR</button>
+        </div>
+        
+    </div>
+
+    <div class="checkbox-container" style="margin-top: 10px; margin-left: 20px;">
+        <div>
+            <label class="switch">
+                <input type="checkbox" id="checkbox1" checked onclick="toggleTable(this, 'table1')">
+                <span class="slider round"></span>
+            </label>
+            <label for="checkbox1" class="slider-label" style="margin-top: 5px;">Mostrar Tabla pre-inscripcion</label>
+        </div>
+        <div>
+            <label class="switch">
+                <input type="checkbox" id="checkbox2" checked onclick="toggleTable(this, 'table2')">
+                <span class="slider round"></span>
+            </label>
+            <label for="checkbox2" class="slider-label" style="margin-top: 5px;">Mostrar Tabla inscriptos</label>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div id="table1" class="table-container">
+    <table class="table table-striped table-hover table-bordered table-sm bg-white">
+        <thead>
+            <tr>
+                <td>Equipo</td>
+                <td>Colegio</td>
+                <td>Deporte</td>
+                <td>Categoria</td>
+                <td>Telefono</td>
+                <td>DNI</td>
+                <td>Correo</td>
+                <td>Miembros</td>
+                <td>Acompañantes</td>
+                <td>Vegetariano</td>
+                <td>Celiaco</td>
+                <td>Diabetico</td>
+                <td>-------</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for inf in Table1_inf %}
+            <tr>
+                <td>{{inf.1}}</td>
+                <td>{{inf.2}}</td>
+                <td>{{inf.3}}</td>
+                <td>{{inf.4}}</td>
+                <td>{{inf.5}}</td>
+                <td>{{inf.6}}</td>
+                <td>{{inf.7}}</td>
+                <td>{{inf.8}}</td>
+                <td>{{inf.9}}</td>
+                <td>{{inf.10}}</td>
+                <td>{{inf.11}}</td>
+                <td>{{inf.12}}</td>
+                <td>
+
+                    <a href="{{ url_for('cargar_team', id=inf[0]) }}" class="btn btn-success"
+                        onclick="return confirm('¿Estás seguro de que deseas confirmar este equipo?');">OK</a>
+                    <a href="{{ url_for('get_team', id=inf[0]) }}" class="btn btn-secondary">Editar</a>
+                    <a href="{{ url_for('delete_team', id=inf[0]) }}" class="btn btn-danger btn-delete"
+                        onclick="return confirm('¿Estás seguro de que deseas eliminar este equipo?');">ELIMINAR</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+<div id="table2" class="table-container">
+    <table class="table table-striped table-hover table-bordered table-sm bg-white">
+        <thead>
+            <tr>
+                <td>Equipo</td>
+                <td>Colegio</td>
+                <td>Deporte</td>
+                <td>Categoria</td>
+                <td>Telefono</td>
+                <td>DNI</td>
+                <td>Correo</td>
+                <td>Miembros</td>
+                <td>Acompañantes</td>
+                <td>Vegetariano</td>
+                <td>Celiaco</td>
+                <td>Diabetico</td>
+                <td>SCORE</td>
+                <td>-------</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for inf in Table2_inf %}
+            <tr>
+                <td>{{inf.1}}</td>
+                <td>{{inf.2}}</td>
+                <td>{{inf.3}}</td>
+                <td>{{inf.4}}</td>
+                <td>{{inf.5}}</td>
+                <td>{{inf.6}}</td>
+                <td>{{inf.7}}</td>
+                <td>{{inf.8}}</td>
+                <td>{{inf.9}}</td>
+                <td>{{inf.10}}</td>
+                <td>{{inf.11}}</td>
+                <td>{{inf.12}}</td>
+                <td>{{inf.13}}</td>
+                <td>
+
+                    <a href="{{ url_for('add_pts', id=inf[0]) }}" class="btn btn-success">+PTS</a>
+                    <a class="btn btn-primary" style="width: 21%; padding: 8px;"
+                        href="{{ url_for('get_team2', id=inf[0]) }}"><img src="static/images/config.png"
+                            style="width: 100%;" /></a>
+
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function toggleTable(checkbox, tableId) {
+        var table = document.getElementById(tableId);
+        if (checkbox.checked) {
+            table.style.display = 'block';
+        } else {
+            table.style.display = 'none';
+        }
+    }
+
+    function initTables() {
+        var checkbox1 = document.getElementById('checkbox1');
+        var checkbox2 = document.getElementById('checkbox2');
+
+        // Verificar si es la primera vez que se carga la página
+        if (localStorage.getItem('firstLoad') === null) {
+            checkbox1.checked = true; // Activar el checkbox solo la primera vez
+            checkbox1.checked = true;
+            localStorage.setItem('firstLoad', 'false'); // Marcar que ya no es la primera vez
+        }
+
+        toggleTable(checkbox1, 'table1');
+        toggleTable(checkbox2, 'table2');
+    }
+
+    window.onload = initTables;
+
+
+
+    function filterTables() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const categoriaFilter = document.getElementById('categoriaFilter').value.toLowerCase();
+            const deporteFilter = document.getElementById('deporteFilter').value.toLowerCase();
+
+            // Filtrar la tabla 1
+            const table1Rows = document.querySelectorAll('#table1 tbody tr');
+            table1Rows.forEach(row => {
+                const equipo = row.cells[0].textContent.toLowerCase();
+                const colegio = row.cells[1].textContent.toLowerCase();
+                const categoria = row.cells[3].textContent.toLowerCase();
+                const deporte = row.cells[2].textContent.toLowerCase();
+
+                const matchesSearch = equipo.includes(searchInput) || colegio.includes(searchInput);
+                const matchesCategoria = categoriaFilter === "" || categoria === categoriaFilter;
+                const matchesDeporte = deporteFilter === "" || deporte === deporteFilter;
+
+                if (matchesSearch && matchesCategoria && matchesDeporte) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            // Filtrar la tabla 2
+            const table2Rows = document.querySelectorAll('#table2 tbody tr');
+            table2Rows.forEach(row => {
+                const equipo = row.cells[0].textContent.toLowerCase();
+                const colegio = row.cells[1].textContent.toLowerCase();
+                const categoria = row.cells[3].textContent.toLowerCase();
+                const deporte = row.cells[2].textContent.toLowerCase();
+
+                const matchesSearch = equipo.includes(searchInput) || colegio.includes(searchInput);
+                const matchesCategoria = categoriaFilter === "" || categoria === categoriaFilter;
+                const matchesDeporte = deporteFilter === "" || deporte === deporteFilter;
+
+                if (matchesSearch && matchesCategoria && matchesDeporte) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            // Reiniciar las opciones de los filtros
+            document.getElementById('categoriaFilter').value = '';
+            document.getElementById('deporteFilter').value = '';
+            document.getElementById('searchInput').value = '';
+        }
+
+        document.getElementById('applyFiltersBtn').addEventListener('click', filterTables);
+
+        window.onload = initTables;
+</script>
+
+{% endblock %}
