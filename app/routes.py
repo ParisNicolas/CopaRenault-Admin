@@ -5,7 +5,6 @@ from app import db
 #from app.models import Carrito, Producto, CarritoProducto, Transaccion
 #from app.forms import TarjetaForm
 
-
 main = Blueprint('main', __name__, template_folder='templates')
 
 @main.route('/')
