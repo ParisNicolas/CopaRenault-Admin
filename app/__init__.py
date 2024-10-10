@@ -24,16 +24,18 @@ def create_app():
     login_manager.init_app(app)
 
     """Blueprints"""
-    from app.routes import main
+    from app.routes.main import main
+    from app.routes.incription import teams_bp
     app.register_blueprint(main)
+    app.register_blueprint(teams_bp)
 
     
     """Get user in each request for more info"""
-    from app.models import User
+    from app.models import Usuario
     login_manager.login_view = "main.login"
     login_manager.login_message_category = "danger"
     @login_manager.user_loader
     def load_user(user_id):
-        return User.query.get(int(user_id))
+        return Usuario.query.get(int(user_id))
 
     return app

@@ -76,10 +76,8 @@
     <div class="admin_bar"
         style="border: 1px solid #ccc; padding: 20px; border-radius: 5px; display: flex; justify-content: space-between; align-items: flex-start;">
         <div class="button-container" style="display: flex; flex-direction: row; margin-bottom: 10px;">
-            <a href="{{ url_for('add_team') }}" class="btn btn-success" style="margin-right: 10px;">Agregar un
+            <a href="{{ url_for('teams_bp.add_team') }}" class="btn btn-success" style="margin-right: 10px;">Agregar un
                 equipo</a>
-            <a class="btn btn-info" style="margin-right: 10px;">NOTIFICACION</a>
-            <a class="btn btn-primary" href="{{ url_for('estadisticas') }}">ESTADISTICAS</a>
         </div>
         <div class="filter-container" style="display: flex; align-items: center; margin-bottom: 20px;">
             <input type="text" id="searchInput" placeholder="Filtrar..." class="form-control" style="width: 160px;">
@@ -152,24 +150,24 @@
         <tbody>
             {% for inf in Table1_inf %}
             <tr>
-                <td>{{inf.1}}</td>
-                <td>{{inf.2}}</td>
-                <td>{{inf.3}}</td>
-                <td>{{inf.4}}</td>
-                <td>{{inf.5}}</td>
-                <td>{{inf.6}}</td>
-                <td>{{inf.7}}</td>
-                <td>{{inf.8}}</td>
-                <td>{{inf.9}}</td>
-                <td>{{inf.10}}</td>
-                <td>{{inf.11}}</td>
-                <td>{{inf.12}}</td>
+                <td>{{inf.Equipo}}</td>
+                <td>{{inf.Colegio}}</td>
+                <td>{{inf.Deporte}}</td>
+                <td>{{inf.Categoria}}</td>
+                <td>{{inf.Telefono}}</td>
+                <td>{{inf.DNI}}</td>
+                <td>{{inf.Correo}}</td>
+                <td>{{inf.Miembros}}</td>
+                <td>{{inf.Acompañantes}}</td>
+                <td>{{inf.Vegetariano}}</td>
+                <td>{{inf.Celiaco}}</td>
+                <td>{{inf.Diabetico}}</td>
                 <td>
 
-                    <a href="{{ url_for('cargar_team', id=inf[0]) }}" class="btn btn-success"
+                    <a href="{{ url_for('teams_bp.cargar_team', id=inf.ID) }}" class="btn btn-success"
                         onclick="return confirm('¿Estás seguro de que deseas confirmar este equipo?');">OK</a>
-                    <a href="{{ url_for('get_team', id=inf[0]) }}" class="btn btn-secondary">Editar</a>
-                    <a href="{{ url_for('delete_team', id=inf[0]) }}" class="btn btn-danger btn-delete"
+                    <a href="{{ url_for('teams_bp.get_team', id=inf.ID) }}" class="btn btn-secondary">Editar</a>
+                    <a href="{{ url_for('teams_bp.delete_team', id=inf.ID) }}" class="btn btn-danger btn-delete"
                         onclick="return confirm('¿Estás seguro de que deseas eliminar este equipo?');">ELIMINAR</a>
                 </td>
             </tr>
@@ -195,31 +193,28 @@
                 <td>Vegetariano</td>
                 <td>Celiaco</td>
                 <td>Diabetico</td>
-                <td>SCORE</td>
                 <td>-------</td>
             </tr>
         </thead>
         <tbody>
             {% for inf in Table2_inf %}
             <tr>
-                <td>{{inf.1}}</td>
-                <td>{{inf.2}}</td>
-                <td>{{inf.3}}</td>
-                <td>{{inf.4}}</td>
-                <td>{{inf.5}}</td>
-                <td>{{inf.6}}</td>
-                <td>{{inf.7}}</td>
-                <td>{{inf.8}}</td>
-                <td>{{inf.9}}</td>
-                <td>{{inf.10}}</td>
-                <td>{{inf.11}}</td>
-                <td>{{inf.12}}</td>
-                <td>{{inf.13}}</td>
+                <td>{{inf.Equipo}}</td>
+                <td>{{inf.Colegio}}</td>
+                <td>{{inf.Deporte}}</td>
+                <td>{{inf.Categoria}}</td>
+                <td>{{inf.Telefono}}</td>
+                <td>{{inf.DNI}}</td>
+                <td>{{inf.Correo}}</td>
+                <td>{{inf.Miembros}}</td>
+                <td>{{inf.Acompañantes}}</td>
+                <td>{{inf.Vegetariano}}</td>
+                <td>{{inf.Celiaco}}</td>
+                <td>{{inf.Diabetico}}</td>
                 <td>
 
-                    <a href="{{ url_for('add_pts', id=inf[0]) }}" class="btn btn-success">+PTS</a>
                     <a class="btn btn-primary" style="width: 21%; padding: 8px;"
-                        href="{{ url_for('get_team2', id=inf[0]) }}"><img src="static/images/config.png"
+                        href="{{ url_for('teams_bp.get_team2', id=inf.ID) }}"><img src="static/images/config.png"
                             style="width: 100%;" /></a>
 
                 </td>
