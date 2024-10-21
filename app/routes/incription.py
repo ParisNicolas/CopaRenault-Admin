@@ -7,16 +7,12 @@ from app.models import Inscripcion
 
 teams_bp = Blueprint('teams_bp', __name__, template_folder='templates')
 
-
-
-
-
 @teams_bp.route('/inscripciones')
 def inscripciones():
     inscripciones = Inscripcion.query.filter_by(Estado=False).all()
     equipos = Inscripcion.query.filter_by(Estado=True).all()
 
-    return render_template('inscripciones.html', Table1_inf=inscripciones, Table2_inf = equipos)
+    return render_template('inscripciones/inscripciones.html', Table1_inf=inscripciones, Table2_inf = equipos)
 
 @teams_bp.route('/add_team', methods=['GET', 'POST'])
 def add_team():
@@ -36,17 +32,17 @@ def add_team():
             Celiaco=request.form['Celiaco'],
             Diabetico=request.form['Diabetico'],
             Libre=0,  # Ajusta según tus necesidades
-            Estado=True  # Ajusta según tus necesidades
+            Estado=False  # Ajusta según tus necesidades
         )
         db.session.add(nueva_inscripcion)
         db.session.commit()
         return redirect(url_for('teams_bp.inscripciones'))
-    return render_template('add-team.html')
+    return render_template('inscripciones/add-team.html')
 
 @teams_bp.route('/edit/<int:id>')
 def get_team(id):
     equipo = Inscripcion.query.get_or_404(id)
-    return render_template('edit-team.html', team=equipo)
+    return render_template('inscripciones/edit-team.html', team=equipo)
 
 @teams_bp.route('/update/<int:id>', methods=['POST'])
 def update_team(id):
@@ -75,16 +71,18 @@ def delete_team(id):
     return redirect(url_for('teams_bp.inscripciones'))
 
 @teams_bp.route('/cargar/<int:id>')
-def cargar_team(id):
+def confirm_team(id):
     equipo = Inscripcion.query.get_or_404(id)
-    equipo.estado = True
+    print(f"Estado antes: {equipo.Estado}")
+    equipo.Estado = True
     db.session.commit()
+    print(f"Estado después: {equipo.Estado}")
     return redirect(url_for('teams_bp.inscripciones'))
 
 @teams_bp.route('/get_info/<int:id>')
 def get_team2(id):
     equipo = Inscripcion.query.get_or_404(id)
-    return render_template('final-config.html', team=equipo)
+    return render_template('inscripciones/final-config.html', team=equipo)
 
 @teams_bp.route('/config/<int:id>', methods=['POST'])
 def config_team(id):
@@ -105,7 +103,7 @@ def config_team(id):
         
         db.session.commit()
         return redirect(url_for('teams_bp.inscripciones'))
-    return render_template('final-config.html')
+    return render_template('inscripciones/final-config.html')
 
 @teams_bp.route('/delete_copa/<int:id>', methods=['POST'])
 def eliminar_team(id):

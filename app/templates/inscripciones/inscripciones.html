@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "./layout.html" %}
 {% block body %}
 
 <style>
@@ -164,7 +164,7 @@
                 <td>{{inf.Diabetico}}</td>
                 <td>
 
-                    <a href="{{ url_for('teams_bp.cargar_team', id=inf.ID) }}" class="btn btn-success"
+                    <a href="{{ url_for('teams_bp.confirm_team', id=inf.ID) }}" class="btn btn-success"
                         onclick="return confirm('¿Estás seguro de que deseas confirmar este equipo?');">OK</a>
                     <a href="{{ url_for('teams_bp.get_team', id=inf.ID) }}" class="btn btn-secondary">Editar</a>
                     <a href="{{ url_for('teams_bp.delete_team', id=inf.ID) }}" class="btn btn-danger btn-delete"

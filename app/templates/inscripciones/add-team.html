@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "./layout.html" %}
 {% block body %}
 
 <head>
@@ -61,34 +61,34 @@
                         <div class="form-group">
                             <label for="Vegetariano">Vegetariano</label>
                             <select class="form-control" id="Vegetariano" name="Vegetariano" required>
+                                <option value="NO">NINGUNO</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
                                 <option value="4">4</option>
                                 <option value="5">5</option>
-                                <option value="NO">NINGUNO</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="Celiaco">Celiaco</label>
                             <select class="form-control" id="Celiaco" name="Celiaco" required>
+                                <option value="NO">NINGUNO</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
                                 <option value="4">4</option>
                                 <option value="5">5</option>
-                                <option value="NO">NINGUNO</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="Diabetico">Diabético</label>
                             <select class="form-control" id="Diabetico" name="Diabetico" required>
+                                <option value="NO">NINGUNO</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
                                 <option value="4">4</option>
                                 <option value="5">5</option>
-                                <option value="NO">NINGUNO</option>
                             </select>
                         </div>
                         <button type="submit" id="submitButton" class="btn btn-primary btn-block" disabled>Guardar</button>
