@@ -26,9 +26,10 @@ def create_app():
     """Blueprints"""
     from app.routes.main import main
     from app.routes.incription import teams_bp
+    from app.routes.sports import sport_bp
     app.register_blueprint(main)
     app.register_blueprint(teams_bp)
-
+    app.register_blueprint(sport_bp)
     
     """Get user in each request for more info"""
     from app.models import Usuario
