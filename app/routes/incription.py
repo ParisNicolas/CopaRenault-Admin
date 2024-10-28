@@ -31,7 +31,6 @@ def add_team():
             Vegetariano=request.form['Vegetariano'],
             Celiaco=request.form['Celiaco'],
             Diabetico=request.form['Diabetico'],
-            Libre=0,  # Ajusta según tus necesidades
             Estado=False  # Ajusta según tus necesidades
         )
         db.session.add(nueva_inscripcion)

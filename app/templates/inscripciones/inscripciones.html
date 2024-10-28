@@ -76,8 +76,7 @@
     <div class="admin_bar"
         style="border: 1px solid #ccc; padding: 20px; border-radius: 5px; display: flex; justify-content: space-between; align-items: flex-start;">
         <div class="button-container" style="display: flex; flex-direction: row; margin-bottom: 10px;">
-            <a href="{{ url_for('teams_bp.add_team') }}" class="btn btn-success" style="margin-right: 10px;">Agregar un
-                equipo</a>
+            <a href="{{ url_for('teams_bp.add_team') }}" class="btn btn-success" style="margin-right: 10px;">Agregar un equipo</a>
         </div>
         <div class="filter-container" style="display: flex; align-items: center; margin-bottom: 20px;">
             <input type="text" id="searchInput" placeholder="Filtrar..." class="form-control" style="width: 160px;">
@@ -185,14 +184,13 @@
                 <td>Colegio</td>
                 <td>Deporte</td>
                 <td>Categoria</td>
+                <td>Grupo</td>
                 <td>Telefono</td>
-                <td>DNI</td>
                 <td>Correo</td>
+                <td>DNI</td>
                 <td>Miembros</td>
                 <td>Acompañantes</td>
-                <td>Vegetariano</td>
-                <td>Celiaco</td>
-                <td>Diabetico</td>
+
                 <td>-------</td>
             </tr>
         </thead>
@@ -203,14 +201,12 @@
                 <td>{{inf.Colegio}}</td>
                 <td>{{inf.Deporte}}</td>
                 <td>{{inf.Categoria}}</td>
+                <td>{{inf.Grupo}}</td>
                 <td>{{inf.Telefono}}</td>
-                <td>{{inf.DNI}}</td>
                 <td>{{inf.Correo}}</td>
+                <td>{{inf.DNI}}</td>
                 <td>{{inf.Miembros}}</td>
                 <td>{{inf.Acompañantes}}</td>
-                <td>{{inf.Vegetariano}}</td>
-                <td>{{inf.Celiaco}}</td>
-                <td>{{inf.Diabetico}}</td>
                 <td>
 
                     <a class="btn btn-primary" style="width: 21%; padding: 8px;"

@@ -17,7 +17,10 @@ class Inscripcion(db.Model):
     Vegetariano = db.Column(db.String(5), nullable=False)
     Celiaco = db.Column(db.String(5), nullable=False)
     Diabetico = db.Column(db.String(5), nullable=False)
-    Libre = db.Column(db.Integer, nullable=False)
+    Comprobante = db.Column(db.String(255), nullable=False, default='no se cargo')
+    Autorizacion = db.Column(db.String(255), nullable=False, default='no se cargo')
+    QR = db.Column(db.String(255), nullable=False, default='no se cargo')
+    Grupo = db.Column(db.String(12), nullable=True, default="sin definir")
     Estado = db.Column(db.Boolean, nullable=False)
 
     def __repr__(self):

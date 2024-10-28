@@ -80,3 +80,9 @@ flask run --debug
 ### Variables de entorno
 - **SECRET_KEY:** Clave secreta que se usara para cifrar las sessiones y tokens
 - **DATABASE_URL:** Url completa de la base de datos (CleverCloud u otra)
+
+
+### Anotaciones:
+
+- admin (sistema de envio de notificaciones, resetear base de datos, cambiar FG -> Llaves)
+- 
