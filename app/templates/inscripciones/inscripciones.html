@@ -135,8 +135,8 @@
                 <td>Colegio</td>
                 <td>Deporte</td>
                 <td>Categoria</td>
-                <td>Telefono</td>
                 <td>DNI</td>
+                <td>Telefono</td>
                 <td>Correo</td>
                 <td>Miembros</td>
                 <td>Acompañantes</td>
@@ -153,8 +153,8 @@
                 <td>{{inf.Colegio}}</td>
                 <td>{{inf.Deporte}}</td>
                 <td>{{inf.Categoria}}</td>
-                <td>{{inf.Telefono}}</td>
                 <td>{{inf.DNI}}</td>
+                <td>{{inf.Telefono}}</td>
                 <td>{{inf.Correo}}</td>
                 <td>{{inf.Miembros}}</td>
                 <td>{{inf.Acompañantes}}</td>
@@ -184,13 +184,12 @@
                 <td>Colegio</td>
                 <td>Deporte</td>
                 <td>Categoria</td>
-                <td>Grupo</td>
+                <td>DNI</td>
                 <td>Telefono</td>
                 <td>Correo</td>
-                <td>DNI</td>
                 <td>Miembros</td>
                 <td>Acompañantes</td>
-
+                <td>Grupo</td>
                 <td>-------</td>
             </tr>
         </thead>
@@ -201,17 +200,18 @@
                 <td>{{inf.Colegio}}</td>
                 <td>{{inf.Deporte}}</td>
                 <td>{{inf.Categoria}}</td>
-                <td>{{inf.Grupo}}</td>
+                <td>{{inf.DNI}}</td>
                 <td>{{inf.Telefono}}</td>
                 <td>{{inf.Correo}}</td>
-                <td>{{inf.DNI}}</td>
                 <td>{{inf.Miembros}}</td>
                 <td>{{inf.Acompañantes}}</td>
+                <td>{{inf.Grupo}}</td>
                 <td>
 
                     <a class="btn btn-primary" style="width: 21%; padding: 8px;"
-                        href="{{ url_for('teams_bp.get_team2', id=inf.ID) }}"><img src="static/images/config.png"
-                            style="width: 100%;" /></a>
+                    href="{{ url_for('teams_bp.get_team2', id=inf.ID) }}">
+                    <img src="/app/static/img/settings_ico.png" style="width: 100%;" />
+                    </a>
 
                 </td>
             </tr>
