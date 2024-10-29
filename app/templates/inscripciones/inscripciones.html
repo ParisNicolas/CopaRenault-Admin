@@ -75,12 +75,13 @@
 <div class="col-md-16" style="margin: 40px;">
     <div class="admin_bar"
         style="border: 1px solid #ccc; padding: 20px; border-radius: 5px; display: flex; justify-content: space-between; align-items: flex-start;">
-        <div class="button-container" style="display: flex; flex-direction: row; margin-bottom: 10px;">
-            <a href="{{ url_for('teams_bp.add_team') }}" class="btn btn-success" style="margin-right: 10px;">Agregar un equipo</a>
+        <div class="button-container" style="display: flex; flex-direction: row;">
+            <a href="{{ url_for('teams_bp.add_team') }}" class="btn btn-success" style="margin-right: 10px;">Agregar un
+                equipo</a>
         </div>
         <div class="filter-container" style="display: flex; align-items: center; margin-bottom: 20px;">
             <input type="text" id="searchInput" placeholder="Filtrar..." class="form-control" style="width: 160px;">
-            
+
             <div class="dropdown" style="margin-left: 10px;width: 160px;">
                 <select id="categoriaFilter" class="form-control">
                     <option value="">Todas las Categorías</option>
@@ -102,7 +103,7 @@
 
             <button id="applyFiltersBtn" class="btn btn-primary" style="margin-left: 10px;">BUSCAR</button>
         </div>
-        
+
     </div>
 
     <div class="checkbox-container" style="margin-top: 10px; margin-left: 20px;">
@@ -127,7 +128,7 @@
 
 
 
-<div id="table1" class="table-container">
+<div id="table1" class="table-container" style="margin: 12px;">
     <table class="table table-striped table-hover table-bordered table-sm bg-white">
         <thead>
             <tr>
@@ -136,13 +137,13 @@
                 <td>Deporte</td>
                 <td>Categoria</td>
                 <td>DNI</td>
-                <td>Telefono</td>
                 <td>Correo</td>
                 <td>Miembros</td>
-                <td>Acompañantes</td>
                 <td>Vegetariano</td>
                 <td>Celiaco</td>
                 <td>Diabetico</td>
+                <td>Autorizacion</td>
+                <td>Comprobante</td>
                 <td>-------</td>
             </tr>
         </thead>
@@ -154,20 +155,25 @@
                 <td>{{inf.Deporte}}</td>
                 <td>{{inf.Categoria}}</td>
                 <td>{{inf.DNI}}</td>
-                <td>{{inf.Telefono}}</td>
                 <td>{{inf.Correo}}</td>
-                <td>{{inf.Miembros}}</td>
-                <td>{{inf.Acompañantes}}</td>
+                <td>{{inf.Miembros}} jugadores <br />
+                    {{inf.Acompañantes}} Acompañantes
+                </td>
                 <td>{{inf.Vegetariano}}</td>
                 <td>{{inf.Celiaco}}</td>
                 <td>{{inf.Diabetico}}</td>
+                <td><a href="{{ inf.Autorizacion }}" target="_blank">LINK</a></td>
+                <td><a href="{{ inf.Comprobante }}" target="_blank">LINK</a></td>
                 <td>
-
+                    <a href="https://wa.me/{{ inf.Telefono }}" class="btn btn-success" target="_blank" style="padding: 5px; display: inline-block; width: auto;">
+                        <img src="{{ url_for('static', filename='img/whatsapp_ico.png') }}" style="width: 40px; height: 40px; margin: 2px;" />
+                    </a>
                     <a href="{{ url_for('teams_bp.confirm_team', id=inf.ID) }}" class="btn btn-success"
                         onclick="return confirm('¿Estás seguro de que deseas confirmar este equipo?');">OK</a>
                     <a href="{{ url_for('teams_bp.get_team', id=inf.ID) }}" class="btn btn-secondary">Editar</a>
                     <a href="{{ url_for('teams_bp.delete_team', id=inf.ID) }}" class="btn btn-danger btn-delete"
                         onclick="return confirm('¿Estás seguro de que deseas eliminar este equipo?');">ELIMINAR</a>
+                    
                 </td>
             </tr>
             {% endfor %}
@@ -176,7 +182,7 @@
 </div>
 
 
-<div id="table2" class="table-container">
+<div id="table2" class="table-container" style="margin: 12px;">
     <table class="table table-striped table-hover table-bordered table-sm bg-white">
         <thead>
             <tr>
@@ -185,10 +191,8 @@
                 <td>Deporte</td>
                 <td>Categoria</td>
                 <td>DNI</td>
-                <td>Telefono</td>
                 <td>Correo</td>
                 <td>Miembros</td>
-                <td>Acompañantes</td>
                 <td>Grupo</td>
                 <td>-------</td>
             </tr>
@@ -201,18 +205,20 @@
                 <td>{{inf.Deporte}}</td>
                 <td>{{inf.Categoria}}</td>
                 <td>{{inf.DNI}}</td>
-                <td>{{inf.Telefono}}</td>
                 <td>{{inf.Correo}}</td>
-                <td>{{inf.Miembros}}</td>
-                <td>{{inf.Acompañantes}}</td>
+                <td>{{inf.Miembros}} jugadores <br />
+                    {{inf.Acompañantes}} Acompañantes
+                </td>
                 <td>{{inf.Grupo}}</td>
                 <td>
-
-                    <a class="btn btn-primary" style="width: 21%; padding: 8px;"
-                    href="{{ url_for('teams_bp.get_team2', id=inf.ID) }}">
-                    <img src="/app/static/img/settings_ico.png" style="width: 100%;" />
+                    <a class="btn btn-success" target="_blank" style="padding: 5px; display: inline-block; width: auto;"
+                        href="https://wa.me/{{ inf.Telefono }}">
+                        <img src="{{ url_for('static', filename='img/whatsapp_ico.png') }}" style="width: 40px; height: 40px; margin: 2px;" />
                     </a>
-
+                    <a class="btn btn-primary" style="padding: 5px; display: inline-block; width: auto;"
+                        href="{{ url_for('teams_bp.get_team2', id=inf.ID) }}">
+                        <img src="{{ url_for('static', filename='img/settings_ico.png') }}" style="width: 40px; height: 40px; margin: 2px;" />
+                    </a>
                 </td>
             </tr>
             {% endfor %}
@@ -250,57 +256,57 @@
 
 
     function filterTables() {
-            const searchInput = document.getElementById('searchInput').value.toLowerCase();
-            const categoriaFilter = document.getElementById('categoriaFilter').value.toLowerCase();
-            const deporteFilter = document.getElementById('deporteFilter').value.toLowerCase();
+        const searchInput = document.getElementById('searchInput').value.toLowerCase();
+        const categoriaFilter = document.getElementById('categoriaFilter').value.toLowerCase();
+        const deporteFilter = document.getElementById('deporteFilter').value.toLowerCase();
 
-            // Filtrar la tabla 1
-            const table1Rows = document.querySelectorAll('#table1 tbody tr');
-            table1Rows.forEach(row => {
-                const equipo = row.cells[0].textContent.toLowerCase();
-                const colegio = row.cells[1].textContent.toLowerCase();
-                const categoria = row.cells[3].textContent.toLowerCase();
-                const deporte = row.cells[2].textContent.toLowerCase();
+        // Filtrar la tabla 1
+        const table1Rows = document.querySelectorAll('#table1 tbody tr');
+        table1Rows.forEach(row => {
+            const equipo = row.cells[0].textContent.toLowerCase();
+            const colegio = row.cells[1].textContent.toLowerCase();
+            const categoria = row.cells[3].textContent.toLowerCase();
+            const deporte = row.cells[2].textContent.toLowerCase();
 
-                const matchesSearch = equipo.includes(searchInput) || colegio.includes(searchInput);
-                const matchesCategoria = categoriaFilter === "" || categoria === categoriaFilter;
-                const matchesDeporte = deporteFilter === "" || deporte === deporteFilter;
+            const matchesSearch = equipo.includes(searchInput) || colegio.includes(searchInput);
+            const matchesCategoria = categoriaFilter === "" || categoria === categoriaFilter;
+            const matchesDeporte = deporteFilter === "" || deporte === deporteFilter;
 
-                if (matchesSearch && matchesCategoria && matchesDeporte) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
+            if (matchesSearch && matchesCategoria && matchesDeporte) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
 
-            // Filtrar la tabla 2
-            const table2Rows = document.querySelectorAll('#table2 tbody tr');
-            table2Rows.forEach(row => {
-                const equipo = row.cells[0].textContent.toLowerCase();
-                const colegio = row.cells[1].textContent.toLowerCase();
-                const categoria = row.cells[3].textContent.toLowerCase();
-                const deporte = row.cells[2].textContent.toLowerCase();
+        // Filtrar la tabla 2
+        const table2Rows = document.querySelectorAll('#table2 tbody tr');
+        table2Rows.forEach(row => {
+            const equipo = row.cells[0].textContent.toLowerCase();
+            const colegio = row.cells[1].textContent.toLowerCase();
+            const categoria = row.cells[3].textContent.toLowerCase();
+            const deporte = row.cells[2].textContent.toLowerCase();
 
-                const matchesSearch = equipo.includes(searchInput) || colegio.includes(searchInput);
-                const matchesCategoria = categoriaFilter === "" || categoria === categoriaFilter;
-                const matchesDeporte = deporteFilter === "" || deporte === deporteFilter;
+            const matchesSearch = equipo.includes(searchInput) || colegio.includes(searchInput);
+            const matchesCategoria = categoriaFilter === "" || categoria === categoriaFilter;
+            const matchesDeporte = deporteFilter === "" || deporte === deporteFilter;
 
-                if (matchesSearch && matchesCategoria && matchesDeporte) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
+            if (matchesSearch && matchesCategoria && matchesDeporte) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
 
-            // Reiniciar las opciones de los filtros
-            document.getElementById('categoriaFilter').value = '';
-            document.getElementById('deporteFilter').value = '';
-            document.getElementById('searchInput').value = '';
-        }
+        // Reiniciar las opciones de los filtros
+        document.getElementById('categoriaFilter').value = '';
+        document.getElementById('deporteFilter').value = '';
+        document.getElementById('searchInput').value = '';
+    }
 
-        document.getElementById('applyFiltersBtn').addEventListener('click', filterTables);
+    document.getElementById('applyFiltersBtn').addEventListener('click', filterTables);
 
-        window.onload = initTables;
+    window.onload = initTables;
 </script>
 
 {% endblock %}

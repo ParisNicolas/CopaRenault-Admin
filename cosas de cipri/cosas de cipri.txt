@@ -1,0 +1,14 @@
+agregar validacione en los forms paguina
+boton de volver en form tabla1
+revisar filter(css, ¿mas filtros?)
+plantilla ficha de ingresó Google doc
+conectar con drive
+mail con html
+envio de qr
+
+
+
+hablar con mati el tema del mail+html
+Revisar formulario (comprecion) con tadeo y corregir restricciones form google
+
+¿? editar url del comprobante/autorizacion

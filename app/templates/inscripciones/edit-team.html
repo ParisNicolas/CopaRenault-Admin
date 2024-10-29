@@ -11,7 +11,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <form id="teamForm" action="/update/{{team.ID}}" method="POST">
+                    <form id="teamForm" action="/update_team/{{team.ID}}" method="POST">
                         <div class="form-group">
                             <label for="Equipo">Equipo</label>
                             <input type="text" class="form-control" id="Equipo" name="Equipo" placeholder="Equipo" value="{{ team.Equipo }}" required>
@@ -38,12 +38,12 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="Telefono">Teléfono</label>
-                            <input type="tel" class="form-control" id="Telefono" name="Telefono" placeholder="Teléfono" value="{{ team.Telefono }}" required>
-                        </div>
-                        <div class="form-group">
                             <label for="DNI">DNI</label>
                             <input type="text" class="form-control" id="DNI" name="DNI" placeholder="DNI" value="{{ team.DNI }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="Telefono">Teléfono</label>
+                            <input type="tel" class="form-control" id="Telefono" name="Telefono" placeholder="Teléfono" value="{{ team.Telefono }}" required>
                         </div>
                         <div class="form-group">
                             <label for="Correo">Correo</label>

@@ -14,14 +14,13 @@
                     <!-- Botones en la parte superior del formulario -->
                     <div class="d-flex justify-content-between mb-3">
                         <a href="{{ url_for('teams_bp.inscripciones') }}" class="btn btn-secondary">VOLVER</a>
-                        <form action="{{ url_for('teams_bp.eliminar_team', id=team.ID) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este equipo?');">
-                            <button type="submit" class="btn btn-danger">ELIMINAR EQUIPO</button>
-                        </form>
+                        <a href="{{ url_for('teams_bp.delete_team', id=team.ID) }}" class="btn btn-danger btn-delete"
+                        onclick="return confirm('¿Estás seguro de que deseas eliminar este equipo?');">ELIMINAR EQUIPO</a>
                         
                     </div>
 
                     <!-- Formulario -->
-                    <form id="teamForm" action="/update/{{team.ID}}" method="POST">
+                    <form id="teamForm" action="/update_team2/{{team.ID}}" method="POST">
                         <div class="form-group">
                             <label for="Equipo">Equipo</label>
                             <input type="text" class="form-control" id="Equipo" name="Equipo" placeholder="Equipo" value="{{ team.Equipo }}" required>
@@ -48,12 +47,12 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="Telefono">Teléfono</label>
-                            <input type="tel" class="form-control" id="Telefono" name="Telefono" placeholder="Teléfono" value="{{ team.Telefono }}" required>
-                        </div>
-                        <div class="form-group">
                             <label for="DNI">DNI</label>
                             <input type="text" class="form-control" id="DNI" name="DNI" placeholder="DNI" value="{{ team.DNI }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="Telefono">Teléfono</label>
+                            <input type="tel" class="form-control" id="Telefono" name="Telefono" placeholder="Teléfono" value="{{ team.Telefono }}" required>
                         </div>
                         <div class="form-group">
                             <label for="Correo">Correo</label>
@@ -66,6 +65,10 @@
                         <div class="form-group">
                             <label for="Acompañantes">Acompañantes</label>
                             <input type="text" class="form-control" id="Acompañantes" name="Acompañantes" placeholder="Acompañantes" value="{{ team.Acompañantes }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="Grupo">Grupo</label>
+                            <input type="text" class="form-control" id="Grupo" name="Grupo" placeholder="Grupo" value="{{ team.Grupo }}">
                         </div>
                         <div class="form-group">
                             <label for="Vegetariano">Vegetariano</label>
