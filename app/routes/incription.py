@@ -67,32 +67,45 @@ def update_team(id):
     db.session.commit()
     return redirect(url_for('teams_bp.inscripciones'))
 
-@teams_bp.route('/cargar/<int:id>')
-def confirm_team(id):
-    # Confirmar el equipo en la base de datos
-    equipo = Inscripcion.query.get_or_404(id)
-    print(f"Estado antes: {equipo.Estado}")
-    equipo.Estado = True
-    db.session.commit()
-    print(f"Estado después: {equipo.Estado}")
 
-    # # Llamar al Apps Script para crear el documento
-    # try:
-    #     script_url = 'https://docs.google.com/spreadsheets/d/1iC2vXoUpnRGCYjwohHsRJh7CBxR7YuNGtotHupB4ZMc/edit?usp=sharing'
-    #     response = requests.get(script_url, params={'id': id})
-        
-    #     if response.status_code == 200:
-    #         doc_url = response.json().get('doc_url')
-    #         # Guardar la URL del documento en el campo QR
-    #         equipo.QR = doc_url
-    #         db.session.commit()
-    #         flash("Equipo confirmado y documento creado exitosamente.", "success")
-    #     else:
-    #         flash("Error al crear el documento en Google Docs.", "error")
-    # except Exception as e:
-    #     flash(f"Error al llamar al Apps Script: {str(e)}", "error")
+
+
+@teams_bp.route('/cargar/<int:id>', methods=['GET'])
+def confirm_team(id):
+    
+    equipo = Inscripcion.query.get_or_404(id)
+    equipo.Estado = True  # Descomentar si deseas cambiar el estado
+    db.session.commit()  # Confirmar cambios en la base de datos
+    
+    
+    # URL del Apps Script (asegúrate de que esta sea la correcta)
+    script_url = 'https://script.google.com/macros/s/AKfycbwOb2stOdGhUEKev9JNf_UFSkYdjgt-9YXP4w1ChQiY5wFA-Ch3JZxJhmuP4DBCNslysg/exec'
+
+    # Imprimir el ID y la URL del Apps Script
+    print(f"ID recibido en Flask: {id}")
+    print(f"Enviando solicitud a: {script_url}")
+
+    # Enviar la solicitud al Apps Script sin esperar respuesta
+    try:
+        # Crear la URL completa
+        full_url = f"{script_url}?id={id}"
+        response = requests.get(full_url)  # Usar GET para pruebas simples
+
+        # Verificar la respuesta del Apps Script
+        if response.status_code == 200:
+            flash("Orden enviada exitosamente al Apps Script.", "success")
+        else:
+            flash(f"Error en Apps Script: {response.status_code}", "error")
+    except requests.exceptions.RequestException as e:
+        flash(f"Error al llamar al Apps Script: {str(e)}", "error")
 
     return redirect(url_for('teams_bp.inscripciones'))
+
+
+
+
+
+
 
 
 #Editar equipo de tabla2
