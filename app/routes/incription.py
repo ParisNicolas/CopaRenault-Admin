@@ -79,7 +79,7 @@ def confirm_team(id):
     
     
     # URL del Apps Script (asegúrate de que esta sea la correcta)
-    script_url = 'https://script.google.com/macros/s/AKfycbwOb2stOdGhUEKev9JNf_UFSkYdjgt-9YXP4w1ChQiY5wFA-Ch3JZxJhmuP4DBCNslysg/exec'
+    script_url = 'https://script.google.com/macros/s/AKfycbyQIB2RlS3YG9OrV43UOCcFf_0Hi8juvrsWbjyaLhf6z6OcJ3JfopZPBFI9JlHrde3FpQ/exec'
 
     # Imprimir el ID y la URL del Apps Script
     print(f"ID recibido en Flask: {id}")
