@@ -9,34 +9,56 @@
     {% block css %}{% endblock %}
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-          <img src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
-          <a class="navbar-brand" href="#">Copa Renault</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <!-- Navigation -->
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand ml-5 d-flex align-items-center" href="#">
+            <img src="{{ url_for('static', filename='img/img_copaRanault2.png') }}" width="40" height="40" class="d-inline-block align-top" alt="Logo">
+            <span class="ml-1">Copa renault</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" href="#">General</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('teams_bp.inscripciones') }}">Inscripciones</a>
-              </li>
-              <li class="nav-item"></li>
-                <a class="nav-link" href="{{ url_for('sport_bp.partidos') }}">Partidos</a>
-              </li>
-              <li class="nav-item"></li>
-                <a class="nav-link" href="#">Log In</a>
-              </li>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+            <ul class="navbar-nav ">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><h3>General</h3></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('teams_bp.inscripciones') }}"><h3>Inscripciones</h3></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('sport_bp.partidos') }}"><h3>Partidos</h3></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.register') }}"><h3>Registrar</h3></a>
+                </li>
             </ul>
-          </div>
+        </div>
+        <div class="mx-5">
+          <span class="bg-secondary border rounded px-2 py-1 mx-5"><b>{{current_user.nombre|upper}}</b></span>
+          <a href="{{ url_for('main.logout') }}" class="btn btn-danger">Log out</a>
         </div>
       </nav>
 
-    {%block content%}
-    {%endblock%}
+      <div class="container-md d-flex justify-content-center">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="alert mx-auto msg" role="alert" style="max-width: 30rem;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-octagon" viewBox="0 0 16 16">
+                    <path d="M4.54.146A.5.5 0 0 1 4.893 0h6.214a.5.5 0 0 1 .353.146l4.394 4.394a.5.5 0 0 1 .146.353v6.214a.5.5 0 0 1-.146.353l-4.394 4.394a.5.5 0 0 1-.353.146H4.893a.5.5 0 0 1-.353-.146L.146 11.46A.5.5 0 0 1 0 11.107V4.893a.5.5 0 0 1 .146-.353zM5.1 1 1 5.1v5.8L5.1 15h5.8l4.1-4.1V5.1L10.9 1z"/>
+                    <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/>
+                  </svg>
+                {% for message in messages %}
+                {{ message }}
+                {% endfor %}  
+            </div>
+            {% endif %}
+        {% endwith %}
+      
+      {%block content%}
+      {%endblock%}
+      </div>
 
     {%block js%}{%endblock%}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>

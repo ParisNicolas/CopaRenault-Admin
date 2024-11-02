@@ -1,9 +1,10 @@
-from flask import Flask
-from flask_login import LoginManager
+from flask import Flask, request, redirect, url_for
+from flask_login import LoginManager, current_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate  # Importa Flask-Migrate
 from dotenv import load_dotenv
 import os
+import click
 
 load_dotenv()
 
@@ -40,5 +41,25 @@ def create_app():
     @login_manager.user_loader
     def load_user(user_id):
         return Usuario.query.get(int(user_id))
+    
+    """Restrict the entire application"""
+    @app.before_request
+    def require_login():
+        # Si el usuario no está autenticado y no está accediendo a la página de inicio de sesión
+        if not current_user.is_authenticated and request.endpoint not in ['main.login']:
+            return redirect(url_for('main.login'))  # Redirige a la página de inicio de sesión
+        
+    @app.cli.command("create_user")
+    @click.argument("nombre")
+    @click.argument("contraseña")
+    @click.argument("gmail")
+    @click.argument("rol")
+    def create_user(nombre, contraseña, gmail, rol):
+        """Create a new user with USERNAME, PASSWORD, GMAIL and ROL."""
+        new_user = Usuario(nombre=nombre, gmail=gmail, rol=rol)
+        new_user.set_password(contraseña)
+        db.session.add(new_user)
+        db.session.commit()
+        click.echo(f"User {nombre} created successfully!")
 
     return app

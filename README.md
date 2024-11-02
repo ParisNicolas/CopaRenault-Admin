@@ -10,8 +10,11 @@ cd CopaRenault
 ```
 
 ### Ejecuta *setup* o sigue las siguientes instrucciones:
+Los scripts setup y run, se crearon para simplificar el proceso.
+Pero son utiles ya que los entornos virtuales (venv) tienen problemas en el cole.
+En caso de hacer uso manual tienes que activar el entorno antes de ejecutar cualquier comando relacionado con la aplicacion.
 
-#### 1) Usando script setup:
+### 1) Usando script setup:
 Windows:
 ```bash
 ./setup.bat
@@ -21,7 +24,7 @@ MAC:
 bash setup.sh
 ```
 
-#### 2) Manualmente:
+### 2) Manualmente:
 ***Crea el entorno virtual y activalo (opcional).***
 ```bash
 python -m venv .venv
@@ -41,10 +44,8 @@ SQLALCHEMY_DATABASE_URI=...
 ```
 
 
-## Corre el codigo
+## Ejecuta el codigo
 ### Con script run:
-> Es necesario en el cole por los entornos virtuales
-> Las computadoras tienen desactivado los scripts y el CMD
 
 Sino usas entorno ejecuta ```flask run --debug```
 
@@ -76,6 +77,7 @@ flask run --debug
 - Flask-WTF
 - mysql-connector-python
 - python-dotenv
+- requests
 
 ### Variables de entorno
 - **SECRET_KEY:** Clave secreta que se usara para cifrar las sessiones y tokens

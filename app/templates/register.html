@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="mt-5 border rounded shadow p-4" style="width: 20vw;">
+  <form role="form" method="post">
+    {{ form.csrf_token }}
+    <h1 class="h3 mb-3 fw-normal text-center">Please sign in</h1>
+
+    <div class="form-floating">
+        {{ form.nombre.label(class="form-label") }}
+        {{ form.nombre(placeholder="Nombre", class="form-control mb-2", size="40") }}
+        {% if form.nombre.errors %}
+          {% for error in form.nombre.errors %}
+          <div class="alert alert-danger" role="alert">
+            {{ error }}
+          </div>
+          {% endfor %}
+        {% endif %}
+    </div>
+    <div class="form-floating">
+        {{ form.gmail.label(class="form-label") }}
+        {{ form.gmail(placeholder="Gmail", class="form-control mb-2", size="40") }}
+        {% if form.nombre.errors %}
+          {% for error in form.nombre.errors %}
+          <div class="alert alert-danger" role="alert">
+            {{ error }}
+          </div>
+          {% endfor %}
+        {% endif %}
+    </div>
+    <div class="form-floating">
+        {{ form.contraseña.label(class="form-label") }}
+        {{ form.contraseña(placeholder="Contraseña", class="form-control mb-2") }}
+        {% if form.contraseña.errors %}
+          {% for error in form.contraseña.errors %}
+            <div class="alert alert-danger" role="alert">
+              {{ error }}
+            </div>
+          {% endfor %}
+        {% endif %}
+    </div>
+    <div class="form-floating">
+        {{ form.confirmar_contraseña(placeholder="Confirmar contraseña", class="form-control mb-2") }}
+          {% if form.confirmar_contraseña.errors %}
+            {% for error in form.confirmar_contraseña.errors %}
+              <div class="alert alert-danger" role="alert">
+                {{ error }}
+              </div>
+            {% endfor %}
+          {% endif %}
+    </div>
+    <div class="form-floating mt-4">
+        {{ form.rol.label(class="form-label") }}
+        {{ form.rol(class="form-select mb-2") }}
+          {% if form.rol.errors %}
+            {% for error in form.rol.errors %}
+              <div class="alert alert-danger" role="alert">
+                {{ error }}
+              </div>
+            {% endfor %}
+          {% endif %}
+      </div>
+      <div class="form-floating">
+        {{ form.descripcion.label(class="form-label") }}
+        {{ form.descripcion(class="form-control mb-2", size="40") }}
+        {% if form.nombre.errors %}
+          {% for error in form.nombre.errors %}
+          <div class="alert alert-danger" role="alert">
+            {{ error }}
+          </div>
+          {% endfor %}
+        {% endif %}
+    </div>
+      {{ form.submit(class="w-100 btn btn-lg btn-primary mt-4") }}
+  </form>
+</main>
+
+{% endblock %}
