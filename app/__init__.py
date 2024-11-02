@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate  # Importa Flask-Migrate
 from dotenv import load_dotenv
 import os
 
@@ -8,7 +9,7 @@ load_dotenv()
 
 db = SQLAlchemy()
 login_manager = LoginManager()
-
+migrate = Migrate()  # Instancia de Flask-Migrate
 
 def create_app():
     app = Flask(__name__)
@@ -22,6 +23,7 @@ def create_app():
     """Inicializacion"""
     db.init_app(app)
     login_manager.init_app(app)
+    migrate.init_app(app, db)  # Inicializa Flask-Migrate con la app y db
 
     """Blueprints"""
     from app.routes.main import main

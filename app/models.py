@@ -2,6 +2,8 @@ from . import db
 from enum import Enum
 from datetime import datetime
 
+from app import db
+
 # Modelo de Inscripciones
 class Inscripcion(db.Model):
     __tablename__ = 'Inscripciones'
@@ -19,11 +21,19 @@ class Inscripcion(db.Model):
     Vegetariano = db.Column(db.String(5), nullable=False)
     Celiaco = db.Column(db.String(5), nullable=False)
     Diabetico = db.Column(db.String(5), nullable=False)
-    Libre = db.Column(db.Integer, nullable=False)
-    Estado = db.Column(db.Boolean, nullable=False)
+    Comprobante = db.Column(db.String(255), nullable=False, default='no se cargo', 
+    info={'charset': 'utf8', 'collate': 'utf8_general_ci'})
+    Autorizacion = db.Column(db.String(255), nullable=False, default='no se cargo', 
+    info={'charset': 'utf8', 'collate': 'utf8_general_ci'})
+    QR = db.Column(db.String(255), nullable=False, default='no se cargo', 
+    info={'charset': 'utf8', 'collate': 'utf8_general_ci'})
+    Grupo = db.Column(db.String(12), nullable=True, default='sin definir', 
+    info={'charset': 'utf8', 'collate': 'utf8_general_ci'})
+    Estado = db.Column(db.Boolean, nullable=False, default=False)  # MySQL tinyint(1) as Boolean
 
     def __repr__(self):
         return f'<Inscripcion {self.Equipo} - {self.Deporte}>'
+
 
 
 
@@ -51,8 +61,9 @@ class Equipo(db.Model):
 
     #Optimizacion de consultas con filtrado
     __table_args__ = (
-        db.Index('idx_deporte_categoria', 'deporte', 'categoria') #Filtrado por deporte y categoria
+    db.Index('idx_deporte_categoria', 'deporte', 'categoria'),  # Filtrado por deporte y categoría
     )
+
     #Representacion en la consola
     def __repr__(self):
         return f'<Equipo {self.grupo} | {self.nombre}-{self.colegio} {self.deporte}-{self.categoria}>'
@@ -104,3 +115,15 @@ class Usuario(db.Model):
 
     def __repr__(self):
         return f'<Usuario {self.nombre}>'
+    
+    
+class Settings(db.Model):
+    __tablename__ = 'Settings'
+
+    deporte = db.Column(db.String(20), primary_key=True)  # Clave primaria
+    categoria = db.Column(db.String(20), nullable=False)
+    cupos = db.Column(db.Integer, nullable=False)
+    cierre = db.Column(db.Date, nullable=False)
+
+    def __repr__(self):
+        return f'<Settings {self.deporte} - {self.categoria}>'
