@@ -16,7 +16,7 @@ def role_required(allowed_rol):
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
-            if current_user.rol == 'admin' or current_user.rol == allowed_rol:
+            if current_user.is_authenticated and (current_user.rol == 'admin' or current_user.rol == allowed_rol):
                 return f(*args, **kwargs)
             else:
                 abort(403)  # Prohibido: el usuario no tiene permiso

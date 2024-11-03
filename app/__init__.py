@@ -43,11 +43,11 @@ def create_app():
         return Usuario.query.get(int(user_id))
     
     """Restrict the entire application"""
-    @app.before_request
-    def require_login():
-        # Si el usuario no está autenticado y no está accediendo a la página de inicio de sesión
-        if not current_user.is_authenticated and request.endpoint not in ['main.login']:
-            return redirect(url_for('main.login'))  # Redirige a la página de inicio de sesión
+    # @app.before_request
+    # def require_login():
+    #     # Si el usuario no está autenticado y no está accediendo a la página de inicio de sesión
+    #     if not current_user.is_authenticated and request.endpoint not in ['main.login']:
+    #         return redirect(url_for('main.login'))  # Redirige a la página de inicio de sesión
         
     @app.cli.command("create_user")
     @click.argument("nombre")
