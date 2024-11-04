@@ -106,7 +106,7 @@ class Partido(db.Model):
     
 
     
-# Modelo de Usuarios
+# Modelo de Usuarios de TRABAJADOR (NO USUARIO PARTICULAR)
 class Usuario(UserMixin, db.Model):
     __tablename__ = 'usuarios'
 
