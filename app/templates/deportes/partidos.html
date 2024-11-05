@@ -75,14 +75,6 @@
     </div>
 </div>
 
-<script>
-    document.getElementById("applyFiltersBtn").addEventListener("click", function () {
-        const categoria = document.getElementById("categoriaFilter").value;
-        const deporte = document.getElementById("deporteFilter").value;
-        window.location.href = `/partidos/${deporte}/${categoria}`;
-    });
-</script>
-
 {% for grupo, equipos in grupos.items() %}
     <h2>Grupo {{ grupo }}</h2>
     <ul>
@@ -91,5 +83,14 @@
         {% endfor %}
     </ul>
 {% endfor %}
+
+
+<script>
+    document.getElementById("applyFiltersBtn").addEventListener("click", function () {
+        const categoria = document.getElementById("categoriaFilter").value;
+        const deporte = document.getElementById("deporteFilter").value;
+        window.location.href = `/partidos/${deporte}/${categoria}`;
+    });
+</script>
 
 {% endblock %}

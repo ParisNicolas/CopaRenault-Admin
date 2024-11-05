@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request
 from app import db
-from app.models import Equipo
+from app.models import Equipo, Inscripcion
 from collections import defaultdict
 
 sport_bp = Blueprint('sport_bp', __name__, template_folder='templates')
@@ -30,3 +30,17 @@ def partidos(deporte, categoria):
         datos.append({"nombre":equipo.deporte, "grupo":registro.grupo_equipo, "pts":registro.puntos_equipo})
     return render_template('deportes/grupos.html', datos=datos)"""
 
+def asignar_equipos_manually():
+    inscripciones = Inscripcion.query.all()
+    grupos = ['A', 'B', 'C', 'D']
+    for i, incripto in enumerate(inscripciones):
+        equipo = Equipo(
+            nombre=incripto.Equipo, 
+            colegio=incripto.Colegio,
+            deporte=incripto.Deporte,
+            categoria=incripto.Categoria,
+            grupo=grupos[i//4]
+            )
+        incripto.equipo_id = equipo.id
+        db.session.add(equipo)
+    db.session.commit()

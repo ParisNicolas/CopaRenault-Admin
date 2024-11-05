@@ -11,7 +11,8 @@
     }
 
     .login-box {
-      margin-top: 75px;
+      margin-top: 125px;
+      padding-top: 50px;
       height: auto;
       background: #272829;
       text-align: center;
@@ -32,87 +33,76 @@
       text-align: center;
       font-size: 30px;
       letter-spacing: 2px;
-      margin-top: 15px;
       font-weight: bold;
       color: #ECF0F5;
     }
 
     .login-form {
-      margin-top: 25px;
+      margin-top: 40px;
       text-align: left;
     }
 
-    input[type=text] {
-      background-color: #232324;
-      border: none;
-      border-bottom: 2px solid #eaf010;
-      border-top: 0px;
-      border-radius: 0px;
-      font-weight: bold;
-      outline: 0;
-      margin-bottom: 20px;
-      padding-left: 0px;
-      color: rgb(85, 85, 85);
-    }
-
+    input[type=text],
     input[type=password] {
       background-color: #232324;
       border: none;
       border-bottom: 2px solid #eaf010;
-      border-top: 0px;
-      border-radius: 0px;
       font-weight: bold;
-      outline: 0;
-      padding-left: 0px;
+      outline: none;
+      color: #FFFFFF;
+      padding-left: 3px;
       margin-bottom: 20px;
-      color: rgb(85, 85, 85);
+    }
+
+    input[type=text]:focus,
+    input[type=password]:focus {
+      background-color: #232324;
+      border-bottom: 2px solid rgb(255, 200, 20);
+      color: #FFFFFF;
+      box-shadow: none;
     }
 
     .form-group {
-      margin-bottom: 40px;
+      margin-top: 40px;
       outline: 0px;
-    }
-
-    .form-control:focus {
-      border-color: inherit;
-      -webkit-box-shadow: none;
-      box-shadow: none;
-      border-bottom: 2px solid #eaf010;
-      outline: 0;
-      background-color: #21211f;
-      color: rgb(85, 85, 85);
-    }
-
-    input:focus {
-      outline: none;
-      box-shadow: 0 0 0;
     }
 
     label {
       margin-bottom: 0px;
-    }
-
-    .form-control-label {
       font-size: 10px;
-      color: rgb(85, 85, 85);
+      color: #AAAAAA;
       font-weight: bold;
       letter-spacing: 1px;
     }
 
-    .btn-outline-primary {
-      border-color: #eaf010;
-      color: #21201e;
-      border-radius: 0px;
-      font-weight: bold;
-      letter-spacing: 1px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-    }
 
-    .btn-outline-primary:hover {
-      background-color: #21201e;
-      right: 0px;
 
-    }
+
+
+
+    .btn-outline {
+  margin-top: 45px;
+  margin-bottom: 30px;
+  background-color: #232324; /* Fondo negro */
+  border: 1px solid #eaf010; /* Borde amarillo */
+  outline: 2px solid #eaf010; /* Agrega un borde extra para mayor visibilidad */
+  color: #eaf010; /* Texto amarillo */
+  border-radius: 5px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  padding: 10px 20px; /* Espacio interior para que se vea el borde */
+  box-shadow: 0px 0px 5px #eaf010; /* Sombra para resaltar el borde */
+}
+
+.btn-outline:hover {
+  background-color: #eaf010; /* Fondo amarillo al hacer hover */
+  color: #232324; /* Texto negro al hacer hover */
+  border-color: #eaf010; /* Borde amarillo */
+  outline: none; /* Quita el borde extra en hover */
+}
+
+
+
 
     .login-btm {
       float: left;
@@ -123,23 +113,11 @@
       text-align: right;
       margin-bottom: 25px;
     }
-
-    .login-text {
-      text-align: left;
-      padding-left: 0px;
-      color: rgb(85, 85, 85);
-    }
-
-    .loginbttm {
-      padding: 0px;
-    }
   </style>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+    integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
-
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css'>
-<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css'>
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
   <title>Sign In</title>
 </head>
 
@@ -165,15 +143,15 @@
               </div>
               <div class="form-group">
                 <label class="form-control-label">PASSWORD</label>
-                <input type="password" class="form-control" i>
+                <input type="password" class="form-control">
               </div>
 
               <div class="col-lg-12 loginbttm">
-                <div class="col-lg-6 login-btm login-text">
+                <div class="col-lg-6 login-btm">
                   <!-- Error Message -->
                 </div>
                 <div class="col-lg-6 login-btm login-button">
-                  <button type="submit" class="btn btn-outline-primary">LOGIN</button>
+                  <button type="submit" class="btn btn-outline">LOGIN</button>
                 </div>
               </div>
             </form>
