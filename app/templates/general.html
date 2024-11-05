@@ -1,11 +1,47 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2 class="mt-3">El hector 10</h2>
-{% endblock %}
-
-{% block js %}
+<div class="content-container">
+    <h2 class="title">El Hector 7</h2>
+    <div class="counter-container">
+        <p>Total de inscripciones: <span>{{ total_inscripciones }}</span></p>
+        <p>Inscripciones en espera: <span>{{ inscripciones_en_espera }}</span></p>
+        <p>Total de personas que asistirán: <span>{{ total_personas }}</span></p>
+        <p>Total de personas con diabetes: <span>{{ total_diabeticos }}</span></p>
+        <p>Total de personas vegetarianas: <span>{{ total_vegetarianos }}</span></p>
+        <p>Total de personas celiacas: <span>{{ total_celiacos }}</span></p>
+    </div>
+</div>
 {% endblock %}
 
 {% block css %}
+<style>
+  .content-container {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      background-color: #f9f9f9;
+  }
+
+  .title {
+      font-size: 1.8em;
+      color: #333;
+      margin-bottom: 15px;
+  }
+
+  .counter-container p {
+      font-size: 1.1em;
+      color: #555;
+      margin: 8px 0;
+  }
+
+  .counter-container span {
+      font-weight: bold;
+      color: #007bff;
+  }
+</style>
 {% endblock %}

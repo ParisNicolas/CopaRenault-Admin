@@ -44,6 +44,112 @@
         background-color: #f19f23;
         font-weight: bold;
     }
+
+    @import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700|Open+Sans:300,400,700');
+.r18-container {
+  max-width: 1068px;
+  margin: 0 auto;
+  width: 100%;
+  background: #0f3f79;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.r18-container>* {
+  flex: 1 100%;
+  text-align: center;
+}
+
+.r18-items:nth-child(1) {
+  background: rgba(0, 255, 255, 0.05);
+}
+
+.r18-items:nth-child(2) {
+  background: rgba(255, 0, 0, 0.05);
+}
+
+.r18-items:nth-child(3) {
+  background: rgba(0, 255, 0, 0.05);
+}
+
+@media all and (min-width: 900px) {
+  .r18-items {
+    flex: 1 auto;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .r18-items {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+.r18-columns {
+  display: inline-flex;
+  font-family: 'Open Sans Condensed', sans-serif;
+  padding-top: 5px;
+}
+
+.r18-name {
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 5px;
+  position: relative;
+  top: -6px;
+}
+
+.r18-team-l {
+  padding-right: 5px;
+}
+
+.r18-team-l::after {
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 300;
+  content: ":";
+  color: #ffffff;
+  font-size: 28px;
+  line-height: 0;
+  top: -2px;
+  position: relative;
+  margin-left: 5px;
+}
+
+.r18-team-r {
+  padding-left: 2px;
+}
+
+.r18-team-r .flag-icon, .r18-team-l .flag-icon {
+  position: relative;
+  top: -4px;
+}
+
+.r18-score {
+  font-weight: 700;
+  font-size: 17.5px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fafafa;
+  position: relative;
+  padding: 0 10px;
+  top: -5px;
+}
+
+.r18-time {
+  color: #FFFFFF;
+  font-family: 'Open Sans', sans-serif;
+  display: inline-flex;
+  margin-bottom: -5px;
+}
+
+.r18-hour {
+  font-weight: 100;
+}
+
+.title-color{
+    color: #000000;
+}
 </style>
 
 <div class="col-md-16" style="margin: 40px;">
@@ -75,15 +181,64 @@
     </div>
 </div>
 
+<h1>{{ categoria }} de {{ deporte }}</h1>
 {% for grupo, equipos in grupos.items() %}
-    <h2>Grupo {{ grupo }}</h2>
-    <ul>
-        {% for equipo in equipos %}
-            <li>{{ equipo.nombre }} - {{ equipo.colegio }} ({{ equipo.deporte }}, {{ equipo.categoria }})</li>
-        {% endfor %}
-    </ul>
+    <div class="tabla-clasificacion">
+        <h3>Grupo {{ grupo }}</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>POS</th>
+                    <th>EQUIPOS</th>
+                    <th>PG</th>
+                    <th>PE</th>
+                    <th>PP</th>
+                    <th>DG</th>
+                    <th class="highlight">PTS</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for equipo in equipos %}
+                <tr>
+                    <td>1</td>
+                    <td>{{ equipo.nombre }}</td>
+                    <td>{{ equipo.victorias}}</td>
+                    <td>{{ equipo.empates}}</td>
+                    <td>{{ equipo.derrotas}}</td>
+                    <td>+3</td>
+                    <td class="highlight">6</td> 
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endfor %}
 
+<h1>Fixture</h1>
+{% for grupo, equipos in grupos.items() %}
+    <h3 class="title-color">Grupo {{ grupo }}</h3>
+    
+    <div class="r18-container">
+
+        <div class="r18-items">
+        <div class="r18-columns">
+            <div class="r18-team-l" data-score="1">
+            <span class="r18-name">Croacia</span>
+            <span class="flag-icon flag-icon-hr"></span>
+            <span class="r18-score">2</span>
+            </div>
+            <div class="r18-team-r" data-score="2">
+            <span class="r18-score">1</span>
+            <span class="flag-icon flag-icon-gb"></span>
+            <span class="r18-name">Inglaterra</span>
+            </div>
+        </div>
+        <div class="r18-time">
+            <div class="r18-hour">11:00</div>
+        </div>
+        </div>
+    </div>
+{% endfor %}
 
 <script>
     document.getElementById("applyFiltersBtn").addEventListener("click", function () {

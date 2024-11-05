@@ -75,36 +75,28 @@
       letter-spacing: 1px;
     }
 
-
-
-
-
-
     .btn-outline {
-  margin-top: 45px;
-  margin-bottom: 30px;
-  background-color: #232324; /* Fondo negro */
-  border: 1px solid #eaf010; /* Borde amarillo */
-  outline: 2px solid #eaf010; /* Agrega un borde extra para mayor visibilidad */
-  color: #eaf010; /* Texto amarillo */
-  border-radius: 5px;
-  font-weight: bold;
-  letter-spacing: 1px;
-  padding: 10px 20px; /* Espacio interior para que se vea el borde */
-  box-shadow: 0px 0px 5px #eaf010; /* Sombra para resaltar el borde */
-}
+      margin-top: 45px;
+      margin-bottom: 30px;
+      background-color: #232324;
+      border: 1px solid #eaf010;
+      outline: 2px solid #eaf010;
+      color: #eaf010;
+      border-radius: 5px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      padding: 10px 20px;
+      box-shadow: 0px 0px 5px #eaf010;
+    }
 
-.btn-outline:hover {
-  background-color: #eaf010; /* Fondo amarillo al hacer hover */
-  color: #232324; /* Texto negro al hacer hover */
-  font-weight: 600;
-  border-color: #eaf010; /* Borde amarillo */
-  outline: none; /* Quita el borde extra en hover */
-  box-shadow: 0px 0px 3px #eaf010;
-}
-
-
-
+    .btn-outline:hover {
+      background-color: #eaf010;
+      color: #232324;
+      font-weight: 600;
+      border-color: #eaf010;
+      outline: none;
+      box-shadow: 0px 0px 3px #eaf010;
+    }
 
     .login-btm {
       float: left;
@@ -128,17 +120,17 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-3 col-md-2"></div>
-      <div class="col-lg-6 col-md-8 login-box">
-        <div class="col-lg-12 login-key">
+      <div class="col-lg-6 col-md-8 login-box" id="login-box">
+        <div class="col-lg-12 login-key" id="login-key">
           <i class="fa fa-key" aria-hidden="true"></i>
         </div>
-        <div class="col-lg-12 login-title">
+        <div class="col-lg-12 login-title" id="login-title">
           ADMIN PANEL
         </div>
 
-        <div class="col-lg-12 login-form">
+        <div class="col-lg-12 login-form" id="login-form-container">
           <div class="col-lg-12 login-form">
-            <form>
+            <form id="login-form">
               <div class="form-group">
                 <label class="form-control-label">USERNAME</label>
                 <input type="text" class="form-control">
@@ -153,7 +145,7 @@
                   <!-- Error Message -->
                 </div>
                 <div class="col-lg-6 login-btm login-button">
-                  <button type="submit" class="btn btn-outline">LOGIN</button>
+                  <button type="button" class="btn btn-outline" onclick="triggerColorChange()">LOGIN</button>
                 </div>
               </div>
             </form>
@@ -162,6 +154,41 @@
         <div class="col-lg-3 col-md-2"></div>
       </div>
     </div>
+  </div>
+
+  <script>
+    function triggerColorChange() {
+      // Seleccionar elementos
+      const loginBox = document.getElementById('login-box');
+      const keyElement = document.getElementById('login-key');
+      const titleElement = document.getElementById('login-title');
+      const formContainer = document.getElementById('login-form-container');
+
+      // Ocultar inputs y botón
+      formContainer.style.visibility = 'hidden';
+
+      // Cambiar el fondo del formulario a negro
+      loginBox.style.backgroundColor = '#000000';
+      keyElement.style.visibility = 'hidden';
+      titleElement.style.visibility = 'hidden';
+
+      // Volver a mostrar los colores después de 200 ms
+      setTimeout(() => {
+        loginBox.style.backgroundColor = '#272829';
+        keyElement.style.visibility = 'visible';
+        titleElement.style.visibility = 'visible';
+        formContainer.style.visibility = 'visible';
+
+        // Cambiar el degradado y el color del título
+        keyElement.style.background = '-webkit-linear-gradient(#ff0000, #d10000)';
+        keyElement.style.webkitBackgroundClip = 'text';
+        keyElement.style.webkitTextFillColor = 'transparent';
+
+        titleElement.style.color = '#ff0000';
+        titleElement.textContent = 'WELCOME OWNER';
+      }, 340);
+    }
+  </script>
 </body>
 
 </html>

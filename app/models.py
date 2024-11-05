@@ -37,8 +37,6 @@ class Inscripcion(db.Model):
         return f'<Inscripcion {self.Equipo} - {self.Deporte}>'
 
 
-
-
 # Para fase de grupos
 class Equipo(db.Model):
     __tablename__ = 'equipos'
@@ -87,14 +85,15 @@ class Partido(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     deporte = db.Column(db.String(100), nullable=False)
     categoria = db.Column(db.String(20), nullable=False)
+    grupo = db.Column(db.String(1), nullable=True)
     horario = db.Column(db.DateTime, nullable=True)
     cancha = db.Column(db.Integer, nullable=False)
 
     #Datos del partido
     equipo1_id = db.Column(db.Integer, db.ForeignKey('equipos.id'), nullable=False)
     equipo2_id = db.Column(db.Integer, db.ForeignKey('equipos.id'), nullable=False)
-    puntaje1 = db.Column(db.Integer, nullable=False, default=0)
-    puntaje2 = db.Column(db.Integer, nullable=False, default=0)
+    puntaje1 = db.Column(db.Integer, nullable=True)
+    puntaje2 = db.Column(db.Integer, nullable=True)
     estado = db.Column(db.String(20), nullable=False, default=ESTADO_PENDIENTE)
 
     #Relaciones

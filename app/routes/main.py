@@ -1,10 +1,11 @@
 from flask import Blueprint, flash, redirect, render_template, url_for, abort
 from flask_login import login_user, logout_user, current_user
 from functools import wraps
+from sqlalchemy import func
 
 from app import db
 from app.forms import LoginForm, RegisterForm
-from app.models import Usuario
+from app.models import Usuario, Inscripcion
 
 #from app.models import Carrito, Producto, CarritoProducto, Transaccion
 #from app.forms import TarjetaForm
@@ -26,7 +27,24 @@ def role_required(allowed_rol):
 
 @main.route('/')
 def general():
-    return render_template('general.html')
+    total_inscripciones = Inscripcion.query.count()
+    inscripciones_en_espera = Inscripcion.query.filter_by(Estado=False).count()
+
+    total_personas = db.session.query(func.sum(Inscripcion.Miembros)).scalar() or 0
+
+    total_diabeticos = Inscripcion.query.filter_by(Diabetico='si').count()
+    total_vegetarianos = Inscripcion.query.filter_by(Vegetariano='si').count()
+    total_celiacos = Inscripcion.query.filter_by(Celiaco='si').count()
+
+    return render_template(
+        'general.html',
+        total_inscripciones=total_inscripciones,
+        inscripciones_en_espera=inscripciones_en_espera,
+        total_personas=total_personas,
+        total_diabeticos=total_diabeticos,
+        total_vegetarianos=total_vegetarianos,
+        total_celiacos=total_celiacos
+    )
 
 
 @main.route('/login', methods=['GET', 'POST'])
@@ -37,10 +55,13 @@ def login():
         if usuario and usuario.check_password(form.contraseña.data):  # Comprueba la contraseña
             login_user(usuario)
             flash('Inicio de sesión exitoso', 'success')
-            return redirect(url_for('main.general'))  # Redirige a la página de inicio o dashboard
+            # Si el usuario es "owner", activa la animación
+            if usuario.nombre == "owner":  # Cambia esto según tu lógica de identificación de "owner"
+                return render_template('login.html', form=form, animate=True)
+            return redirect(url_for('main.general'))  # Redirige normalmente si no es "owner"
         else:
             flash('Inicio de sesión fallido. Verifica tu nombre de usuario y contraseña.', 'danger')
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=form, animate=False)
 
 
 #Registro
