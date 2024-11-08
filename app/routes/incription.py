@@ -1,8 +1,6 @@
-import requests
-#pip install requests
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from app import db
-from app.models import Inscripcion
+from app.models import Inscripcion, Equipo
 
 #from app.models import Carrito, Producto, CarritoProducto, Transaccion
 #from app.forms import TarjetaForm
@@ -16,7 +14,6 @@ def inscripciones():
 
     return render_template('inscripciones/inscripciones.html', Table1_inf=inscripciones, Table2_inf = equipos)
 
-#Cargar equipo manualmente a tabla1
 @teams_bp.route('/add_team', methods=['GET', 'POST'])
 def add_team():
     if request.method == 'POST':
@@ -34,21 +31,20 @@ def add_team():
             Vegetariano=request.form['Vegetariano'],
             Celiaco=request.form['Celiaco'],
             Diabetico=request.form['Diabetico'],
-            Estado=False  # Ajusta según tus necesidades
+            Libre=0,  # Ajusta según tus necesidades
+            Estado=True  # Ajusta según tus necesidades
         )
         db.session.add(nueva_inscripcion)
         db.session.commit()
         return redirect(url_for('teams_bp.inscripciones'))
-    return render_template('inscripciones/add-team.html')
+    return render_template('add-team.html')
 
-
-#Editar equipo de tabla1
 @teams_bp.route('/edit/<int:id>')
 def get_team(id):
     equipo = Inscripcion.query.get_or_404(id)
-    return render_template('inscripciones/edit-team.html', team=equipo)
+    return render_template('edit-team.html', team=equipo)
 
-@teams_bp.route('/update_team/<int:id>', methods=['POST'])
+@teams_bp.route('/update/<int:id>', methods=['POST'])
 def update_team(id):
     equipo = Inscripcion.query.get_or_404(id)
     equipo.Equipo = request.form['Equipo']
@@ -67,55 +63,27 @@ def update_team(id):
     db.session.commit()
     return redirect(url_for('teams_bp.inscripciones'))
 
-
-
-
-@teams_bp.route('/cargar/<int:id>', methods=['GET'])
-def confirm_team(id):
-    
+@teams_bp.route('/delete/<int:id>')
+def delete_team(id):
     equipo = Inscripcion.query.get_or_404(id)
-    equipo.Estado = True  # Descomentar si deseas cambiar el estado
-    db.session.commit()  # Confirmar cambios en la base de datos
-    
-    
-    # URL del Apps Script (asegúrate de que esta sea la correcta)
-    script_url = 'https://script.google.com/macros/s/AKfycbyQIB2RlS3YG9OrV43UOCcFf_0Hi8juvrsWbjyaLhf6z6OcJ3JfopZPBFI9JlHrde3FpQ/exec'
-
-    # Imprimir el ID y la URL del Apps Script
-    print(f"ID recibido en Flask: {id}")
-    print(f"Enviando solicitud a: {script_url}")
-
-    # Enviar la solicitud al Apps Script sin esperar respuesta
-    try:
-        # Crear la URL completa
-        full_url = f"{script_url}?id={id}"
-        response = requests.get(full_url)  # Usar GET para pruebas simples
-
-        # Verificar la respuesta del Apps Script
-        if response.status_code == 200:
-            flash("Orden enviada exitosamente al Apps Script.", "success")
-        else:
-            flash(f"Error en Apps Script: {response.status_code}", "error")
-    except requests.exceptions.RequestException as e:
-        flash(f"Error al llamar al Apps Script: {str(e)}", "error")
-
+    db.session.delete(equipo)
+    db.session.commit()
     return redirect(url_for('teams_bp.inscripciones'))
 
+@teams_bp.route('/cargar/<int:id>')
+def cargar_team(id):
+    equipo = Inscripcion.query.get_or_404(id)
+    equipo.estado = True
+    db.session.commit()
+    return redirect(url_for('teams_bp.inscripciones'))
 
-
-
-
-
-
-
-#Editar equipo de tabla2
-@teams_bp.route('/edit2/<int:id>')
+@teams_bp.route('/get_info/<int:id>')
 def get_team2(id):
     equipo = Inscripcion.query.get_or_404(id)
     return render_template('inscripciones/final-config.html', team=equipo)
 
-@teams_bp.route('/update_team2/<int:id>', methods=['POST'])
-def update_team2(id):
+@teams_bp.route('/config/<int:id>', methods=['POST'])
+def config_team(id):
     if request.method == 'POST':
         equipo = Inscripcion.query.get_or_404(id)
         equipo.Equipo = request.form['Equipo']
@@ -127,19 +95,37 @@ def update_team2(id):
         equipo.Correo = request.form['Correo']
         equipo.Miembros = request.form['Miembros']
         equipo.Acompañantes = request.form['Acompañantes']
-        equipo.Grupo = request.form['Grupo']
         equipo.Vegetariano = request.form['Vegetariano']
         equipo.Celiaco = request.form['Celiaco']
         equipo.Diabetico = request.form['Diabetico']
         
         db.session.commit()
         return redirect(url_for('teams_bp.inscripciones'))
-    return render_template('inscripciones/final-config.html')
+    return render_template('final-config.html')
 
-
-@teams_bp.route('/delete/<int:id>')
-def delete_team(id):
+@teams_bp.route('/delete_copa/<int:id>', methods=['POST'])
+def eliminar_team(id):
     equipo = Inscripcion.query.get_or_404(id)
     db.session.delete(equipo)
     db.session.commit()
+    return redirect(url_for('teams_bp.inscripciones'))
+
+@teams_bp.route('/asignar_grupo/<int:id>', methods=['POST'])
+def asignar_grupo(id):
+    inscripto = Inscripcion.query.get_or_404(id)
+    
+    if inscripto.equipo_id:
+         inscripto.equipo.grupo = request.form['grupo']
+    else:
+        equipo = Equipo(
+            nombre=inscripto.Equipo,
+            colegio=inscripto.Colegio,
+            deporte=inscripto.Deporte,
+            categoria=inscripto.Categoria,
+            grupo=request.form['grupo']
+        )
+        inscripto.equipo_id = equipo.id
+        db.session.add(equipo)
+    db.session.commit()
+
     return redirect(url_for('teams_bp.inscripciones'))

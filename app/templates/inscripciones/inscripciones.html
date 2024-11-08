@@ -219,6 +219,20 @@
                         href="{{ url_for('teams_bp.get_team2', id=inf.ID) }}">
                         <img src="{{ url_for('static', filename='img/settings_ico.png') }}" style="width: 40px; height: 40px; margin: 2px;" />
                     </a>
+                    <form action="{{ url_for('teams_bp.asignar_grupo', id=inf.ID) }}" method="POST" class="d-flex flex-row">
+                        <select class="form-control" name="grupo">
+                            {% for letra in 'ABCDEF'%}
+                                <option value={{letra}}>Grupo {{letra}}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="ms-2 btn btn-info">></button>
+                    </form>
+                    <div class="
+                        {% if inf.equipo_id %}
+                            bg-danger
+                        {% else %}
+                            bg-success
+                        {% endif %}">.</div>
                 </td>
             </tr>
             {% endfor %}

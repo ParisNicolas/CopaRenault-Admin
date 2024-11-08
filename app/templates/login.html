@@ -8,38 +8,51 @@
     body {
       background: #232425;
       font-family: 'Roboto', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
     }
 
     .login-box {
-      margin-top: 125px;
       padding-top: 50px;
-      height: auto;
+      padding-bottom: 50px;
+      width: 100%;
+      max-width: 400px;
       background: #272829;
       text-align: center;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+      position: relative;
+      overflow: hidden;
     }
 
     .login-key {
-      height: 100px;
       font-size: 80px;
       line-height: 100px;
-      background: -webkit-linear-gradient(#eaf010, #f7b84a);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: #eaf010;
+      transition: color 1s ease;
     }
 
     .login-title {
       margin-top: 15px;
-      text-align: center;
       font-size: 30px;
       letter-spacing: 2px;
       font-weight: bold;
       color: #ECF0F5;
+      transition: all 0.3s ease;
     }
 
     .login-form {
       margin-top: 40px;
       text-align: left;
+      transition: all 0.3s ease;
+    }
+
+    .hidden {
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
 
     input[type=text],
@@ -77,7 +90,6 @@
 
     .btn-outline {
       margin-top: 45px;
-      margin-bottom: 30px;
       background-color: #232324;
       border: 1px solid #eaf010;
       outline: 2px solid #eaf010;
@@ -87,6 +99,7 @@
       letter-spacing: 1px;
       padding: 10px 20px;
       box-shadow: 0px 0px 5px #eaf010;
+      float: right;
     }
 
     .btn-outline:hover {
@@ -98,14 +111,42 @@
       box-shadow: 0px 0px 3px #eaf010;
     }
 
-    .login-btm {
-      float: left;
+    /* Estilos para el mensaje de bienvenida */
+    .welcome-text {
+      position: absolute;
+      top: 56%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 50px;
+      color: #ff0000;
+      font-weight: bold;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 1s ease, transform 1s ease;
     }
 
-    .login-button {
-      padding-right: 0px;
-      text-align: right;
-      margin-bottom: 25px;
+    .show-welcome-text {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    /* Animación de entrada */
+    body {
+      color: #411;
+      font-family: Consolas, Courier, monospace;
+      font-size: 60px;
+      text-shadow: 0 0 15px #411;
+    }
+
+    .glow {
+      color: #f00;
+      text-shadow: 0px 0px 10px #f00;
+    }
+
+    span {
+
+      padding: 0 6px;
     }
   </style>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
@@ -118,8 +159,7 @@
 <body>
 
   <div class="container">
-    <div class="row">
-      <div class="col-lg-3 col-md-2"></div>
+    <div class="row justify-content-center">
       <div class="col-lg-6 col-md-8 login-box" id="login-box">
         <div class="col-lg-12 login-key" id="login-key">
           <i class="fa fa-key" aria-hidden="true"></i>
@@ -129,64 +169,95 @@
         </div>
 
         <div class="col-lg-12 login-form" id="login-form-container">
-          <div class="col-lg-12 login-form">
-            <form id="login-form">
-              <div class="form-group">
-                <label class="form-control-label">USERNAME</label>
-                <input type="text" class="form-control">
+          <form id="login-form">
+            <div class="form-group">
+              <label class="form-control-label">USERNAME</label>
+              <input type="text" class="form-control">
+            </div>
+            <div class="form-group">
+              <label class="form-control-label">PASSWORD</label>
+              <input type="password" class="form-control">
+            </div>
+            <div class="col-lg-12 loginbttm">
+              <div class="login-button">
+                <button type="button" class="btn btn-outline" onclick="triggerColorChange()">LOGIN</button>
               </div>
-              <div class="form-group">
-                <label class="form-control-label">PASSWORD</label>
-                <input type="password" class="form-control">
-              </div>
-
-              <div class="col-lg-12 loginbttm">
-                <div class="col-lg-6 login-btm">
-                  <!-- Error Message -->
-                </div>
-                <div class="col-lg-6 login-btm login-button">
-                  <button type="button" class="btn btn-outline" onclick="triggerColorChange()">LOGIN</button>
-                </div>
-              </div>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
-        <div class="col-lg-3 col-md-2"></div>
+
+        <!-- Texto de bienvenida centrado -->
+        <div class="welcome-text" id="welcome-text">
+          <div id="loading" >WELCOME ADMIN</div>
+        </div>
       </div>
     </div>
   </div>
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     function triggerColorChange() {
-      // Seleccionar elementos
       const loginBox = document.getElementById('login-box');
       const keyElement = document.getElementById('login-key');
       const titleElement = document.getElementById('login-title');
       const formContainer = document.getElementById('login-form-container');
+      const welcomeText = document.getElementById('welcome-text');
 
-      // Ocultar inputs y botón
-      formContainer.style.visibility = 'hidden';
+      // Ocultar inputs, botón y título inicial
+      formContainer.classList.add('hidden');
+      titleElement.classList.add('hidden');
 
-      // Cambiar el fondo del formulario a negro
+      // Cambiar fondo a negro
       loginBox.style.backgroundColor = '#000000';
-      keyElement.style.visibility = 'hidden';
-      titleElement.style.visibility = 'hidden';
 
-      // Volver a mostrar los colores después de 200 ms
+      // Cambiar color de la key a rojo
       setTimeout(() => {
-        loginBox.style.backgroundColor = '#272829';
-        keyElement.style.visibility = 'visible';
-        titleElement.style.visibility = 'visible';
-        formContainer.style.visibility = 'visible';
+        keyElement.style.transition = 'color 2s ease'; // Cambio de color con transición
+        keyElement.style.color = 'red'; // Rojo
+      }, 10);
 
-        // Cambiar el degradado y el color del título
-        keyElement.style.background = '-webkit-linear-gradient(#ff0000, #d10000)';
-        keyElement.style.webkitBackgroundClip = 'text';
-        keyElement.style.webkitTextFillColor = 'transparent';
+      // Mostrar mensaje de bienvenida después de cambiar el color de la key
+      setTimeout(() => {
+        welcomeText.classList.add('show-welcome-text');
+        startAnimation();
+      }, 400);
+    }
 
-        titleElement.style.color = '#ff0000';
-        titleElement.textContent = 'WELCOME OWNER';
-      }, 340);
+    function startAnimation() {
+      alphabet = new Array("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0");
+      letter_count = 0;
+      el = $("#loading");
+      word = el.html().trim();
+      finished = false;
+
+      el.html("");
+      for (var i = 0; i < word.length; i++) {
+        el.append("<span>" + word.charAt(i) + "</span>");
+      }
+
+      setTimeout(write, 20);
+      incrementer = setTimeout(inc, 200);
+
+      function write() {
+        for (var i = letter_count; i < word.length; i++) {
+          var c = Math.floor(Math.random() * 36);
+          $("span")[i].innerHTML = alphabet[c];
+        }
+        if (!finished) {
+          setTimeout(write, 60);
+        }
+      }
+
+      function inc() {
+        $("span")[letter_count].innerHTML = word[letter_count];
+        $("span:eq(" + letter_count + ")").addClass("glow");
+        letter_count++;
+        if (letter_count >= word.length) {
+          finished = true;
+        } else {
+          setTimeout(inc, 65);
+        }
+      }
     }
   </script>
 </body>
