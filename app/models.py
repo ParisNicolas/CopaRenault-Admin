@@ -60,7 +60,7 @@ class Equipo(db.Model):
     #partidos = db.relationship('Partido')
     partidos = db.relationship('Partido', 
                                 primaryjoin='or_(Equipo.id==Partido.equipo1_id, Equipo.id==Partido.equipo2_id)',
-                                backref='equipo')
+                                backref='equipo', cascade='all, delete-orphan')
 
     #Optimizacion de consultas con filtrado
     __table_args__ = (

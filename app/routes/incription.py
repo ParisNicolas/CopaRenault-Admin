@@ -65,8 +65,13 @@ def update_team(id):
 
 @teams_bp.route('/delete/<int:id>')
 def delete_team(id):
-    equipo = Inscripcion.query.get_or_404(id)
-    db.session.delete(equipo)
+    inscripcion	 = Inscripcion.query.get_or_404(id)
+    equipo = inscripcion.equipo
+
+    db.session.delete(inscripcion)
+    if equipo:
+        db.session.delete(equipo)
+    
     db.session.commit()
     return redirect(url_for('teams_bp.inscripciones'))
 

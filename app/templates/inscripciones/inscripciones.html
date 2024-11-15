@@ -186,6 +186,7 @@
     <table class="table table-striped table-hover table-bordered table-sm bg-white">
         <thead>
             <tr>
+                <td>ID</td>
                 <td>Equipo</td>
                 <td>Colegio</td>
                 <td>Deporte</td>
@@ -200,6 +201,7 @@
         <tbody>
             {% for inf in Table2_inf %}
             <tr>
+                <td>{{inf.ID}}</td>
                 <td>{{inf.Equipo}}</td>
                 <td>{{inf.Colegio}}</td>
                 <td>{{inf.Deporte}}</td>
