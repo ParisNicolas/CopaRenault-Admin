@@ -31,13 +31,12 @@ def add_team():
             Vegetariano=request.form['Vegetariano'],
             Celiaco=request.form['Celiaco'],
             Diabetico=request.form['Diabetico'],
-            Libre=0,  # Ajusta según tus necesidades
             Estado=True  # Ajusta según tus necesidades
         )
         db.session.add(nueva_inscripcion)
         db.session.commit()
         return redirect(url_for('teams_bp.inscripciones'))
-    return render_template('add-team.html')
+    return render_template('inscripciones/add-team.html')
 
 @teams_bp.route('/edit/<int:id>')
 def get_team(id):
@@ -87,8 +86,8 @@ def get_team2(id):
     equipo = Inscripcion.query.get_or_404(id)
     return render_template('inscripciones/final-config.html', team=equipo)
 
-@teams_bp.route('/config/<int:id>', methods=['POST'])
-def config_team(id):
+@teams_bp.route('/update_team2/<int:id>', methods=['POST'])
+def update_team2(id):
     if request.method == 'POST':
         equipo = Inscripcion.query.get_or_404(id)
         equipo.Equipo = request.form['Equipo']
@@ -106,7 +105,7 @@ def config_team(id):
         
         db.session.commit()
         return redirect(url_for('teams_bp.inscripciones'))
-    return render_template('final-config.html')
+    return render_template('inscripciones/final-config.html')
 
 @teams_bp.route('/delete_copa/<int:id>', methods=['POST'])
 def eliminar_team(id):
@@ -129,8 +128,9 @@ def asignar_grupo(id):
             categoria=inscripto.Categoria,
             grupo=request.form['grupo']
         )
-        inscripto.equipo_id = equipo.id
         db.session.add(equipo)
+        db.session.commit()
+        inscripto.equipo_id = equipo.id
     db.session.commit()
 
     return redirect(url_for('teams_bp.inscripciones'))

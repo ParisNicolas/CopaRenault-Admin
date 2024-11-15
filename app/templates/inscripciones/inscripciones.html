@@ -229,11 +229,12 @@
                         </select>
                         <button type="submit" class="ms-2 btn btn-info">></button>
                     </form>
+                    {{ inf.equipo_id }}
                     <div class="
                         {% if inf.equipo_id %}
-                            bg-danger
-                        {% else %}
                             bg-success
+                        {% else %}
+                            bg-danger
                         {% endif %}">.</div>
                 </td>
             </tr>

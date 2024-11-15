@@ -205,8 +205,8 @@
                     <td>{{ equipo.victorias}}</td>
                     <td>{{ equipo.empates}}</td>
                     <td>{{ equipo.derrotas}}</td>
-                    <td>+3</td>
-                    <td class="highlight">6</td> 
+                    <td>{{ equipo.diferncia_gol}}</td>
+                    <td class="highlight">{{ equipo.puntos}}</td> 
                 </tr>
                 {% endfor %}
             </tbody>
@@ -218,26 +218,29 @@
 {% for grupo, equipos in grupos.items() %}
     <h3 class="title-color">Grupo {{ grupo }}</h3>
     
-    <div class="r18-container">
-
-        <div class="r18-items">
-        <div class="r18-columns">
-            <div class="r18-team-l" data-score="1">
-            <span class="r18-name">{{ equipos[0].nombre }}</span>
-            <span class="flag-icon flag-icon-hr"></span>
-            <span class="r18-score">2</span>
-            </div>
-            <div class="r18-team-r" data-score="2">
-            <span class="r18-score">1</span>
-            <span class="flag-icon flag-icon-gb"></span>
-            <span class="r18-name">{{ equipos[1].nombre }}</span>
-            </div>
-        </div>
-        <div class="r18-time">
-            <div class="r18-hour">11:00</div>
-        </div>
-        </div>
-    </div>
+    {% for i in range(equipos|length) %}
+      {% for j in range(i+1, equipos|length) %}
+      <div class="r18-container">
+          <div class="r18-items">
+          <div class="r18-columns">
+              <div class="r18-team-l" data-score="1">
+              <span class="r18-name">{{ equipos[i].nombre }}</span>
+              <span class="flag-icon flag-icon-hr"></span>
+              <span class="r18-score">2</span>
+              </div>
+              <div class="r18-team-r" data-score="2">
+              <span class="r18-score">1</span>
+              <span class="flag-icon flag-icon-gb"></span>
+              <span class="r18-name">{{ equipos[j].nombre }}</span>
+              </div>
+          </div>
+          <div class="r18-time">
+              <div class="r18-hour">11:00</div>
+          </div>
+          </div>
+      </div>
+    {% endfor %}
+  {% endfor %}
 {% endfor %}
 
 <script>

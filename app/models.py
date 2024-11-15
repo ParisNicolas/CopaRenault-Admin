@@ -53,6 +53,7 @@ class Equipo(db.Model):
     victorias = db.Column(db.Integer, nullable=False, default=0)
     empates = db.Column(db.Integer, nullable=False, default=0)
     derrotas = db.Column(db.Integer, nullable=False, default=0)
+    diferncia_gol = db.Column(db.Integer, nullable=False, default=0)
     puntos = db.Column(db.Integer, nullable=False, default=0)
 
     #Relaciones (1-1 a inscripcion) y (1-N a partidos)
