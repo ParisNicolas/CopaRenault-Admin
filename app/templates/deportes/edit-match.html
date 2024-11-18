@@ -1,0 +1,57 @@
+{% extends "./layout.html" %}
+{% block body %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cargar goles</title>
+</head>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <form id="updateMatchForm" action="{{ url_for('sport_bp.update_match', id=partido.id) }}" method="POST">
+                        <div class="form-group">
+                            <label for="puntaje1">Goles Equipo 1</label>
+                            <input type="number" class="form-control" id="puntaje1" name="puntaje1" value="{{ partido.puntaje1 }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="puntaje2">Goles Equipo 2</label>
+                            <input type="number" class="form-control" id="puntaje2" name="puntaje2" value="{{ partido.puntaje2 }}" required>
+                        </div>
+                        <button type="submit" id="submitButton" class="btn btn-primary btn-block">Actualizar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('updateMatchForm');
+        const submitButton = document.getElementById('submitButton');
+        
+        // Verifica si todos los campos requeridos están completos
+        function checkFormCompletion() {
+            const requiredFields = form.querySelectorAll('input[required]');
+            let allFilled = true;
+    
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    allFilled = false;
+                }
+            });
+    
+            submitButton.disabled = !allFilled;
+        }
+    
+        // Revisa el formulario cada vez que cambia un campo
+        form.addEventListener('input', checkFormCompletion);
+    
+        // Llama a la función una vez al cargar la página
+        checkFormCompletion();
+    });
+</script>
+    

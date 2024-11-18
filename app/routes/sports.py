@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect, url_for
 from app import db
 from app.models import Equipo, Inscripcion, Partido
 from collections import defaultdict
@@ -22,7 +22,7 @@ def partidos(deporte, categoria):
         equipos_por_grupo[equipo.grupo].append(equipo)
 
 
-    partidos = Partido.query.filter_by(deporte=deporte, categoria=categoria).order_by(Partido.grupo, Partido.horario).all()
+    partidos = Partido.query.filter_by(deporte=deporte, categoria=categoria).order_by(Partido.grupo, Partido.horario, Partido.cancha).all()
 
     partidos_por_grupo = defaultdict(list)
     for partido in partidos:
@@ -32,8 +32,14 @@ def partidos(deporte, categoria):
 
     return render_template('deportes/partidos.html', grupos=equipos_por_grupo, partidos=partidos_por_grupo, deporte=deporte, categoria=categoria)
 
+@sport_bp.route('/updates/<int:id>', methods=['POST'])
+def update_match(id):
+    partido  = Partido.query.get_or_404(id)
+    partido.puntaje1 = request.form['puntaje1']
+    partido.puntaje2 = request.form['puntaje2']
 
-
+    db.session.commit()
+    return redirect(url_for('sport_bp.partidos'))
 
 def asignar_equipos_manually():
     inscripciones = Inscripcion.query.all()

@@ -214,34 +214,56 @@
     </div>
 {% endfor %}
 
-<h1>Fixture</h1>
-{% for grupo, equipos in grupos.items() %}
-    <h3 class="title-color">Grupo {{ grupo }}</h3>
-    
-    {% for i in range(equipos|length) %}
-      {% for j in range(i+1, equipos|length) %}
-      <div class="r18-container">
-          <div class="r18-items">
-          <div class="r18-columns">
-              <div class="r18-team-l" data-score="1">
-              <span class="r18-name">{{ equipos[i].nombre }}</span>
-              <span class="flag-icon flag-icon-hr"></span>
-              <span class="r18-score">2</span>
+<div class="container py-4">
+  <h2 class="text-center text-warning mb-4">Fixture</h2>
+
+  {% for grupo, equipos in grupos.items() %}
+  <div class="grupo-wrapper py-3 mx-auto" style="background-color: #121212; max-width: 900px; border-radius: 15px;">
+    <div class="grupo-section">
+      <h3 class="text-center text-light mb-3">Grupo {{ grupo }}</h3>
+      <div class="row justify-content-center">
+        {% for i in range(equipos|length) %}
+          {% for j in range(i+1, equipos|length) %}
+            {% set partido = partidos[grupo][loop.index0] if grupo in partidos and loop.index0 < partidos[grupo]|length else None %}
+            <div class="d-flex justify-content-between align-items-center rounded p-3 m-2 shadow-lg" style="width: 100%; max-width: 700px; background-color: #2c2c2c; color: #fff;">
+              
+              <!-- eEquipo 1 -->
+              <div class="team d-flex align-items-center">
+                <span class="fw-bold me-3">{{ equipos[i].nombre }}</span>
+                <span class="r18-score bg-light text-dark rounded px-2 py-1" style="font-size: 0.9rem; margin-left: 15px;">
+                  {{ partido.puntaje1 if partido else "0" }}
+                </span>
               </div>
-              <div class="r18-team-r" data-score="2">
-              <span class="r18-score">1</span>
-              <span class="flag-icon flag-icon-gb"></span>
-              <span class="r18-name">{{ equipos[j].nombre }}</span>
+  
+              <span class="vs mx-4 text-uppercase" style="color: #bbb; font-size: 1.2rem;">VS</span>
+  
+              <!-- equipo 2 -->
+              <div class="team d-flex align-items-center">
+                <span class="r18-score bg-light text-dark rounded px-2 py-1" style="font-size: 0.9rem; margin-right: 15px;">
+                  {{ partido.puntaje2 if partido else "0" }}
+                </span>
+                <span class="fw-bold ms-3">{{ equipos[j].nombre }}</span>
               </div>
-          </div>
-          <div class="r18-time">
-              <div class="r18-hour">11:00</div>
-          </div>
-          </div>
+  
+              <!-- info partido -->
+              <div class="info text-center mt-3" style="font-size: 0.9rem;">
+                <div class="text-light">Hora: {{ partido.horario if partido else "No definido" }}</div>
+                <div class="text-light">Cancha: {{ partido.cancha if partido else "No definida" }}</div>
+              </div>
+
+              <a class="btn btn-Secondary" style="padding: 5px; display: inline-block; width: auto;"
+                href="#">
+                <img src="{{ url_for('static', filename='img/upload.ico') }}" style="width: 40px; height: 40px; margin: 2px;" />
+              </a>
+            </div>
+          {% endfor %}
+        {% endfor %}
       </div>
-    {% endfor %}
+    </div>
+  </div>
   {% endfor %}
-{% endfor %}
+</div>
+
 
 <script>
     document.getElementById("applyFiltersBtn").addEventListener("click", function () {
