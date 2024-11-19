@@ -14,6 +14,7 @@
         overflow: hidden;
         text-align: center;
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+        position: relative;
     }
     .tabla-clasificacion h2 {
         background-color: #f1c40f;
@@ -150,6 +151,31 @@
 .title-color{
     color: #000000;
 }
+
+
+.dropdown{
+  text-align: right;
+  position: absolute;
+  top: 5px;
+  right: 16px;
+}
+
+.input-square{
+  width: 5rem; /* Anchura del cuadrado */
+  height: 2rem; /* Altura del cuadrado */
+  text-align: center; /* Centrar el texto */
+  border-radius: 0.5rem; /* Esquinas redondeadas opcionales */
+  margin-left: 20px;
+}
+
+.input-square2{
+  width: 5rem; /* Anchura del cuadrado */
+  height: 2rem; /* Altura del cuadrado */
+  text-align: center; /* Centrar el texto */
+  border-radius: 0.5rem; /* Esquinas redondeadas opcionales */
+  margin-right: 20px;
+}
+
 </style>
 
 <div class="col-md-16" style="margin: 40px;">
@@ -184,7 +210,19 @@
 <h1>{{ categoria }} de {{ deporte }}</h1>
 {% for grupo, equipos in grupos.items() %}
     <div class="tabla-clasificacion">
-        <h3>Grupo {{ grupo }}</h3>
+      <h3>Grupo {{ grupo }}</h3>
+      <div class="dropdown">
+        <button class="btn btn-light btn-sm" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="fa-solid fa-ellipsis"></i> <!-- Icono de 3 puntitos -->
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <li>
+            <a class="dropdown-item" href="{{ url_for('sport_bp.crear_partidos', deporte=deporte, categoria=categoria, grupo=grupo) }}">
+            Crear Fixture
+          </a>
+        </li>
+        </ul>
+      </div>
         <table>
             <thead>
                 <tr>
@@ -214,35 +252,55 @@
     </div>
 {% endfor %}
 
+
+
 <div class="container py-4">
   <h2 class="text-center text-warning mb-4">Fixture</h2>
 
-  {% for grupo, equipos in grupos.items() %}
+  {% for grupo, partidos in partidos_grupo.items() %}
   <div class="grupo-wrapper py-3 mx-auto" style="background-color: #121212; max-width: 900px; border-radius: 15px;">
     <div class="grupo-section">
       <h3 class="text-center text-light mb-3">Grupo {{ grupo }}</h3>
       <div class="row justify-content-center">
-        {% for i in range(equipos|length) %}
-          {% for j in range(i+1, equipos|length) %}
-            {% set partido = partidos[grupo][loop.index0] if grupo in partidos and loop.index0 < partidos[grupo]|length else None %}
-            <div class="d-flex justify-content-between align-items-center rounded p-3 m-2 shadow-lg" style="width: 100%; max-width: 700px; background-color: #2c2c2c; color: #fff;">
+        {% for partido in partidos %}
+            <form class="d-flex justify-content-between align-items-center rounded p-3 m-2 shadow-lg" style="width: 100%; max-width: 700px; background-color: #2c2c2c; color: #fff;" action="#" method="POST">
               
-              <!-- eEquipo 1 -->
-              <div class="team d-flex align-items-center">
-                <span class="fw-bold me-3">{{ equipos[i].nombre }}</span>
-                <span class="r18-score bg-light text-dark rounded px-2 py-1" style="font-size: 0.9rem; margin-left: 15px;">
-                  {{ partido.puntaje1 if partido else "0" }}
-                </span>
-              </div>
-  
-              <span class="vs mx-4 text-uppercase" style="color: #bbb; font-size: 1.2rem;">VS</span>
-  
-              <!-- equipo 2 -->
-              <div class="team d-flex align-items-center">
-                <span class="r18-score bg-light text-dark rounded px-2 py-1" style="font-size: 0.9rem; margin-right: 15px;">
-                  {{ partido.puntaje2 if partido else "0" }}
-                </span>
-                <span class="fw-bold ms-3">{{ equipos[j].nombre }}</span>
+              <div class="d-flex align-items-center">
+                <!-- eEquipo 1 -->
+                <div class="team d-flex align-items-center">
+                  <div class="d-flex flex-column text-center">
+                    <span class="ms-3" style="font-size: 20px;">{{ partido.equipo1.nombre }}</span>
+                    <span style="font-weight: bold;">{{ partido.equipo1.colegio }}</span>
+                  </div>
+                    <input 
+                      type="number" 
+                      name="puntaje1"
+                      id="singleDigit" 
+                      class="input-square" 
+                      min="0" 
+                      max="9" 
+                      maxlength="1" 
+                      placeholder="{{ partido.puntaje1 if partido else '0' }}">
+                </div>
+    
+                <span class="vs mx-2 text-uppercase" style="color: #bbb; font-size: 1rem;">VS</span>
+    
+                <!-- equipo 2 -->
+                <div class="team d-flex align-items-center">
+                  <input 
+                      type="number" 
+                      name="puntaje2"
+                      id="singleDigit" 
+                      class="input-square2" 
+                      min="0" 
+                      max="9" 
+                      maxlength="1" 
+                      placeholder="{{ partido.puntaje2 if partido else '0' }}">
+                  <div class="d-flex flex-column text-center">
+                    <span class="ms-3" style="font-size: 20px;">{{ partido.equipo2.nombre }}</span>
+                    <span style="font-weight: bold;">{{ partido.equipo2.colegio }}</span>
+                  </div>
+                </div>
               </div>
   
               <!-- info partido -->
@@ -251,12 +309,10 @@
                 <div class="text-light">Cancha: {{ partido.cancha if partido else "No definida" }}</div>
               </div>
 
-              <a class="btn btn-Secondary" style="padding: 5px; display: inline-block; width: auto;"
-                href="#">
+              <button class="btn btn-Secondary" style="padding: 5px; display: inline-block; width: auto;" type="submit">
                 <img src="{{ url_for('static', filename='img/upload.ico') }}" style="width: 40px; height: 40px; margin: 2px;" />
-              </a>
-            </div>
-          {% endfor %}
+              </button>
+            </form>
         {% endfor %}
       </div>
     </div>

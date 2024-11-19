@@ -88,7 +88,7 @@ class Partido(db.Model):
     categoria = db.Column(db.String(20), nullable=False)
     grupo = db.Column(db.String(1), nullable=True)
     horario = db.Column(db.DateTime, nullable=True)
-    cancha = db.Column(db.Integer, nullable=False)
+    cancha = db.Column(db.Integer, nullable=True)
 
     #Datos del partido
     equipo1_id = db.Column(db.Integer, db.ForeignKey('equipos.id'), nullable=False)
