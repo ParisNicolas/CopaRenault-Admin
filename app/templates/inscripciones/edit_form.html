@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Editar Equipo</title>
+    <title> ar Equipo</title>
 </head>
 
 <div class="container">
@@ -11,6 +11,15 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
+                    <!-- Botones en la parte superior del formulario -->
+                    <div class="d-flex justify-content-between mb-3">
+                        <a href="{{ url_for('teams_bp.inscripciones') }}" class="btn btn-secondary">VOLVER</a>
+                        <a href="{{ url_for('teams_bp.delete_team', id=team.ID) }}" class="btn btn-danger btn-delete"
+                        onclick="return confirm('¿Estás seguro de que deseas eliminar este equipo?');">ELIMINAR EQUIPO</a>
+                        
+                    </div>
+
+                    <!-- Formulario -->
                     <form id="teamForm" action="/update_team/{{team.ID}}" method="POST">
                         <div class="form-group">
                             <label for="Equipo">Equipo</label>
@@ -58,6 +67,10 @@
                             <input type="text" class="form-control" id="Acompañantes" name="Acompañantes" placeholder="Acompañantes" value="{{ team.Acompañantes }}" required>
                         </div>
                         <div class="form-group">
+                            <label for="Grupo">Grupo</label>
+                            <input type="text" class="form-control" id="Grupo" name="Grupo" placeholder="Grupo" value="{{ team.Grupo }}">
+                        </div>
+                        <div class="form-group">
                             <label for="Vegetariano">Vegetariano</label>
                             <select class="form-control" id="Vegetariano" name="Vegetariano" required>
                                 <option value="1" {% if team.Vegetariano=='1' %}selected{% endif %}>1</option>
@@ -97,6 +110,7 @@
         </div>
     </div>
 </div>
+
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {

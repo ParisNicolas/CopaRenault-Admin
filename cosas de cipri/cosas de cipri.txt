@@ -1,12 +1,14 @@
-agregar validacione en los forms paguina
-boton de volver en form tabla1
+agregar validacione en los formularios de edicion y de registro
 revisar filter(css, ¿mas filtros?)
-mail con html
-envio de qr
+envio de mails con html
+eliminacion de las fichas si el equipo se elimina
+Revisar formulario (comprecion) con tadeo y corregir restricciones google form 
+uso de iconos para simplificar
+decorar tablas para mejor lectura
+menu inferior para seleccionar la cantidad de equipos que se muestran 
+agregar la opcion para adjuntra los comprobantes en el foprmulario de de regitro de equipos
 
 
-
-hablar con mati el tema del mail+html
-Revisar formulario (comprecion) con tadeo y corregir restricciones form google
-
-¿? editar url del comprobante/autorizacion
+?cambiar el modo de alternar entre tabla incri. y pre inscr.
+?manejo de alertas por errores de la base de datos
+?
