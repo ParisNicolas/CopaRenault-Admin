@@ -153,7 +153,7 @@
 }
 
 
-.dropdown{
+.dropdown-special{
   text-align: right;
   position: absolute;
   top: 5px;
@@ -207,54 +207,59 @@
     </div>
 </div>
 
-<h1>{{ categoria }} de {{ deporte }}</h1>
-{% for grupo, equipos in grupos.items() %}
-    <div class="tabla-clasificacion">
-      <h3>Grupo {{ grupo }}</h3>
-      <div class="dropdown">
-        <button class="btn btn-light btn-sm" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-          <i class="fa-solid fa-ellipsis"></i> <!-- Icono de 3 puntitos -->
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <li>
-            <a class="dropdown-item" href="{{ url_for('sport_bp.crear_partidos', deporte=deporte, categoria=categoria, grupo=grupo) }}">
-            Crear Fixture
-          </a>
-        </li>
-        </ul>
-      </div>
-        <table>
-            <thead>
-                <tr>
-                    <th>POS</th>
-                    <th>EQUIPOS</th>
-                    <th>PG</th>
-                    <th>PE</th>
-                    <th>PP</th>
-                    <th>DG</th>
-                    <th class="highlight">PTS</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for equipo in equipos %}
-                <tr>
-                    <td>1</td>
-                    <td>{{ equipo.nombre }}</td>
-                    <td>{{ equipo.victorias}}</td>
-                    <td>{{ equipo.empates}}</td>
-                    <td>{{ equipo.derrotas}}</td>
-                    <td>{{ equipo.diferncia_gol}}</td>
-                    <td class="highlight">{{ equipo.puntos}}</td> 
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-{% endfor %}
+<h1 class="mb-4 text-center"><i>{{ categoria }} de {{ deporte }}</i></h1>
 
+<div class="container">
+  <h2 class="text-center text-warning mb-4">Ranking</h2>
+  <div class="container d-flex justify-content-center mb-5">
+    {% for grupo, equipos in grupos.items() %}
+        <div class="tabla-clasificacion">
+          <h3>Grupo {{ grupo }}</h3>
+          <div class="dropdown dropdown-special">
+            <button class="btn btn-light btn-sm" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-ellipsis"></i> <!-- Icono de 3 puntitos -->
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <li>
+                <a class="dropdown-item" href="{{ url_for('sport_bp.crear_partidos', deporte=deporte, categoria=categoria, grupo=grupo) }}">
+                Crear Fixture
+                </a>
+              </li>
+            </ul>
+          </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>POS</th>
+                        <th>EQUIPOS</th>
+                        <th>PG</th>
+                        <th>PE</th>
+                        <th>PP</th>
+                        <th>DG</th>
+                        <th class="highlight">PTS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for equipo in equipos %}
+                    <tr>
+                        <td>1</td>
+                        <td>{{ equipo.nombre }}</td>
+                        <td>{{ equipo.victorias}}</td>
+                        <td>{{ equipo.empates}}</td>
+                        <td>{{ equipo.derrotas}}</td>
+                        <td>{{ equipo.diferncia_gol}}</td>
+                        <td class="highlight">{{ equipo.puntos}}</td> 
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endfor %}
+  </div>
 
+  <br/>
+  <br/>
 
-<div class="container py-4">
   <h2 class="text-center text-warning mb-4">Fixture</h2>
 
   {% for grupo, partidos in partidos_grupo.items() %}

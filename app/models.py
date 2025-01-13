@@ -21,13 +21,13 @@ class Inscripcion(db.Model):
     Celiaco = db.Column(db.String(5), nullable=False)
     Diabetico = db.Column(db.String(5), nullable=False)
     Comprobante = db.Column(db.String(255), nullable=False, default='no se cargo', 
-    info={'charset': 'utf8', 'collate': 'utf8_general_ci'})
+                    info={'charset': 'utf8', 'collate': 'utf8_general_ci'})
     Autorizacion = db.Column(db.String(255), nullable=False, default='no se cargo', 
-    info={'charset': 'utf8', 'collate': 'utf8_general_ci'})
+                    info={'charset': 'utf8', 'collate': 'utf8_general_ci'})
     QR = db.Column(db.String(255), nullable=False, default='no se cargo', 
-    info={'charset': 'utf8', 'collate': 'utf8_general_ci'})
+                    info={'charset': 'utf8', 'collate': 'utf8_general_ci'})
     Grupo = db.Column(db.String(12), nullable=True, default='sin definir', 
-    info={'charset': 'utf8', 'collate': 'utf8_general_ci'})
+                    info={'charset': 'utf8', 'collate': 'utf8_general_ci'})
     Estado = db.Column(db.Boolean, nullable=False, default=False)  # MySQL tinyint(1) as Boolean
 
     equipo_id = db.Column(db.Integer, db.ForeignKey('equipos.id'), nullable=True, unique=True)
