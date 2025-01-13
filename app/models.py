@@ -6,30 +6,31 @@ from app import db
 # Modelo de Inscripciones
 class Inscripcion(db.Model):
     __tablename__ = 'Inscripciones'
-
     ID = db.Column(db.Integer, primary_key=True)
-    Equipo = db.Column(db.String(100), nullable=False)
-    Colegio = db.Column(db.String(100), nullable=False)
-    Deporte = db.Column(db.String(20), nullable=False)
-    Categoria = db.Column(db.String(20), nullable=False)
-    Telefono = db.Column(db.String(20), nullable=False)
-    DNI = db.Column(db.Integer, nullable=False)
-    Correo = db.Column(db.String(50), nullable=False)
-    Miembros = db.Column(db.Integer, nullable=False)
-    Acompañantes = db.Column(db.Integer, nullable=False)
-    Vegetariano = db.Column(db.String(5), nullable=False)
-    Celiaco = db.Column(db.String(5), nullable=False)
-    Diabetico = db.Column(db.String(5), nullable=False)
-    Comprobante = db.Column(db.String(255), nullable=False, default='no se cargo', 
+    
+    Equipo = db.Column(db.String(100), nullable=False)  #Nombre del equipo
+    Colegio = db.Column(db.String(100), nullable=False) #Nombre del colegio
+    Deporte = db.Column(db.String(20), nullable=False)  #Tipo de deporte
+    Categoria = db.Column(db.String(20), nullable=False)#Categoria por edades
+    Telefono = db.Column(db.String(20), nullable=False) #Telefono del encargado
+    DNI = db.Column(db.Integer, nullable=False)         #DNI del encargado
+    Correo = db.Column(db.String(50), nullable=False)   #Correo del encargado
+    Miembros = db.Column(db.Integer, nullable=False)    #Cantidad de jugadores
+    Acompañantes = db.Column(db.Integer, nullable=False)#Cantidad de noJugadores
+    Vegetariano = db.Column(db.String(5), nullable=False)#Vegano
+    Celiaco = db.Column(db.String(5), nullable=False)    #Celiaco
+    Diabetico = db.Column(db.String(5), nullable=False)  #Diabetico
+    Comprobante = db.Column(db.String(255), nullable=False, default='no se cargo',  #URL al comprobante
                     info={'charset': 'utf8', 'collate': 'utf8_general_ci'})
-    Autorizacion = db.Column(db.String(255), nullable=False, default='no se cargo', 
+    Autorizacion = db.Column(db.String(255), nullable=False, default='no se cargo', #URL a la autorizacion
                     info={'charset': 'utf8', 'collate': 'utf8_general_ci'})
-    QR = db.Column(db.String(255), nullable=False, default='no se cargo', 
+    QR = db.Column(db.String(255), nullable=False, default='no se cargo',           #URL del QR
                     info={'charset': 'utf8', 'collate': 'utf8_general_ci'})
-    Grupo = db.Column(db.String(12), nullable=True, default='sin definir', 
+    Grupo = db.Column(db.String(12), nullable=True, default='sin definir',          #Letra del grupo
                     info={'charset': 'utf8', 'collate': 'utf8_general_ci'})
     Estado = db.Column(db.Boolean, nullable=False, default=False)  # MySQL tinyint(1) as Boolean
 
+    #RELACION A EQUIPOS (para fase de grupos)
     equipo_id = db.Column(db.Integer, db.ForeignKey('equipos.id'), nullable=True, unique=True)
     equipo = db.relationship('Equipo', back_populates='inscripcion')
 
