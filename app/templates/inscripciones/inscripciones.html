@@ -6,6 +6,16 @@
         display: none;
     }
 
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #d1d1d1;
+        /* Gris más oscuro */
+    }
+
+    .table-striped tbody tr:nth-of-type(even) {
+        background-color: #dfdfdf;
+        /* Blanco para las filas pares */
+    }
+
     .switch {
         position: relative;
         display: inline-block;
@@ -72,56 +82,58 @@
 </style>
 
 
-<div class="col-md-16" style="margin: 40px;">
+<div class="" style="margin: 40px;">
     <div class="admin_bar"
         style="border: 1px solid #ccc; padding: 20px; border-radius: 5px; display: flex; justify-content: space-between; align-items: flex-start;">
         <div class="button-container" style="display: flex; flex-direction: row;">
             <a href="{{ url_for('teams_bp.add_team') }}" class="btn btn-success" style="margin-right: 10px;">Agregar un
                 equipo</a>
         </div>
-        <div class="filter-container" style="display: flex; align-items: center; margin-bottom: 20px;">
-            <input type="text" id="searchInput" placeholder="Filtrar..." class="form-control" style="width: 160px;">
-
-            <div class="dropdown" style="margin-left: 10px;width: 160px;">
-                <select id="categoriaFilter" class="form-control">
-                    <option value="">Todas las Categorías</option>
-                    <option value="Masculino mayor">Masculino mayor</option>
-                    <option value="Masculino menor">Masculino menor</option>
-                    <option value="Femenino mayor">Femenino mayor</option>
-                    <option value="Femenino menor">Femenino menor</option>
-                </select>
-            </div>
-
-            <div class="dropdown" style="margin-left: 10px;width: 160px;">
-                <select id="deporteFilter" class="form-control">
-                    <option value="">Todos los Deportes</option>
-                    <option value="Futbol">Futbol</option>
-                    <option value="Basquet">Basquet</option>
-                    <option value="Voley">Voley</option>
-                </select>
-            </div>
-
-            <button id="applyFiltersBtn" class="btn btn-primary" style="margin-left: 10px;">BUSCAR</button>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="asignarGruposCheckBox" onchange="activarAsignacion(this)">
+            <label class="form-check-label" for="defaultCheck1">
+              Asignar grupos
+            </label>
         </div>
+
+        <form method="POST" class="filter-container" style="display: flex; align-items: center; margin-bottom: 20px;">
+            
+            {{ form.cantidad(class="form-control") }}
+            {{ form.filtro(placeholder="Filtrar...", class="form-control", style="width: 140px;") }}
+            
+            <div class="dropdown" style="margin-left: 10px;width: 400px;">
+                {{ form.categoria(class="form-control") }}
+            </div>
+            
+            <div class="dropdown" style="margin-left: 10px;width: 400px;">
+                {{ form.deporte(class="form-control") }}
+            </div>
+            
+            {{ form.submit(class="btn btn-primary", style="margin-left: 10px;") }}
+            <a href="{{ url_for('teams_bp.inscripciones') }}" class="btn btn-danger ml-2">X</a>
+        </form>
 
     </div>
 
     <div class="checkbox-container" style="margin-top: 10px; margin-left: 20px;">
         <div>
             <label class="switch">
-                <input type="checkbox" id="checkbox1" checked onclick="toggleTable(this, 'table1')">
+                <input type="checkbox" id="checkbox1" checked
+                    onclick="toggleTables('checkbox1', 'checkbox2', 'table1', 'table2')">
                 <span class="slider round"></span>
             </label>
-            <label for="checkbox1" class="slider-label" style="margin-top: 5px;">Mostrar Tabla pre-inscripcion</label>
+            <label for="checkbox1" class="slider-label" style="margin-top: 5px;">Mostrar Tabla pre-inscripción</label>
         </div>
         <div>
             <label class="switch">
-                <input type="checkbox" id="checkbox2" checked onclick="toggleTable(this, 'table2')">
+                <input type="checkbox" id="checkbox2"
+                    onclick="toggleTables('checkbox2', 'checkbox1', 'table2', 'table1')">
                 <span class="slider round"></span>
             </label>
             <label for="checkbox2" class="slider-label" style="margin-top: 5px;">Mostrar Tabla inscriptos</label>
         </div>
     </div>
+
 </div>
 
 
@@ -183,7 +195,7 @@
 
 
 <div id="table2" class="table-container" style="margin: 12px;">
-    <table class="table table-striped table-hover table-bordered table-sm bg-white">
+    <table class="table table-striped table-hover table-bordered table-sm">
         <thead>
             <tr>
                 <th>ID</th>
@@ -212,7 +224,26 @@
                     {{ inf.Miembros }} jugadores <br />
                     {{ inf.Acompañantes }} Acompañantes
                 </td>
-                <td>{{ inf.Grupo }}</td>
+                <td class="texto_grupo">
+                    {{ inf.Grupo }}
+                </td>
+                <td class="form_grupo d-none">
+                    <form action="{{ url_for('teams_bp.asignar_grupo', id=inf.ID) }}" method="post" class="d-flex">
+                        <select class="form-control" name="grupo">
+                            <option value="">Sin definir</option>
+                            {% for letra in 'ABCDEF' %}
+                            <option value="{{ letra }}" {% if inf.Grupo == letra %}selected{%endif%}>
+                                Grupo {{ letra }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" 
+                            class="ml-2 flex-shrink-1 btn btn-sm {% if inf.Grupo == 'sin definir' %}btn-danger{%else%}btn-success{%endif%}">
+                            >
+                        </button>
+                    </form>
+                </td>
+
                 <td>
                     <a class="btn btn-success btn-sm" target="_blank" href="https://wa.me/{{ inf.Telefono }}">
                         <img src="{{ url_for('static', filename='img/whatsapp_ico.png') }}" class="img-fluid"
@@ -222,23 +253,6 @@
                         <img src="{{ url_for('static', filename='img/settings_ico.png') }}" class="img-fluid"
                             style="width: 24px; height: 24px;">
                     </a>
-                    <!-- <form action="{{ url_for('teams_bp.asignar_grupo', id=inf.ID) }}" method="POST"
-                        class="d-flex flex-row mt-1">
-                        <select class="form-control" name="grupo">
-                            {% for letra in 'ABCDEF' %}
-                            <option value="{{ letra }}">Grupo {{ letra }}</option>
-                            {% endfor %}
-                        </select>
-                        <button type="submit" class="ms-2 btn btn-info btn-sm">></button>
-                    </form>
-                    {{ inf.equipo_id }}
-                    <div class="
-                        {% if inf.equipo_id %}
-                            bg-success
-                        {% else %}
-                            bg-danger
-                        {% endif %} mt-1" style="height: 10px;">
-                    </div> -->
                 </td>
             </tr>
             {% endfor %}
@@ -247,13 +261,23 @@
 </div>
 
 
+
+
 <script>
-    function toggleTable(checkbox, tableId) {
-        var table = document.getElementById(tableId);
+    function activarAsignacion(checkbox){
+
         if (checkbox.checked) {
-            table.style.display = 'block';
+            let textos = document.querySelectorAll('.texto_grupo');
+            textos.forEach(elemento => elemento.classList.add('d-none'));
+
+            let formularios = document.querySelectorAll('.form_grupo');
+            formularios.forEach(elemento => elemento.classList.remove('d-none'));
         } else {
-            table.style.display = 'none';
+            let textos = document.querySelectorAll('.texto_grupo');
+            textos.forEach(elemento => elemento.classList.remove('d-none'));
+
+            let formularios = document.querySelectorAll('.form_grupo');
+            formularios.forEach(elemento => elemento.classList.add('d-none'));
         }
     }
 
@@ -263,13 +287,51 @@
 
         // Verificar si es la primera vez que se carga la página
         if (localStorage.getItem('firstLoad') === null) {
-            checkbox1.checked = true; // Activar el checkbox solo la primera vez
-            checkbox1.checked = true;
+            checkbox1.checked = true;  // Activar el primer checkbox
+            checkbox2.checked = false; // Desactivar el segundo checkbox
             localStorage.setItem('firstLoad', 'false'); // Marcar que ya no es la primera vez
+        } else {
+            // Restaurar el estado de los checkboxes desde localStorage
+            checkbox1.checked = localStorage.getItem('checkbox1') === 'true';
+            checkbox2.checked = localStorage.getItem('checkbox2') === 'true';
         }
 
+        // Actualizar la visualización de las tablas según los checkboxes
         toggleTable(checkbox1, 'table1');
         toggleTable(checkbox2, 'table2');
+    }
+
+    function toggleTable(checkbox, tableId) {
+        var table = document.getElementById(tableId);
+
+        if (checkbox.checked) {
+            table.style.display = 'block';
+        } else {
+            table.style.display = 'none';
+        }
+
+        // Guardar el estado del checkbox en localStorage
+        localStorage.setItem(checkbox.id, checkbox.checked);
+    }
+
+    function toggleTables(activeCheckboxId, inactiveCheckboxId, activeTableId, inactiveTableId) {
+        var activeCheckbox = document.getElementById(activeCheckboxId);
+        var inactiveCheckbox = document.getElementById(inactiveCheckboxId);
+
+        if (!activeCheckbox.checked && !inactiveCheckbox.checked) {
+            // Impedir que ambos checkboxes queden desactivados
+            activeCheckbox.checked = true;
+            return;
+        }
+
+        if (activeCheckbox.checked) {
+            // Desactivar el otro checkbox y ocultar su tabla
+            inactiveCheckbox.checked = false;
+            toggleTable(inactiveCheckbox, inactiveTableId);
+        }
+
+        // Actualizar la tabla del checkbox actual
+        toggleTable(activeCheckbox, activeTableId);
     }
 
     window.onload = initTables;
@@ -331,3 +393,5 @@
 </script>
 
 {% endblock %}
+
+

@@ -1,14 +1,7 @@
-agregar validacione en los formularios de edicion y de registro
-revisar filter(css, ¿mas filtros?)
-envio de mails con html
-eliminacion de las fichas si el equipo se elimina
-Revisar formulario (comprecion) con tadeo y corregir restricciones google form 
+
 uso de iconos para simplificar
-decorar tablas para mejor lectura
-menu inferior para seleccionar la cantidad de equipos que se muestran 
-agregar la opcion para adjuntra los comprobantes en el foprmulario de de regitro de equipos
+hacer filtro por grupo
+envio de mails con html
 
-
-?cambiar el modo de alternar entre tabla incri. y pre inscr.
-?manejo de alertas por errores de la base de datos
-?
+Asignacion en segundo plano de los grupos
+Poner id del grupo pequenito

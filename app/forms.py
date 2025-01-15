@@ -1,9 +1,39 @@
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, StringField, SelectField, SubmitField, TextAreaField
-from wtforms.validators import DataRequired, ValidationError, Length, EqualTo, Optional
+from wtforms import PasswordField, StringField, SelectField, SubmitField, TextAreaField, IntegerField
+from wtforms.validators import DataRequired, ValidationError, Length, EqualTo, Optional, NumberRange
 
 from app.models import Usuario
 from sqlalchemy import or_
+
+deportes = ['futbol', 'voley', 'basket']
+categorias = [
+    'Todas'
+    'Masculino mayor', 
+    'Masculino menor', 
+    'Femenino mayor', 
+    'Femenino menor'
+]
+
+class FilterForm(FlaskForm):
+    filtro=StringField('Buscar')
+    deporte=SelectField('deporte', choices=[('all','Todos los Deportes'),
+                                        ('Futbol', 'Futbol'), 
+                                        ('Basquet', 'Basquet'), 
+                                        ('Voley', 'Voley')],
+                            default='all')
+    categoria=SelectField('categoria', choices=[
+                                        ('all','Todas las Categorías'),
+                                        ('Masculino mayor', 'Masculino mayor'),
+                                        ('Masculino menor', 'Masculino menor'),
+                                        ('Femenino mayor', 'Femenino mayor'),
+                                        ('Femenino menor', 'Femenino menor')],
+                            default='all')
+    
+    cantidad=SelectField('Mostrar', choices=[(5, '5'), (10, '10'), (20, '20')], coerce=int, default=10)
+    submit=SubmitField('Buscar')
+    reset = SubmitField('Restablecer')
+
+
 
 class LoginForm(FlaskForm):
     nombre = StringField("Nombre", validators=[DataRequired()])

@@ -1,19 +1,48 @@
 import requests
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from app import db
-from app.models import Inscripcion, Equipo
+import os
 
-#from app.models import Carrito, Producto, CarritoProducto, Transaccion
-#from app.forms import TarjetaForm
+
+from app.models import Inscripcion, Equipo
+from app.forms import FilterForm
+from sqlalchemy import or_
 
 teams_bp = Blueprint('teams_bp', __name__, template_folder='templates')
+APPSCRIPT_URL = os.getenv('APPSCRIPT_URL')
 
-@teams_bp.route('/inscripciones')
+@teams_bp.route('/inscripciones', methods=['GET','POST'])
 def inscripciones():
-    inscripciones = Inscripcion.query.filter_by(Estado=0).all()
-    equipos = Inscripcion.query.filter_by(Estado=1).all()
+    form = FilterForm()
 
-    return render_template('inscripciones/inscripciones.html', Table1_inf=inscripciones, Table2_inf = equipos)
+    query = Inscripcion.query
+    if form.validate_on_submit():
+        
+        if form.deporte.data != 'all':
+            query = query.filter(Inscripcion.Deporte==form.deporte.data)
+        
+        if form.categoria.data != 'all':
+            query = query.filter(Inscripcion.Categoria==form.categoria.data)
+
+        query = query.filter(
+            or_(
+                Inscripcion.Equipo.ilike(f"%{form.filtro.data}%"),
+                Inscripcion.Colegio.ilike(f"%{form.filtro.data}%")
+            ))
+        
+        inscripciones = query.filter_by(Estado=0).limit(form.cantidad.data).all()
+        equipos = query.filter_by(Estado=1).limit(form.cantidad.data).all()
+    else:
+        inscripciones = query.filter_by(Estado=0).all()
+        equipos = query.filter_by(Estado=1).all()
+
+    return render_template('inscripciones/inscripciones.html',
+        form=form,
+        Table1_inf=inscripciones,
+        Table2_inf=equipos
+    )
+
+#    return render_template('inscripciones/inscripciones.html', Table1_inf=inscripciones, Table2_inf = equipos)
 
 @teams_bp.route('/add_team', methods=['GET', 'POST'])
 def add_team():
@@ -46,15 +75,13 @@ def cargar_team(id):
     equipo.Estado = True
     db.session.commit()
     
-    # URL del Apps Script (asegúrate de que esta sea la correcta)
-    script_url = 'https://script.google.com/macros/s/AKfycbyQIB2RlS3YG9OrV43UOCcFf_0Hi8juvrsWbjyaLhf6z6OcJ3JfopZPBFI9JlHrde3FpQ/exec'
     # Imprimir el ID y la URL del Apps Script
     print(f"ID recibido en Flask: {id}")
-    print(f"Enviando solicitud a: {script_url}")
+    print(f"Enviando solicitud a: {APPSCRIPT_URL}")
     # Enviar la solicitud al Apps Script sin esperar respuesta
     try:
         # Crear la URL completa
-        full_url = f"{script_url}?id={id}"
+        full_url = f"{APPSCRIPT_URL}?id={id}"
         response = requests.get(full_url)  # Usar GET para pruebas simples
         # Verificar la respuesta del Apps Script
         if response.status_code == 200:
@@ -65,6 +92,11 @@ def cargar_team(id):
         flash(f"Error al llamar al Apps Script: {str(e)}", "error")
 
     return redirect(url_for('teams_bp.inscripciones'))
+
+
+
+
+
 
 
 
@@ -103,29 +135,33 @@ def delete_team(id):
 
 
 
-
-
-
-
-
-
 @teams_bp.route('/asignar_grupo/<int:id>', methods=['POST'])
 def asignar_grupo(id):
     inscripto = Inscripcion.query.get_or_404(id)
     
+    grupo = request.form.get('grupo')  # Obtener el valor del grupo
+    
+    if not grupo:  # Verificar si se seleccionó un grupo
+        flash("Debe seleccionar un grupo", "danger")
+        return redirect(url_for('teams_bp.inscripciones'))
+
     if inscripto.equipo_id:
-        inscripto.equipo.grupo = request.form['grupo']
+        inscripto.Grupo = grupo  # Asignar el grupo al inscripto
+        inscripto.equipo.grupo = grupo  # Asignar el grupo al equipo existente
     else:
         equipo = Equipo(
             nombre=inscripto.Equipo,
             colegio=inscripto.Colegio,
             deporte=inscripto.Deporte,
             categoria=inscripto.Categoria,
-            grupo=request.form['grupo']
+            grupo=grupo  # Asignar el grupo al nuevo equipo
         )
         db.session.add(equipo)
         db.session.commit()
-        inscripto.equipo_id = equipo.id
+        inscripto.equipo_id = equipo.id  # Asignar el ID del nuevo equipo al inscripto
+        inscripto.Grupo = grupo  # Asignar el grupo al inscripto
+
     db.session.commit()
+    flash("Grupo asignado exitosamente", "success")
 
     return redirect(url_for('teams_bp.inscripciones'))
