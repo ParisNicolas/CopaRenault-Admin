@@ -92,7 +92,7 @@
         <div class="form-check">
             <input class="form-check-input" type="checkbox" id="asignarGruposCheckBox" onchange="activarAsignacion(this)">
             <label class="form-check-label" for="defaultCheck1">
-              Asignar grupos
+            Asignar grupos
             </label>
         </div>
 
@@ -107,6 +107,10 @@
             
             <div class="dropdown" style="margin-left: 10px;width: 400px;">
                 {{ form.deporte(class="form-control") }}
+            </div>
+            
+            <div class="dropdown" style="margin-left: 10px;width: 400px;">
+                {{ form.grupo(class="form-control") }}
             </div>
             
             {{ form.submit(class="btn btn-primary", style="margin-left: 10px;") }}
@@ -184,7 +188,10 @@
                     </a>
                     <a href="{{ url_for('teams_bp.cargar_team', id=inf.ID) }}" class="btn btn-success"
                         onclick="return confirm('¿Estás seguro de que deseas confirmar este equipo?');">OK</a>
-                    <a href="{{ url_for('teams_bp.edit_team', id=inf.ID) }}" class="btn btn-secondary">Editar</a>
+                    
+                    <a class="btn btn-primary btn-sm" href="{{ url_for('teams_bp.edit_team', id=inf.ID) }}">
+                        <img src="{{ url_for('static', filename='img/settings_ico.png') }}" class="img-fluid">
+                    </a>
 
                 </td>
             </tr>

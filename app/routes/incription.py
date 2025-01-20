@@ -11,6 +11,7 @@ from sqlalchemy import or_
 teams_bp = Blueprint('teams_bp', __name__, template_folder='templates')
 APPSCRIPT_URL = os.getenv('APPSCRIPT_URL')
 
+
 @teams_bp.route('/inscripciones', methods=['GET','POST'])
 def inscripciones():
     form = FilterForm()
@@ -23,6 +24,9 @@ def inscripciones():
         
         if form.categoria.data != 'all':
             query = query.filter(Inscripcion.Categoria==form.categoria.data)
+            
+        if form.grupo.data != 'all':
+            query = query.filter(Inscripcion.Grupo==form.grupo.data)
 
         query = query.filter(
             or_(

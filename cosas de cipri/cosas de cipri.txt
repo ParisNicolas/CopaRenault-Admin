@@ -1,7 +1,4 @@
 
-uso de iconos para simplificar
-hacer filtro por grupo
-envio de mails con html
 
 Asignacion en segundo plano de los grupos
 Poner id del grupo pequenito

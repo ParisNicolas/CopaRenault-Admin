@@ -28,6 +28,14 @@ class FilterForm(FlaskForm):
                                         ('Femenino mayor', 'Femenino mayor'),
                                         ('Femenino menor', 'Femenino menor')],
                             default='all')
+    grupo=SelectField('grupo', choices=[('all','Todos los Grupos'),
+                                        ('A', 'a'), 
+                                        ('B', 'b'), 
+                                        ('C', 'c'),
+                                        ('D', 'd'), 
+                                        ('E', 'e'),
+                                        ('F', 'f')],
+                            default='all')
     
     cantidad=SelectField('Mostrar', choices=[(5, '5'), (10, '10'), (20, '20')], coerce=int, default=10)
     submit=SubmitField('Buscar')
