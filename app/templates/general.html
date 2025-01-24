@@ -1,47 +1,275 @@
-{% extends "base.html" %}
+{% extends "layout.html" %}
 
-{% block content %}
-<div class="content-container">
-    <h2 class="title">El Hector 7</h2>
-    <div class="counter-container">
-        <p>Total de inscripciones: <span>{{ total_inscripciones }}</span></p>
-        <p>Inscripciones en espera: <span>{{ inscripciones_en_espera }}</span></p>
-        <p>Total de personas que asistirán: <span>{{ total_personas }}</span></p>
-        <p>Total de personas con diabetes: <span>{{ total_diabeticos }}</span></p>
-        <p>Total de personas vegetarianas: <span>{{ total_vegetarianos }}</span></p>
-        <p>Total de personas celiacas: <span>{{ total_celiacos }}</span></p>
+{% block body %}
+<style>
+    body,
+    html {
+        height: 100%;
+    }
+
+    .full-height {
+        height: 88vh;
+        /* Ocupa el 100% de la altura de la pantalla */
+    }
+
+    .h-70 {
+        height: 70%;
+        /* 3/4 de la altura */
+    }
+
+    .h-30 {
+        height: 30%;
+        /* 1/4 de la altura */
+    }
+
+    .h-40 {
+        height: 40%;
+    }
+
+    .h-60 {
+        height: 60%;
+    }
+
+    /* grafico ingresos historico de ej */
+    .container {
+        width: 90%;
+        max-width: 800px;
+        height: 35%;
+        background: #fff;
+        padding: 20px;
+
+        position: relative;
+    }
+
+    .container h2 {
+        position: absolute;
+        top: 10px;
+        left: 20px;
+        font-size: 16px;
+        color: #333;
+        margin: 0;
+    }
+
+
+    /* botones del mini menu */
+    .button-container {
+        display: flex;
+        justify-content: space-between;
+        margin: 80px;
+    }
+
+    .square-button {
+        width: 80px;
+        height: 80px;
+        background-color: #4CAF50;
+        color: white;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .square-button:hover {
+        background-color: #45a049;
+    }
+
+
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        /* Asegura que el modal está al frente */
+    }
+
+    .modal {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        z-index: 1050;
+        display: flow;
+        width: 60%;
+        height: 60%;
+    }
+
+
+    /* Switches container */
+    .switches {
+        margin: 20px 0;
+        text-align: left;
+    }
+
+    .switches label {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    /* Buttons in modal */
+    .buttons {
+        margin-top: 20px;
+    }
+
+    .buttons button {
+        padding: 10px 15px;
+        margin: 0 10px;
+        cursor: pointer;
+    }
+</style>
+
+<div class="container-fluid full-height">
+    <div class="row h-100">
+        <div class="col-4 d-flex flex-column">
+            <div class="h-70 border border-primary">
+                <!-- ingresos y estadisticas -->
+                <h4>Ingresos Totales</h4>
+                <h3>$</h3>
+                <p>Ultima Actualizacion 22/01 11:02</p>
+
+                <div class="container">
+                    <canvas id="ingresosChart"></canvas>
+                </div>
+
+                <h4>Equipos Inscriptos</h4>
+                <h3>83</h3>
+                <p>Ultima Actualizacion 22/01 11:02</p>
+
+                <h4>Concurrencia estimada</h4>
+                <h3>1289</h3>
+                <p>Ultima Actualizacion 22/01 11:02</p>
+            </div>
+            <div class="h-30 border border-dark">
+                <!-- Panel de control -->
+                <div class="button-container">
+                    <button class="square-button">otras stats</button>
+                    <button class="square-button">users manage</button>
+                    <button id="openModalBtn" class="square-button">config</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-8 d-flex flex-column">
+            <div class="h-40 border border-success">
+                <!-- graficos circulares -->
+                Segunda sección, 1/3
+            </div>
+            <div class="h-60 border border-danger">
+                <!-- registro de inscripciones -->
+                Segunda sección, 2/3
+            </div>
+        </div>
     </div>
 </div>
-{% endblock %}
 
-{% block css %}
-<style>
-  .content-container {
-      max-width: 600px;
-      margin: 20px auto;
-      padding: 20px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      background-color: #f9f9f9;
-  }
+<div id="modalOverlay" class="modal-overlay">
+    <div class="modal">
+        <h2>Configuración</h2>
+        <div class="switches">
+            <label><input type="checkbox"> desabilitar incripciones</label>`
+            <label><input type="checkbox"> desabilitar deportes</label>
+            <label><input type="checkbox"> desabilitar formulario</label>
+            <label><input type="checkbox"> Opción 4</label>
+            <label><input type="checkbox"> Opción 5</label>
+            <label><input type="checkbox"> Opción 6</label>
+        </div>
+        <div class="buttons">
+            <button id="saveBtn">Guardar</button>
+            <button id="closeModalBtn">Salir</button>
+        </div>
+    </div>
+</div>
 
-  .title {
-      font-size: 1.8em;
-      color: #333;
-      margin-bottom: 15px;
-  }
+<script>
+    fetch('/data/ingresos')
+        .then(response => response.json())
+        .then(data => {
+            const ctx = document.getElementById('ingresosChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.meses,
+                    datasets: [{
+                        label: '',
+                        data: data.valores,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false // Ocultar leyenda
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false // Ocultar líneas de cuadrícula
+                            },
+                            ticks: {
+                                display: false // Ocultar etiquetas del eje X
+                            }
+                        },
+                        y: {
+                            grid: {
+                                display: false // Ocultar líneas de cuadrícula
+                            },
+                            ticks: {
+                                display: false // Ocultar etiquetas del eje Y
+                            },
+                            beginAtZero: true
+                        }
+                    },
+                    elements: {
+                        point: {
+                            radius: 0 // Eliminar puntos en el gráfico
+                        }
+                    }
+                }
+            });
+        });
 
-  .counter-container p {
-      font-size: 1.1em;
-      color: #555;
-      margin: 8px 0;
-  }
 
-  .counter-container span {
-      font-weight: bold;
-      color: #007bff;
-  }
-</style>
+    const openModalBtn = document.getElementById('openModalBtn');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+
+    // Abre el modal
+    openModalBtn.addEventListener('click', () => {
+        console.log('Botón abrir clicado'); // Debug
+        modalOverlay.style.display = 'flow'; // Asegúrate de que esto ocurre
+    });
+
+    // Cierra el modal
+    closeModalBtn.addEventListener('click', () => {
+        console.log('Botón cerrar clicado'); // Debug
+        modalOverlay.style.display = 'none';
+    });
+
+    // Cierra el modal al hacer clic fuera de él
+    modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) {
+            console.log('Clic fuera del modal'); // Debug
+            modalOverlay.style.display = 'none';
+        }
+    });
+
+</script>
+
 {% endblock %}

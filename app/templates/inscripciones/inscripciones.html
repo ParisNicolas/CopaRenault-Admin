@@ -8,31 +8,25 @@
 
     .table-striped tbody tr:nth-of-type(odd) {
         background-color: #d1d1d1;
-        /* Gris más oscuro */
     }
 
     .table-striped tbody tr:nth-of-type(even) {
         background-color: #dfdfdf;
-        /* Blanco para las filas pares */
     }
 
     .switch {
         position: relative;
         display: inline-block;
         width: 36px;
-        /* Reducción al 60% de 60px */
         height: 20px;
-        /* Reducción al 60% de 34px */
     }
 
-    /* Esconder el checkbox original */
     .switch input {
         opacity: 0;
         width: 0;
         height: 0;
     }
 
-    /* Slider */
     .slider {
         position: absolute;
         cursor: pointer;
@@ -43,90 +37,289 @@
         background-color: #ccc;
         transition: .4s;
         border-radius: 20px;
-        /* Ajustado para mantener proporciones */
     }
 
     .slider:before {
         position: absolute;
         content: "";
         height: 16px;
-        /* Reducción al 60% de 26px */
         width: 16px;
-        /* Reducción al 60% de 26px */
         left: 2px;
-        /* Ajustado para mantener proporciones */
         bottom: 2px;
-        /* Ajustado para mantener proporciones */
         background-color: white;
         transition: .4s;
         border-radius: 50%;
     }
 
     input:checked+.slider {
-        background-color: #4CAF50;
+        background-color: #5AB55D;
     }
 
     input:checked+.slider:before {
         transform: translateX(16px);
-        /* Ajustado para el nuevo tamaño */
     }
 
-    /* Estilo de las etiquetas */
     .slider-label {
         margin-left: 8px;
-        /* Ajustado para el nuevo tamaño */
         font-size: 14px;
-        /* Ajustado para el nuevo tamaño */
         vertical-align: middle;
+    }
+
+    .admin_bar {
+        border: 1px solid #ccc;
+        padding: 20px;
+        border-radius: 5px;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .button-container {
+        flex: 0 0 auto;
+    }
+
+    .filter-container {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: end;
+        gap: 10px;
+        flex: 1 1 auto;
+        justify-content: flex-end;
+        flex-direction: row;
+    }
+
+    .dropdown {
+        flex: 0 0 150px;
+        min-width: 120px;
+    }
+
+    .form-control {
+        flex: 0 0 150px;
+        min-width: 150px;
+    }
+
+    .btn {
+        flex: 0 0 auto;
+        white-space: nowrap;
+    }
+
+    @media (max-width: 768px) {
+        .admin_bar {
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .filter-container {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .button-container {
+            justify-content: center;
+        }
+
+        .dropdown,
+        .form-control,
+        .btn {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .admin_bar {
+            padding: 10px;
+        }
+
+        .form-check {
+            justify-content: center;
+        }
+    }
+
+
+    @mixin breakpoint($value) {
+        @if $value =='phone' {
+            @media only screen and (min-width: 120px) and (max-width: 767px) {
+                @content;
+            }
+        }
+
+        @else if $value =='tablet' {
+            @media only screen and (min-width: 768px) and (max-width: 1024px) {
+                @content;
+            }
+        }
+
+        @else if $value =='touch' {
+            @media only screen and (min-width: 120px) and (max-width: 1024px) {
+                @content;
+            }
+        }
+
+        @else if $value =='desktop' {
+            @media only screen and (min-width: 1025px) {
+                @content;
+            }
+        }
+
+        @else {
+            @media only screen and (max-width: $value) {
+                @content;
+            }
+        }
+    }
+
+    .admin_bar {
+        margin: 40px;
+        border: 1px solid #ccc;
+        padding: 20px;
+        border-radius: 5px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        align-items: center;
+    }
+
+    .button-container {
+        flex: 0 0 auto;
+    }
+
+    .filter-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        flex: 1 1 auto;
+        align-items: center;
+    }
+
+    .dropdown {
+        flex: 0 0 150px;
+        min-width: 170px;
+    }
+
+    .form-control {
+        flex: 0 0 150px;
+        min-width: 150px;
+    }
+
+    .btn {
+        flex: 0 0 auto;
+        white-space: nowrap;
+    }
+
+    .checkbox-container {
+        margin-left: 40px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .pagination-wrapper {
+        text-align: right;
+        margin: 5px 0;
+    }
+
+    .pagination {
+        display: inline-block;
+        height: 37.5px;
+        /* 50px -> 25% reducción */
+        padding: 0 15px;
+        /* 20px -> 25% reducción */
+        border-radius: 18.75px;
+        /* 25px -> 25% reducción */
+        background-color: #ffffff;
+    }
+
+    .page-numbers {
+        display: block;
+        padding: 0 11.25px;
+        /* 15px -> 25% reducción */
+        float: left;
+        color: #5AB55D;
+        font-size: 12px;
+        /* 16px -> 25% reducción */
+        letter-spacing: 0.075em;
+        /* 0.1em -> 25% reducción */
+        line-height: 37.5px;
+        /* 50px -> 25% reducción */
+    }
+
+    .page-numbers:hover,
+    .page-numbers.current {
+        background-color: #5AB55D;
+        color: white;
+    }
+
+    .page-numbers.prev:hover,
+    .page-numbers.next:hover {
+        background-color: transparent;
+        color: #5AB55D;
+    }
+
+    @media (max-width: 768px) {
+        .pagination-wrapper {
+            margin: 11.25px 0;
+            /* 15px -> 25% reducción */
+        }
+
+        .page-numbers {
+            font-size: 10.5px;
+            /* 14px -> 25% reducción */
+            padding: 0 7.5px;
+            /* 10px -> 25% reducción */
+            line-height: 30px;
+            /* 40px -> 25% reducción */
+        }
+    }
+
+    .options {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 18px;
+        padding-left: 10px;
+        padding-right: 30px;
     }
 </style>
 
-
-<div class="" style="margin: 40px;">
-    <div class="admin_bar"
-        style="border: 1px solid #ccc; padding: 20px; border-radius: 5px; display: flex; justify-content: space-between; align-items: flex-start;">
-        <div class="button-container" style="display: flex; flex-direction: row;">
-            <a href="{{ url_for('teams_bp.add_team') }}" class="btn btn-success" style="margin-right: 10px;">Agregar un
-                equipo</a>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="asignarGruposCheckBox" onchange="activarAsignacion(this)">
-            <label class="form-check-label" for="defaultCheck1">
-            Asignar grupos
-            </label>
-        </div>
-
-        <form method="POST" class="filter-container" style="display: flex; align-items: center; margin-bottom: 20px;">
-            
-            {{ form.cantidad(class="form-control") }}
-            {{ form.filtro(placeholder="Filtrar...", class="form-control", style="width: 140px;") }}
-            
-            <div class="dropdown" style="margin-left: 10px;width: 400px;">
-                {{ form.categoria(class="form-control") }}
-            </div>
-            
-            <div class="dropdown" style="margin-left: 10px;width: 400px;">
-                {{ form.deporte(class="form-control") }}
-            </div>
-            
-            <div class="dropdown" style="margin-left: 10px;width: 400px;">
-                {{ form.grupo(class="form-control") }}
-            </div>
-            
-            {{ form.submit(class="btn btn-primary", style="margin-left: 10px;") }}
-            <a href="{{ url_for('teams_bp.inscripciones') }}" class="btn btn-danger ml-2">X</a>
-        </form>
-
+<div class="admin_bar">
+    <!-- Botón "Agregar equipo" -->
+    <div class="button-container">
+        <a href="{{ url_for('teams_bp.add_team') }}" class="btn btn-success">Agregar equipo</a>
     </div>
 
-    <div class="checkbox-container" style="margin-top: 10px; margin-left: 20px;">
+    <!-- Formulario de filtros -->
+    <form method="POST" class="filter-container">
+        <div class="dropdown">
+            {{ form.filtro(placeholder="Filtrar...", class="form-control") }}
+        </div>
+        <div class="dropdown">
+            {{ form.categoria(class="form-control") }}
+        </div>
+        <div class="dropdown">
+            {{ form.deporte(class="form-control") }}
+        </div>
+        {{ form.submit(class="btn btn-primary") }}
+        <a href="{{ url_for('teams_bp.inscripciones') }}" class="btn btn-danger ml-2">X</a>
+    </form>
+</div>
+
+<div class="options">
+    <div class="checkbox-container">
+        <div>
+            <label class="switch">
+                <input type="checkbox" id="checkbox0" onclick="activarAsignacion(this)">
+                <span class="slider round"></span>
+            </label>
+            <label for="checkbox0" class="slider-label">Asignar grupos</label>
+        </div>
         <div>
             <label class="switch">
                 <input type="checkbox" id="checkbox1" checked
                     onclick="toggleTables('checkbox1', 'checkbox2', 'table1', 'table2')">
                 <span class="slider round"></span>
             </label>
-            <label for="checkbox1" class="slider-label" style="margin-top: 5px;">Mostrar Tabla pre-inscripción</label>
+            <label for="checkbox1" class="slider-label">Mostrar Tabla pre-inscripción</label>
         </div>
         <div>
             <label class="switch">
@@ -134,13 +327,19 @@
                     onclick="toggleTables('checkbox2', 'checkbox1', 'table2', 'table1')">
                 <span class="slider round"></span>
             </label>
-            <label for="checkbox2" class="slider-label" style="margin-top: 5px;">Mostrar Tabla inscriptos</label>
+            <label for="checkbox2" class="slider-label">Mostrar Tabla inscriptos</label>
         </div>
     </div>
 
+    <div class="pagination-wrapper">
+        <div class="pagination">
+            {% set total_pages = Table2_inf|length // 10 + (1 if Table2_inf|length % 10 > 0 else 0) %}
+            {% for page in range(1, total_pages + 1) %}
+                <a class="page-numbers {% if page == 1 %}current{% endif %}" data-page="{{ page }}">{{ page }}</a>
+            {% endfor %}
+        </div>
+    </div>
 </div>
-
-
 
 
 
@@ -163,8 +362,9 @@
                 <td>-------</td>
             </tr>
         </thead>
-        <tbody>
-            {% for inf in Table1_inf %}
+        {% for pagina in Table1_inf|batch(10) %}
+        <tbody id="page1-{{ loop.index }}" {% if not loop.first %}class="d-none"{% endif %}>
+            {% for inf in pagina %}
             <tr>
                 <td>{{inf.Equipo}}</td>
                 <td>{{inf.Colegio}}</td>
@@ -188,7 +388,7 @@
                     </a>
                     <a href="{{ url_for('teams_bp.cargar_team', id=inf.ID) }}" class="btn btn-success"
                         onclick="return confirm('¿Estás seguro de que deseas confirmar este equipo?');">OK</a>
-                    
+
                     <a class="btn btn-primary btn-sm" href="{{ url_for('teams_bp.edit_team', id=inf.ID) }}">
                         <img src="{{ url_for('static', filename='img/settings_ico.png') }}" class="img-fluid">
                     </a>
@@ -197,6 +397,7 @@
             </tr>
             {% endfor %}
         </tbody>
+        {% endfor %}
     </table>
 </div>
 
@@ -217,8 +418,9 @@
                 <th>Acciones</th>
             </tr>
         </thead>
-        <tbody>
-            {% for inf in Table2_inf %}
+        {% for pagina in Table2_inf|batch(10) %}
+        <tbody id="page2-{{ loop.index }}" {% if not loop.first %}class="d-none"{% endif %}>
+            {% for inf in pagina %}
             <tr>
                 <td>{{ inf.ID }}</td>
                 <td>{{ inf.Equipo }}</td>
@@ -239,12 +441,12 @@
                         <select class="form-control" name="grupo">
                             <option value="">Sin definir</option>
                             {% for letra in 'ABCDEF' %}
-                            <option value="{{ letra }}" {% if inf.Grupo == letra %}selected{%endif%}>
+                            <option value="{{ letra }}" {% if inf.Grupo==letra %}selected{%endif%}>
                                 Grupo {{ letra }}
                             </option>
                             {% endfor %}
                         </select>
-                        <button type="submit" 
+                        <button type="submit"
                             class="ml-2 flex-shrink-1 btn btn-sm {% if inf.Grupo == 'sin definir' %}btn-danger{%else%}btn-success{%endif%}">
                             >
                         </button>
@@ -264,6 +466,7 @@
             </tr>
             {% endfor %}
         </tbody>
+        {% endfor %}
     </table>
 </div>
 
@@ -271,7 +474,32 @@
 
 
 <script>
-    function activarAsignacion(checkbox){
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const paginationLinks = document.querySelectorAll('.pagination a');
+        const tableBodies = document.querySelectorAll('tbody');
+
+        paginationLinks.forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault(); // Evita que el anchor cambie de página
+
+                // Ocultar todos los TBODIES
+                tableBodies.forEach(tbody => tbody.classList.add('d-none'));
+
+                // Mostrar el TBODY correspondiente
+                const page = this.getAttribute('data-page');
+                document.getElementById(`page2-${page}`).classList.remove('d-none');
+
+                // Actualizar el estado activo de los links
+                paginationLinks.forEach(link => link.classList.remove('current'));
+                this.classList.add('current');
+            });
+        });
+    });
+
+
+
+    function activarAsignacion(checkbox) {
 
         if (checkbox.checked) {
             let textos = document.querySelectorAll('.texto_grupo');
@@ -400,5 +628,3 @@
 </script>
 
 {% endblock %}
-
-

@@ -184,36 +184,34 @@
         <div class="filter-container" style="display: flex; align-items: center; margin-bottom: 20px;">
             <div class="dropdown" style="margin-left: 10px;width: 160px;">
                 <select id="categoriaFilter" class="form-control">
-                    <option value="">Todas las Categorías</option>
-                    <option value="Masculino mayor">Masculino mayor</option>
-                    <option value="Masculino menor">Masculino menor</option>
-                    <option value="Femenino mayor">Femenino mayor</option>
-                    <option value="Femenino menor">Femenino menor</option>
+                    <option value="Masculino mayor" {%if categoria == 'Masculino mayor'%}selected{%endif%}>Masculino mayor</option>
+                    <option value="Masculino menor" {%if categoria == 'Masculino menor'%}selected{%endif%}>Masculino menor</option>
+                    <option value="Femenino mayor" {%if categoria == 'Femenino mayor'%}selected{%endif%}>Femenino mayor</option>
+                    <option value="Femenino menor" {%if categoria == 'Femenino menor'%}selected{%endif%}>Femenino menor</option>
                 </select>
             </div>
 
             <div class="dropdown" style="margin-left: 10px;width: 160px;">
                 <select id="deporteFilter" class="form-control">
-                    <option value="">Todos los Deportes</option>
-                    <option value="Futbol">Futbol</option>
-                    <option value="Basquet">Basquet</option>
-                    <option value="Voley">Voley</option>
+                    <option value="Futbol" {%if deporte == 'Futbol'%}selected{%endif%}>Futbol</option>
+                    <option value="Basquet" {%if deporte == 'Basquet'%}selected{%endif%}>Basquet</option>
+                    <option value="Voley" {%if deporte == 'Voley'%}selected{%endif%}>Voley</option>
                 </select>
             </div>
 
             <button id="applyFiltersBtn" class="btn btn-primary" style="margin-left: 10px;">BUSCAR</button>
         </div>
         
-    </div>
+    </div>  
 </div>
 
 <h1 class="mb-4 text-center"><i>{{ categoria }} de {{ deporte }}</i></h1>
 
 <div class="container">
   <h2 class="text-center text-warning mb-4">Ranking</h2>
-  <div class="container d-flex justify-content-center mb-5">
+  <div class="container d-flex justify-content-around">
     {% for grupo, equipos in grupos.items() %}
-        <div class="tabla-clasificacion">
+        <div class="tabla-clasificacion mx-3">
           <h3>Grupo {{ grupo }}</h3>
           <div class="dropdown dropdown-special">
             <button class="btn btn-light btn-sm" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">

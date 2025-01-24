@@ -1,4 +1,4 @@
-from flask import Blueprint, flash, redirect, render_template, url_for, abort
+from flask import Blueprint, flash, redirect, render_template, url_for, abort, jsonify
 from flask_login import login_user, logout_user, current_user
 from functools import wraps
 from sqlalchemy import func
@@ -27,25 +27,20 @@ def role_required(allowed_rol):
 
 @main.route('/')
 def general():
-    total_inscripciones = Inscripcion.query.count()
-    inscripciones_en_espera = Inscripcion.query.filter_by(Estado=False).count()
 
-    total_personas = db.session.query(func.sum(Inscripcion.Miembros)).scalar() or 0
-
-    total_diabeticos = Inscripcion.query.filter_by(Diabetico='si').count()
-    total_vegetarianos = Inscripcion.query.filter_by(Vegetariano='si').count()
-    total_celiacos = Inscripcion.query.filter_by(Celiaco='si').count()
 
     return render_template(
-        'general.html',
-        total_inscripciones=total_inscripciones,
-        inscripciones_en_espera=inscripciones_en_espera,
-        total_personas=total_personas,
-        total_diabeticos=total_diabeticos,
-        total_vegetarianos=total_vegetarianos,
-        total_celiacos=total_celiacos
+        'general.html'
     )
 
+@main.route('/data/ingresos')
+def obtener_ingresos():
+    # Datos de ejemplo (pueden provenir de una base de datos o cálculo)
+    ingresos = {
+        "meses": ["Enero", "Febrero", "Marzo", "Abril", "Mayo"],
+        "valores": [12000, 15000, 17000, 13000, 18000]
+    }
+    return jsonify(ingresos)
 
 @main.route('/login', methods=['GET', 'POST'])
 def login():

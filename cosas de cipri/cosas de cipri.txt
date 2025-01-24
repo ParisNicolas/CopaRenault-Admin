@@ -1,4 +1,21 @@
-
-
+(----INSCRIPCIONES----)
 Asignacion en segundo plano de los grupos
 Poner id del grupo pequenito
+min widht en filtros
+
+envio automatico de respuesta por appscrip
+diagramar general
+eliminar htmls inecesarios
+
+
+(----GENERAL----)
+intentar hacer lo que esta en la foto 
+
+posible menu:
+-reloj
+-3 botones
+-usuarios
+-estadisticas
+-config
+
+(----PARTIDOS----)
