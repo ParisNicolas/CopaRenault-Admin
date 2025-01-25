@@ -9,7 +9,7 @@ from app.forms import FilterForm
 from sqlalchemy import or_
 
 teams_bp = Blueprint('teams_bp', __name__, template_folder='templates')
-APPSCRIPT_URL = os.getenv('APPSCRIPT_URL')
+APPSCRIPT_URL1 = os.getenv('APPSCRIPT_URL1')
 
 
 @teams_bp.route('/inscripciones', methods=['GET','POST'])
@@ -81,11 +81,11 @@ def cargar_team(id):
     
     # Imprimir el ID y la URL del Apps Script
     print(f"ID recibido en Flask: {id}")
-    print(f"Enviando solicitud a: {APPSCRIPT_URL}")
+    print(f"Enviando solicitud a: {APPSCRIPT_URL1}")
     # Enviar la solicitud al Apps Script sin esperar respuesta
     try:
         # Crear la URL completa
-        full_url = f"{APPSCRIPT_URL}?id={id}"
+        full_url = f"{APPSCRIPT_URL1}?id={id}"
         response = requests.get(full_url)  # Usar GET para pruebas simples
         # Verificar la respuesta del Apps Script
         if response.status_code == 200:

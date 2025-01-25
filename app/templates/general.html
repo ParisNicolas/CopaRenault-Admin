@@ -74,58 +74,32 @@
         background-color: #45a049;
     }
 
-
-    .modal-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: none;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-        /* Asegura que el modal está al frente */
+    .modal-content {
+        border-radius: 15px;
     }
 
-    .modal {
-        background-color: white;
-        padding: 20px;
-        border-radius: 8px;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        text-align: center;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        z-index: 1050;
-        display: flow;
-        width: 60%;
-        height: 60%;
+    .modal-dialog {
+        max-width: 50%;
     }
 
-
-    /* Switches container */
-    .switches {
-        margin: 20px 0;
-        text-align: left;
+    .form-group {
+        margin-bottom: 1rem;
     }
 
-    .switches label {
-        display: block;
-        margin-bottom: 10px;
+    .form-row {
+        margin-bottom: 1rem;
     }
 
-    /* Buttons in modal */
-    .buttons {
-        margin-top: 20px;
+    .table tbody tr:nth-child(odd) {
+        background-color: #f9f9f9;
     }
 
-    .buttons button {
-        padding: 10px 15px;
-        margin: 0 10px;
-        cursor: pointer;
+    .table tbody tr:nth-child(even) {
+        background-color: #ffffff;
+    }
+
+    .table td:last-child {
+        text-align: right;
     }
 </style>
 
@@ -153,9 +127,15 @@
             <div class="h-30 border border-dark">
                 <!-- Panel de control -->
                 <div class="button-container">
-                    <button class="square-button">otras stats</button>
-                    <button class="square-button">users manage</button>
-                    <button id="openModalBtn" class="square-button">config</button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#extra-stats-menu">
+                        OTHER STATS
+                    </button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#users-menu">
+                        USERS MANAGE
+                    </button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#settings-menu">
+                        SETTINGS
+                    </button>
                 </div>
             </div>
         </div>
@@ -173,23 +153,244 @@
     </div>
 </div>
 
-<div id="modalOverlay" class="modal-overlay">
-    <div class="modal">
-        <h2>Configuración</h2>
-        <div class="switches">
-            <label><input type="checkbox"> desabilitar incripciones</label>`
-            <label><input type="checkbox"> desabilitar deportes</label>
-            <label><input type="checkbox"> desabilitar formulario</label>
-            <label><input type="checkbox"> Opción 4</label>
-            <label><input type="checkbox"> Opción 5</label>
-            <label><input type="checkbox"> Opción 6</label>
-        </div>
-        <div class="buttons">
-            <button id="saveBtn">Guardar</button>
-            <button id="closeModalBtn">Salir</button>
+<!-- Modal de estadisticas extras -->
+
+<div class="modal fade" id="extra-stats-menu" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">ESTADISTICAS SECUNDARIAS</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- aqui las estditicas nesesarias -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>
+
+<!-- Modal de usuarios -->
+
+<div class="modal fade" id="users-menu" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">USERS MANAGER</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <button type="button" class="btn btn-success" data-dismiss="modal"
+                style="max-width: 22%; margin-left: 20px;">Agregar User</button>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">USER</th>
+                            <th scope="col">TAG</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Row 2 Col 1</td>
+                            <td>Row 2 Col 2</td>
+                            <td>
+                                <input class="form-check-input border border-dark" type="checkbox" id="switch1"
+                                    style="border: 2px solid #000;">
+                                <label class="form-check-label" for="switch3">ADMIN</label>
+                                <button class="btn btn-primary btn-sm">Edit</button>
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de settings -->
+<div class="modal fade" id="settings-menu" tabindex="-1" role="dialog" aria-labelledby="configModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="configModalLabel">AJUSTES GENERALES</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-row">
+                        <div class="col-12 mb-3" style="display: flex;">
+
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input border border-dark" type="checkbox" id="switch1"
+                                    style="border: 2px solid #000;">
+                                <label class="form-check-label" for="switch1">desactivar solicitudes de
+                                    incripcionen</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="switch2">
+                                <label class="form-check-label" for="switch2">desactivar panel de inscripciones</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="switch3">
+                                <label class="form-check-label" for="switch3">desactivar panel de partidos</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="switch4">
+                                <label class="form-check-label" for="switch4">otra opcion que podria ser util</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-12 mb-3">
+                            <h5>Cupos Disponibles</h5>
+                            <div class="row">
+                                <div class="col-md-4 mb-2">
+                                    <label for="cupos1">Evento 1</label>
+                                    <input type="number" class="form-control" id="cupos1" placeholder="Cupos">
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label for="cupos2">Evento 2</label>
+                                    <input type="number" class="form-control" id="cupos2" placeholder="Cupos">
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label for="cupos3">Evento 3</label>
+                                    <input type="number" class="form-control" id="cupos3" placeholder="Cupos">
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label for="cupos4">Evento 4</label>
+                                    <input type="number" class="form-control" id="cupos4" placeholder="Cupos">
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label for="cupos5">Evento 5</label>
+                                    <input type="number" class="form-control" id="cupos5" placeholder="Cupos">
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label for="cupos6">Evento 6</label>
+                                    <input type="number" class="form-control" id="cupos6" placeholder="Cupos">
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label for="cupos7">Evento 7</label>
+                                    <input type="number" class="form-control" id="cupos7" placeholder="Cupos">
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label for="cupos8">Evento 8</label>
+                                    <input type="number" class="form-control" id="cupos8" placeholder="Cupos">
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label for="cupos9">Evento 9</label>
+                                    <input type="number" class="form-control" id="cupos9" placeholder="Cupos">
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label for="cupos10">Evento 10</label>
+                                    <input type="number" class="form-control" id="cupos10" placeholder="Cupos">
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label for="cupos11">Evento 11</label>
+                                    <input type="number" class="form-control" id="cupos11" placeholder="Cupos">
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label for="cupos12">Evento 12</label>
+                                    <input type="number" class="form-control" id="cupos12" placeholder="Cupos">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-6">
+                            <label for="fechaCierre">Fecha de Cierre de Inscripciones</label>
+                            <input type="date" class="form-control" id="fechaCierre">
+                        </div>
+                        <div class="col-6">
+                            <label for="fechaCopa">Fecha de la Copa</label>
+                            <input type="date" class="form-control" id="fechaCopa">
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer d-flex">
+                <button type="button" class="btn btn-primary mr-auto" data-toggle="modal" data-target="#advance-settings-menu">
+                    Advance Menu
+                </button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="passwordModalLabel">Ingrese la Clave</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="passwordForm">
+                        <div class="form-group">
+                            <label for="passwordInput">Clave</label>
+                            <input type="password" class="form-control" id="passwordInput" placeholder="Ingrese su clave" required>
+                        </div>
+                        <div class="alert alert-danger d-none" id="errorAlert">
+                            Clave incorrecta. Inténtelo de nuevo.
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" onclick="validatePassword()">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalLabel">¿Está seguro de que desea eliminar este arrendatario?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Eliminar un arrendatario lo eliminará permanentemente de su mapa y red. Esta acción no se puede deshacer.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Mantener arrendatario</button>
+                    <button type="button" class="btn btn-danger" onclick="confirmAction()">Eliminar arrendatario</button>
+                    <button type="button" class="btn btn-warning" onclick="cancelAction()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 <script>
     fetch('/data/ingresos')
@@ -245,31 +446,23 @@
             });
         });
 
+    function validatePassword() {
+        const correctPassword = "12345"; // Cambiar por la clave deseada
+        const userPassword = document.getElementById("passwordInput").value;
+        const errorAlert = document.getElementById("errorAlert");
 
-    const openModalBtn = document.getElementById('openModalBtn');
-    const modalOverlay = document.getElementById('modalOverlay');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-
-    // Abre el modal
-    openModalBtn.addEventListener('click', () => {
-        console.log('Botón abrir clicado'); // Debug
-        modalOverlay.style.display = 'flow'; // Asegúrate de que esto ocurre
-    });
-
-    // Cierra el modal
-    closeModalBtn.addEventListener('click', () => {
-        console.log('Botón cerrar clicado'); // Debug
-        modalOverlay.style.display = 'none';
-    });
-
-    // Cierra el modal al hacer clic fuera de él
-    modalOverlay.addEventListener('click', (e) => {
-        if (e.target === modalOverlay) {
-            console.log('Clic fuera del modal'); // Debug
-            modalOverlay.style.display = 'none';
+        if (userPassword === correctPassword) {
+            errorAlert.classList.add("d-none");
+            alert("Acceso concedido");
+            $('#passwordModal').modal('hide');
+        } else {
+            errorAlert.classList.remove("d-none");
         }
-    });
+    }
 
 </script>
 
 {% endblock %}
+
+
+
