@@ -128,7 +128,18 @@ class Usuario(UserMixin, db.Model):
     def __repr__(self):
         return f'<Usuario {self.nombre}>'
     
-    
+
+class Cupos(db.Model):
+    __tablename__ = 'cupos'
+
+    deporte = db.Column(db.String(20), nullable=False, primary_key=True)
+    categoria = db.Column(db.String(20), nullable=False, primary_key=True)
+    cupos = db.Column(db.Integer, nullable=False)
+    cupos_restantes = db.Column(db.Integer, nullable=False)
+
+    def __repr__(self):
+        return f"<Cupo(deporte='{self.deporte}', categoria='{self.categoria}', cupos={self.cupos}, cupos_restantes={self.cupos_restantes})>"
+
 class Settings(db.Model):
     __tablename__ = 'Settings'
 

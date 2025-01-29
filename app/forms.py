@@ -14,6 +14,24 @@ categorias = [
     'Femenino menor'
 ]
 
+class quotaForm(FlaskForm):
+    deporte=SelectField('deporte', choices=[('all','Todos los Deportes'),
+                                        ('Futbol', 'Futbol'), 
+                                        ('Basquet', 'Basquet'), 
+                                        ('Voley', 'Voley')],
+                            default='all')
+    categoria=SelectField('categoria', choices=[
+                                        ('all','Todas las Categorías'),
+                                        ('Masculino mayor', 'Masculino mayor'),
+                                        ('Masculino menor', 'Masculino menor'),
+                                        ('Femenino mayor', 'Femenino mayor'),
+                                        ('Femenino menor', 'Femenino menor')],
+                            default='all')
+    cupos=IntegerField('cupos', validators=[DataRequired(), NumberRange(min=0, max=120)])
+    submit = SubmitField('Submit')
+
+
+
 class FilterForm(FlaskForm):
     filtro=StringField('Buscar')
     deporte=SelectField('deporte', choices=[('all','Todos los Deportes'),

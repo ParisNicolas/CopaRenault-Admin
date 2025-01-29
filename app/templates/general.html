@@ -98,8 +98,17 @@
         background-color: #ffffff;
     }
 
-    .table td:last-child {
-        text-align: right;
+    .form-row {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+    }
+
+    .input-group {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        max-width: 80%;
     }
 </style>
 
@@ -112,9 +121,7 @@
                 <h3>$</h3>
                 <p>Ultima Actualizacion 22/01 11:02</p>
 
-                <div class="container">
-                    <canvas id="ingresosChart"></canvas>
-                </div>
+                <h1>##grafico de los ingresos##</h1>
 
                 <h4>Equipos Inscriptos</h4>
                 <h3>83</h3>
@@ -143,7 +150,7 @@
         <div class="col-8 d-flex flex-column">
             <div class="h-40 border border-success">
                 <!-- graficos circulares -->
-                Segunda sección, 1/3
+                Segunda sección, poner graficos y estadisticas nesesarias
             </div>
             <div class="h-60 border border-danger">
                 <!-- registro de inscripciones -->
@@ -175,8 +182,6 @@
     </div>
 </div>
 
-<!-- Modal de usuarios -->
-
 <div class="modal fade" id="users-menu" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -187,29 +192,29 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <button type="button" class="btn btn-success" data-dismiss="modal"
-                style="max-width: 22%; margin-left: 20px;">Agregar User</button>
             <div class="modal-body">
                 <table class="table">
                     <thead>
                         <tr>
                             <th scope="col">USER</th>
                             <th scope="col">TAG</th>
+                            <th scope="col">ACTIONS</th>
                         </tr>
                     </thead>
                     <tbody>
+                        {% for usuario in usuarios %}
                         <tr>
-                            <td>Row 2 Col 1</td>
-                            <td>Row 2 Col 2</td>
+                            <td>{{ usuario.nombre }}</td>
+                            <td>{{ usuario.rol }}</td>
                             <td>
-                                <input class="form-check-input border border-dark" type="checkbox" id="switch1"
-                                    style="border: 2px solid #000;">
-                                <label class="form-check-label" for="switch3">ADMIN</label>
+                                <input class="form-check-input border border-dark" type="checkbox"
+                                    id="switch-{{ usuario.id }}" style="border: 2px solid #000;">
+                                <label class="form-check-label" for="switch-{{ usuario.id }}">admin</label>
                                 <button class="btn btn-primary btn-sm">Edit</button>
                                 <button class="btn btn-danger btn-sm">Delete</button>
                             </td>
                         </tr>
-
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -228,241 +233,171 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="configModalLabel">AJUSTES GENERALES</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cerrarModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form>
+                <form method="POST" id="form-cupos" onsubmit="return false;">
                     <div class="form-row">
                         <div class="col-12 mb-3" style="display: flex;">
-
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input border border-dark" type="checkbox" id="switch1"
                                     style="border: 2px solid #000;">
                                 <label class="form-check-label" for="switch1">desactivar solicitudes de
-                                    incripcionen</label>
+                                    inscripción</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" id="switch2">
                                 <label class="form-check-label" for="switch2">desactivar panel de inscripciones</label>
                             </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="switch3">
-                                <label class="form-check-label" for="switch3">desactivar panel de partidos</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="switch4">
-                                <label class="form-check-label" for="switch4">otra opcion que podria ser util</label>
-                            </div>
                         </div>
                     </div>
-
                     <div class="form-row">
-                        <div class="col-12 mb-3">
+                        <div class="col-10 mb-3">
                             <h5>Cupos Disponibles</h5>
-                            <div class="row">
-                                <div class="col-md-4 mb-2">
-                                    <label for="cupos1">Evento 1</label>
-                                    <input type="number" class="form-control" id="cupos1" placeholder="Cupos">
-                                </div>
-                                <div class="col-md-4 mb-2">
-                                    <label for="cupos2">Evento 2</label>
-                                    <input type="number" class="form-control" id="cupos2" placeholder="Cupos">
-                                </div>
-                                <div class="col-md-4 mb-2">
-                                    <label for="cupos3">Evento 3</label>
-                                    <input type="number" class="form-control" id="cupos3" placeholder="Cupos">
-                                </div>
-                                <div class="col-md-4 mb-2">
-                                    <label for="cupos4">Evento 4</label>
-                                    <input type="number" class="form-control" id="cupos4" placeholder="Cupos">
-                                </div>
-                                <div class="col-md-4 mb-2">
-                                    <label for="cupos5">Evento 5</label>
-                                    <input type="number" class="form-control" id="cupos5" placeholder="Cupos">
-                                </div>
-                                <div class="col-md-4 mb-2">
-                                    <label for="cupos6">Evento 6</label>
-                                    <input type="number" class="form-control" id="cupos6" placeholder="Cupos">
-                                </div>
-                                <div class="col-md-4 mb-2">
-                                    <label for="cupos7">Evento 7</label>
-                                    <input type="number" class="form-control" id="cupos7" placeholder="Cupos">
-                                </div>
-                                <div class="col-md-4 mb-2">
-                                    <label for="cupos8">Evento 8</label>
-                                    <input type="number" class="form-control" id="cupos8" placeholder="Cupos">
-                                </div>
-                                <div class="col-md-4 mb-2">
-                                    <label for="cupos9">Evento 9</label>
-                                    <input type="number" class="form-control" id="cupos9" placeholder="Cupos">
-                                </div>
-                                <div class="col-md-4 mb-2">
-                                    <label for="cupos10">Evento 10</label>
-                                    <input type="number" class="form-control" id="cupos10" placeholder="Cupos">
-                                </div>
-                                <div class="col-md-4 mb-2">
-                                    <label for="cupos11">Evento 11</label>
-                                    <input type="number" class="form-control" id="cupos11" placeholder="Cupos">
-                                </div>
-                                <div class="col-md-4 mb-2">
-                                    <label for="cupos12">Evento 12</label>
-                                    <input type="number" class="form-control" id="cupos12" placeholder="Cupos">
-                                </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-10 d-flex">
+                                <select class="form-control" id="deporte" name="deporte" onchange="mostrarCategorias()">
+                                    <option value="" selected>Seleccione un deporte</option>
+                                    {% for deporte, categorias in deportes_dict.items() %}
+                                    <option value="{{ deporte }}">{{ deporte }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row mt-4">
+                            <div class="col-12">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Categoría</th>
+                                            <th>Cupos actuales</th>
+                                            <th>Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabla-categorias">
+                                        <!-- Las categorías y cupos se llenarán dinámicamente -->
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
-
                     <div class="form-row">
                         <div class="col-6">
                             <label for="fechaCierre">Fecha de Cierre de Inscripciones</label>
-                            <input type="date" class="form-control" id="fechaCierre">
+                            <input type="date" class="form-control" id="fechaCierre" name="fechaCierre"
+                                value="{{ fecha_cierre }}">
                         </div>
                         <div class="col-6">
                             <label for="fechaCopa">Fecha de la Copa</label>
-                            <input type="date" class="form-control" id="fechaCopa">
+                            <input type="date" class="form-control" id="fechaCopa" name="fechaCopa"
+                                value="{{ fecha_copa }}">
                         </div>
                     </div>
-
                 </form>
             </div>
-
             <div class="modal-footer d-flex">
-                <button type="button" class="btn btn-primary mr-auto" data-toggle="modal" data-target="#advance-settings-menu">
-                    Advance Menu
-                </button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="guardarCambios()" id="guardarCambiosBtn"
+                    style="display:none;">Guardar Cambios</button>
             </div>
-            
         </div>
     </div>
 </div>
 
-
-<div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="passwordModalLabel">Ingrese la Clave</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="passwordForm">
-                        <div class="form-group">
-                            <label for="passwordInput">Clave</label>
-                            <input type="password" class="form-control" id="passwordInput" placeholder="Ingrese su clave" required>
-                        </div>
-                        <div class="alert alert-danger d-none" id="errorAlert">
-                            Clave incorrecta. Inténtelo de nuevo.
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary" onclick="validatePassword()">Enviar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Confirmación -->
-    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmModalLabel">¿Está seguro de que desea eliminar este arrendatario?</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>Eliminar un arrendatario lo eliminará permanentemente de su mapa y red. Esta acción no se puede deshacer.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Mantener arrendatario</button>
-                    <button type="button" class="btn btn-danger" onclick="confirmAction()">Eliminar arrendatario</button>
-                    <button type="button" class="btn btn-warning" onclick="cancelAction()">Cancelar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
 <script>
-    fetch('/data/ingresos')
-        .then(response => response.json())
-        .then(data => {
-            const ctx = document.getElementById('ingresosChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: data.meses,
-                    datasets: [{
-                        label: '',
-                        data: data.valores,
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderWidth: 2,
-                        tension: 0.4,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false // Ocultar leyenda
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: {
-                                display: false // Ocultar líneas de cuadrícula
-                            },
-                            ticks: {
-                                display: false // Ocultar etiquetas del eje X
-                            }
-                        },
-                        y: {
-                            grid: {
-                                display: false // Ocultar líneas de cuadrícula
-                            },
-                            ticks: {
-                                display: false // Ocultar etiquetas del eje Y
-                            },
-                            beginAtZero: true
-                        }
-                    },
-                    elements: {
-                        point: {
-                            radius: 0 // Eliminar puntos en el gráfico
-                        }
-                    }
-                }
+    const deportesCategorias = JSON.parse('{{ deportes_dict | tojson | safe }}');
+
+    function mostrarCategorias() {
+        const deporteSeleccionado = document.getElementById('deporte').value;
+        const tablaCategorias = document.getElementById('tabla-categorias');
+        tablaCategorias.innerHTML = '';  // Limpiar la tabla
+
+        if (deporteSeleccionado && deportesCategorias[deporteSeleccionado]) {
+            deportesCategorias[deporteSeleccionado].forEach((item, index) => {
+                const fila = `
+                <tr id="fila${index}">
+                    <td>${item.categoria}</td>
+                    <td id="cupos${index}" >${item.cupos}/${item.cupos}</td>
+                    <td class="input-group">
+                        <button class="btn btn-warning btn-sm" id="act_cupos_input" onclick="activarInput(${index})">Modificar Cupo</button>
+                        <input type="number" class="form-control" id="cuposRestantes${index}" style="display:none" value="${item.cupos}">
+                        <button class="btn btn-success btn-sm" onclick="confirmarCambio(${index})" style="display:none" id="btnConfirmar${index}"><i class="fa fa-check"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="abortarCambio(${index})" style="display:none" id="btnAbortar${index}"><i class="fa fa-times"></i></button>
+                    </td>
+                </tr>
+            `;
+                tablaCategorias.innerHTML += fila;
             });
-        });
-
-    function validatePassword() {
-        const correctPassword = "12345"; // Cambiar por la clave deseada
-        const userPassword = document.getElementById("passwordInput").value;
-        const errorAlert = document.getElementById("errorAlert");
-
-        if (userPassword === correctPassword) {
-            errorAlert.classList.add("d-none");
-            alert("Acceso concedido");
-            $('#passwordModal').modal('hide');
-        } else {
-            errorAlert.classList.remove("d-none");
         }
     }
 
+    function activarInput(index) {
+        document.getElementById(`cuposRestantes${index}`).style.display = 'inline-block';
+        document.getElementById(`btnConfirmar${index}`).style.display = 'inline-block';
+        document.getElementById(`btnAbortar${index}`).style.display = 'inline-block';
+        document.getElementById(`act_cupos_input`).style.display = 'none';
+
+    }
+
+    function confirmarCambio(index) {
+        const nuevosCupos = document.getElementById(`cuposRestantes${index}`).value;
+        const deporte = document.getElementById('deporte').value;
+        const categoria = deportesCategorias[deporte][index].categoria;
+        document.getElementById(`cuposRestantes${index}`).style.display = 'none';
+        document.getElementById(`btnConfirmar${index}`).style.display = 'none';
+        document.getElementById(`btnAbortar${index}`).style.display = 'none';
+        document.getElementById(`act_cupos_input`).style.display = 'inline-block';
+
+        // Solo actualizar la tabla visualmente
+        document.getElementById(`cupos${index}`).innerHTML = `${nuevosCupos}/${nuevosCupos}`;
+
+        // Mostrar el botón de "Guardar Cambios"
+        document.getElementById('guardarCambiosBtn').style.display = 'inline-block';
+
+        // Almacenar el cambio para el envío posterior
+        deportesCategorias[deporte][index].cupos = nuevosCupos;
+    }
+
+    function abortarCambio(index) {
+        document.getElementById(`cuposRestantes${index}`).style.display = 'none';
+        document.getElementById(`btnConfirmar${index}`).style.display = 'none';
+        document.getElementById(`btnAbortar${index}`).style.display = 'none';
+        document.getElementById(`act_cupos_input`).style.display = 'inline-block';
+    }
+
+    // Función para enviar todos los cambios a la base de datos
+    async function guardarCambios() {
+        const datos = deportesCategorias;
+        /*{
+            "fútbol": [
+                { "categoria": "Masculino mayor", "cupos": 10, "cupos_restantes": 5 },
+                { "categoria": "Masculino menor", "cupos": 15, "cupos_restantes": 10 }
+            ],
+            "básquetbol": [
+                { "categoria": "infantiles", "cupos": 20, "cupos_restantes": 15 }
+            ]
+        };*/
+
+        const response = await fetch('/guardar_cupos', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos)
+        });
+
+        const resultado = await response.json();
+        if (resultado.mensaje) {
+            alert(resultado.mensaje);
+            console.log("Cupos guardados:", resultado.cupos);
+        } else {
+            alert(resultado.error);
+        }
+    }
 </script>
 
+
 {% endblock %}
-
-
-

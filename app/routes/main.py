@@ -1,11 +1,11 @@
-from flask import Blueprint, flash, redirect, render_template, url_for, abort, jsonify
+from flask import Blueprint, flash, redirect, render_template, url_for, abort, jsonify, request
 from flask_login import login_user, logout_user, current_user
 from functools import wraps
 from sqlalchemy import func
 
 from app import db
 from app.forms import LoginForm, RegisterForm
-from app.models import Usuario, Inscripcion
+from app.models import Usuario, Inscripcion, Settings, Cupos
 
 #from app.models import Carrito, Producto, CarritoProducto, Transaccion
 #from app.forms import TarjetaForm
@@ -24,23 +24,92 @@ def role_required(allowed_rol):
         return decorated_function
     return decorator
 
-
-@main.route('/')
+@main.route('/', methods=['GET', 'POST'])
 def general():
+    if request.method == 'POST':
+        try:
+            # Procesar los cambios de cupos
+            for i, value in enumerate(request.form.getlist('cupos_restantes[]')):
+                deporte = request.form.getlist('deporte[]')[i]
+                categoria = request.form.getlist('categoria[]')[i]
+
+                # Actualizar la base de datos
+                cupo = Cupos.query.filter_by(deporte=deporte, categoria=categoria).first()
+                if cupo:
+                    cupo.cupos_restantes = int(value)
+            
+            # Confirmar cambios en la base de datos
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Error al procesar los datos: {str(e)}")
+
+    # Consultar los datos para mostrarlos
+    usuarios = Usuario.query.all()
+    deportes = db.session.query(Cupos.deporte, Cupos.categoria, Cupos.cupos, Cupos.cupos_restantes).all()
+
+    # Agrupar los datos por deporte
+    deportes_dict = {}
+    for deporte, categoria, cupos, cupos_restantes in deportes:
+        if deporte not in deportes_dict:
+            deportes_dict[deporte] = []
+        deportes_dict[deporte].append({
+            'categoria': categoria,
+            'cupos': cupos,
+            'cupos_restantes': cupos_restantes
+        })
+
+    return render_template('general.html', deportes_dict=deportes_dict, usuarios=usuarios)
 
 
-    return render_template(
-        'general.html'
-    )
+@main.route('/guardar_cupos', methods=['POST'])
+def guardar_cupos():
+    try:
+        # Obtener los datos enviados desde el cliente
+        cupos_actualizados = request.get_json()
+        print("Datos recibidos:", cupos_actualizados)
 
-@main.route('/data/ingresos')
-def obtener_ingresos():
-    # Datos de ejemplo (pueden provenir de una base de datos o cálculo)
-    ingresos = {
-        "meses": ["Enero", "Febrero", "Marzo", "Abril", "Mayo"],
-        "valores": [12000, 15000, 17000, 13000, 18000]
-    }
-    return jsonify(ingresos)
+        # Procesar cada entrada y actualizar en la base de datos
+        for deporte, categorias in cupos_actualizados.items():
+            for categoria in categorias:
+                # Buscar la entrada correspondiente en la base de datos
+                cupo = Cupos.query.filter_by(
+                    deporte=deporte, categoria=categoria['categoria']
+                ).first()
+
+                if cupo:
+                    # Actualizar los campos necesarios
+                    cupo.cupos = categoria['cupos']
+                    cupo.cupos_restantes = categoria.get('cupos_restantes', cupo.cupos_restantes)
+                    print(f"Actualizado: {cupo}")
+                else:
+                    print(f"No se encontró el registro para: Deporte={deporte}, Categoría={categoria['categoria']}")
+
+        # Confirmar los cambios
+        db.session.commit()
+
+        # Obtener todos los registros para devolverlos como respuesta
+        cupos_guardados = Cupos.query.all()
+        resultado = [
+            {
+                "deporte": cupo.deporte,
+                "categoria": cupo.categoria,
+                "cupos": cupo.cupos,
+                "cupos_restantes": cupo.cupos_restantes,
+            }
+            for cupo in cupos_guardados
+        ]
+        print(resultado)
+
+        return jsonify({"mensaje": "Cambios guardados correctamente", "cupos": resultado}), 200
+
+    except Exception as e:
+        db.session.rollback()  # Revertir cambios en caso de error
+        print("Error al guardar cupos:", e)
+        return jsonify({"error": "Ocurrió un error al guardar los cupos"}), 500
+
+
+
 
 @main.route('/login', methods=['GET', 'POST'])
 def login():

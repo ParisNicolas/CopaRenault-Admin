@@ -2,34 +2,27 @@
 Asignacion en segundo plano de los grupos
 Poner id del grupo pequenito
 
+**cambio del sistema de inscripciones**
+-eliminar campos del formulario
+-poner campo fecha para turnos en formulario
+-adaptar appscrip para cargar la fecha
+-adaptar base de datos
+-eliminar visor de comprobante y autorizacion 
+-añadir menu que ordene la informacion para confirmar incripcion
+-revisar boostrap
+
 envio automatico de respuesta por appscrip (hacer mail)
 hacer mail confirmacion 
 
-poner campo fecha para turnos en formulario
-editar DB y appscrip para cargar la fecha
-eliminar visor de comprobante y autorizacion 
-poner un campo de si vino dejo papeles eh hizo el pago
-
-
-
-
 (----GENERAL----)
-calendario con los que van a venir a pagar
-interfaz cencilla si pago y dejo papeles
 
-posible menu:
--reloj
--3 botones
--usuarios
--estadisticas
--config
-
-amanaque con los turnos de los colegios
+calendario con los turnos y fechas importantes
+conetar botones
+invertir tablas cupos y settings
 
 (----PARTIDOS----)
 
 
 (----appscrip----)
-
 
 desabilitar form manualmente
