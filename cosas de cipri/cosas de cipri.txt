@@ -1,15 +1,6 @@
 (----INSCRIPCIONES----)
-Asignacion en segundo plano de los grupos
-Poner id del grupo pequenito
+.... siempre se puede ver css, pero por ahora esta todos
 
-**cambio del sistema de inscripciones**
--eliminar campos del formulario
--poner campo fecha para turnos en formulario
--adaptar appscrip para cargar la fecha
--adaptar base de datos
--eliminar visor de comprobante y autorizacion 
--añadir menu que ordene la informacion para confirmar incripcion
--revisar boostrap
 
 envio automatico de respuesta por appscrip (hacer mail)
 hacer mail confirmacion 

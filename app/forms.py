@@ -47,12 +47,12 @@ class FilterForm(FlaskForm):
                                         ('Femenino menor', 'Femenino menor')],
                             default='all')
     grupo=SelectField('grupo', choices=[('all','Todos los Grupos'),
-                                        ('A', 'a'), 
-                                        ('B', 'b'), 
-                                        ('C', 'c'),
-                                        ('D', 'd'), 
-                                        ('E', 'e'),
-                                        ('F', 'f')],
+                                        ('A', 'A'), 
+                                        ('B', 'B'), 
+                                        ('C', 'C'),
+                                        ('D', 'D'), 
+                                        ('E', 'E'),
+                                        ('F', 'F')],
                             default='all')
     
     cantidad=SelectField('Mostrar', choices=[(5, '5'), (10, '10'), (20, '20')], coerce=int, default=10)

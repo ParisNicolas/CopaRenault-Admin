@@ -1,5 +1,5 @@
 import requests
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import Blueprint, flash, redirect, render_template, request, url_for, jsonify
 from app import db
 import os
 
@@ -138,34 +138,36 @@ def delete_team(id):
     return redirect(url_for('teams_bp.inscripciones'))
 
 
-
 @teams_bp.route('/asignar_grupo/<int:id>', methods=['POST'])
 def asignar_grupo(id):
     inscripto = Inscripcion.query.get_or_404(id)
-    
-    grupo = request.form.get('grupo')  # Obtener el valor del grupo
-    
-    if not grupo:  # Verificar si se seleccionó un grupo
-        flash("Debe seleccionar un grupo", "danger")
-        return redirect(url_for('teams_bp.inscripciones'))
+    grupo = request.form.get('grupo')
+
+    if not grupo:
+        return jsonify({"success": False, "message": "Debe seleccionar un grupo"}), 400
 
     if inscripto.equipo_id:
-        inscripto.Grupo = grupo  # Asignar el grupo al inscripto
-        inscripto.equipo.grupo = grupo  # Asignar el grupo al equipo existente
+        inscripto.Grupo = grupo
+        inscripto.equipo.grupo = grupo
     else:
         equipo = Equipo(
             nombre=inscripto.Equipo,
             colegio=inscripto.Colegio,
             deporte=inscripto.Deporte,
             categoria=inscripto.Categoria,
-            grupo=grupo  # Asignar el grupo al nuevo equipo
+            grupo=grupo
         )
         db.session.add(equipo)
         db.session.commit()
-        inscripto.equipo_id = equipo.id  # Asignar el ID del nuevo equipo al inscripto
-        inscripto.Grupo = grupo  # Asignar el grupo al inscripto
+        inscripto.equipo_id = equipo.id
+        inscripto.Grupo = grupo
 
     db.session.commit()
-    flash("Grupo asignado exitosamente", "success")
+    
+    return jsonify({"success": True, "message": "Grupo asignado correctamente"})
 
-    return redirect(url_for('teams_bp.inscripciones'))
+
+@teams_bp.route('/ver_equipo/<id>', methods=['GET'])
+def mostrar_equipo(id):
+    equipo = Equipo.query.get_or_404(id)
+    return render_template('inscripciones/ver_equipo.html', equipo=equipo)

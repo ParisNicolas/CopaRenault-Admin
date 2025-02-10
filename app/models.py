@@ -20,9 +20,7 @@ class Inscripcion(db.Model):
     Vegetariano = db.Column(db.String(5), nullable=False)#Vegano
     Celiaco = db.Column(db.String(5), nullable=False)    #Celiaco
     Diabetico = db.Column(db.String(5), nullable=False)  #Diabetico
-    Comprobante = db.Column(db.String(255), nullable=False, default='no se cargo',  #URL al comprobante
-                    info={'charset': 'utf8', 'collate': 'utf8_general_ci'})
-    Autorizacion = db.Column(db.String(255), nullable=False, default='no se cargo', #URL a la autorizacion
+    Dudas = db.Column(db.String(2048), nullable=False,   #URL al comprobante
                     info={'charset': 'utf8', 'collate': 'utf8_general_ci'})
     QR = db.Column(db.String(255), nullable=False, default='no se cargo',           #URL del QR
                     info={'charset': 'utf8', 'collate': 'utf8_general_ci'})

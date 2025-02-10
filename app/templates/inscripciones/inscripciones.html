@@ -137,39 +137,6 @@
         }
     }
 
-
-    @mixin breakpoint($value) {
-        @if $value =='phone' {
-            @media only screen and (min-width: 120px) and (max-width: 767px) {
-                @content;
-            }
-        }
-
-        @else if $value =='tablet' {
-            @media only screen and (min-width: 768px) and (max-width: 1024px) {
-                @content;
-            }
-        }
-
-        @else if $value =='touch' {
-            @media only screen and (min-width: 120px) and (max-width: 1024px) {
-                @content;
-            }
-        }
-
-        @else if $value =='desktop' {
-            @media only screen and (min-width: 1025px) {
-                @content;
-            }
-        }
-
-        @else {
-            @media only screen and (max-width: $value) {
-                @content;
-            }
-        }
-    }
-
     .admin_bar {
         margin: 40px;
         border: 1px solid #ccc;
@@ -299,6 +266,9 @@
         <div class="dropdown">
             {{ form.deporte(class="form-control") }}
         </div>
+        <div class="dropdown">
+            {{ form.grupo(class="form-control" ) }}
+        </div>
         {{ form.submit(class="btn btn-primary") }}
         <a href="{{ url_for('teams_bp.inscripciones') }}" class="btn btn-danger ml-2">X</a>
     </form>
@@ -330,40 +300,39 @@
             <label for="checkbox2" class="slider-label">Mostrar Tabla inscriptos</label>
         </div>
     </div>
-
-    <div class="pagination-wrapper">
-        <div class="pagination">
-            {% set total_pages = Table2_inf|length // 10 + (1 if Table2_inf|length % 10 > 0 else 0) %}
-            {% for page in range(1, total_pages + 1) %}
-                <a class="page-numbers {% if page == 1 %}current{% endif %}" data-page="{{ page }}">{{ page }}</a>
-            {% endfor %}
-        </div>
-    </div>
 </div>
 
 
 
-<div id="table1" class="table-container" style="margin: 12px;">
+<div id="table1" class=" table-container" style="margin: 12px;">
+    <div class="pagination-wrapper d-flex flex-column align-items-end ">
+        <div class="pagination1">
+            {% set total_pages = Table1_inf|length // 10 + (1 if Table1_inf|length % 10 > 0 else 0) %}
+            {% for page in range(1, total_pages + 1) %}
+            <a class="page-numbers {% if page == 1 %}current{% endif %}" data-page="{{ page }}">{{ page }}</a>
+            {% endfor %}
+        </div>
+    </div>
     <table class="table table-striped table-hover table-bordered table-sm bg-white">
         <thead>
             <tr>
-                <td>Equipo</td>
-                <td>Colegio</td>
-                <td>Deporte</td>
-                <td>Categoria</td>
-                <td>DNI</td>
-                <td>Correo</td>
-                <td>Miembros</td>
-                <td>Vegetariano</td>
-                <td>Celiaco</td>
-                <td>Diabetico</td>
-                <td>Autorizacion</td>
-                <td>Comprobante</td>
-                <td>-------</td>
+                <th>Equipo</th>
+                <th>Colegio</th>
+                <th>Deporte</th>
+                <th>Categoria</th>
+                <th>DNI</th>
+                <th>Correo</th>
+                <th>Miembros</th>
+                <th>Vegetariano</th>
+                <th>Celiaco</th>
+                <th>Diabetico</th>
+                <th>
+                    <hr class="border border-2" style="margin-top: 6%;">
+                </th>
             </tr>
         </thead>
         {% for pagina in Table1_inf|batch(10) %}
-        <tbody id="page1-{{ loop.index }}" {% if not loop.first %}class="d-none"{% endif %}>
+        <tbody id="page1-{{ loop.index }}" class="pagination1tbody {% if not loop.first %}d-none{% endif %}">
             {% for inf in pagina %}
             <tr>
                 <td>{{inf.Equipo}}</td>
@@ -378,20 +347,26 @@
                 <td>{{inf.Vegetariano}}</td>
                 <td>{{inf.Celiaco}}</td>
                 <td>{{inf.Diabetico}}</td>
-                <td><a href="{{ inf.Autorizacion }}" target="_blank">LINK</a></td>
-                <td><a href="{{ inf.Comprobante }}" target="_blank">LINK</a></td>
-                <td>
-                    <a href="https://wa.me/{{ inf.Telefono }}" class="btn btn-success" target="_blank"
-                        style="padding: 5px; display: inline-block; width: auto;">
-                        <img src="{{ url_for('static', filename='img/whatsapp_ico.png') }}"
-                            style="width: 40px; height: 40px; margin: 2px;" />
-                    </a>
-                    <a href="{{ url_for('teams_bp.cargar_team', id=inf.ID) }}" class="btn btn-success"
-                        onclick="return confirm('¿Estás seguro de que deseas confirmar este equipo?');">OK</a>
+                <td width="236px">
+                    <div class="d-flex">
+                        <a class="btn btn-success" style="margin-right: 4px;"
+                            href="{{ url_for('teams_bp.cargar_team', id=inf.ID) }}"
+                            onclick="return confirm('¿Estás seguro de que deseas confirmar este equipo?');">
+                            <i class="fa-solid fa-check fa-2x"></i>
+                        </a>
 
-                    <a class="btn btn-primary btn-sm" href="{{ url_for('teams_bp.edit_team', id=inf.ID) }}">
-                        <img src="{{ url_for('static', filename='img/settings_ico.png') }}" class="img-fluid">
-                    </a>
+                        <a target="_blank" class="btn btn-success" style="margin-right: 4px;"
+                            href="https://wa.me/{{ inf.Telefono }}">
+                            <i class="fa-brands fa-whatsapp fa-2x"></i>
+                        </a>
+
+                        <a class="btn btn-primary" href="{{ url_for('teams_bp.edit_team', id=inf.ID) }}">
+                            <i class="fa-solid fa-gear fa-2x"></i>
+                        </a>
+                    </div>
+
+
+
 
                 </td>
             </tr>
@@ -403,6 +378,14 @@
 
 
 <div id="table2" class="table-container" style="margin: 12px;">
+    <div class="pagination-wrapper d-flex flex-column align-items-end ">
+        <div class="pagination2">
+            {% set total_pages = Table2_inf|length // 10 + (1 if Table2_inf|length % 10 > 0 else 0) %}
+            {% for page in range(1, total_pages + 1) %}
+            <a class="page-numbers {% if page == 1 %}current{% endif %}" data-page="{{ page }}">{{ page }}</a>
+            {% endfor %}
+        </div>
+    </div>
     <table class="table table-striped table-hover table-bordered table-sm">
         <thead>
             <tr>
@@ -415,11 +398,11 @@
                 <th>Correo</th>
                 <th>Miembros</th>
                 <th>Grupo</th>
-                <th>Acciones</th>
+                <th><hr class="border border-2" style="margin-top: 6%;"></th>
             </tr>
         </thead>
         {% for pagina in Table2_inf|batch(10) %}
-        <tbody id="page2-{{ loop.index }}" {% if not loop.first %}class="d-none"{% endif %}>
+        <tbody id="page2-{{ loop.index }}" class="pagination2tbody {% if not loop.first %}d-none{% endif %}">
             {% for inf in pagina %}
             <tr>
                 <td>{{ inf.ID }}</td>
@@ -434,10 +417,19 @@
                     {{ inf.Acompañantes }} Acompañantes
                 </td>
                 <td class="texto_grupo">
-                    {{ inf.Grupo }}
+                    <b>{{ inf.Grupo }}</b>
+
+                    {% if inf.equipo_id %}
+                    <div class="d-flex justify-content-end">
+                        <a href="{{ url_for('teams_bp.mostrar_equipo', id=inf.equipo_id) }}"
+                            style="text-decoration: none; color: inherit;">
+                            <small>{{ inf.equipo_id}}</small>
+                        </a>
+                    </div>
+                    {%endif%}
                 </td>
                 <td class="form_grupo d-none">
-                    <form action="{{ url_for('teams_bp.asignar_grupo', id=inf.ID) }}" method="post" class="d-flex">
+                    <form id="grupoForm-{{ inf.ID }}" class="d-flex">
                         <select class="form-control" name="grupo">
                             <option value="">Sin definir</option>
                             {% for letra in 'ABCDEF' %}
@@ -448,20 +440,28 @@
                         </select>
                         <button type="submit"
                             class="ml-2 flex-shrink-1 btn btn-sm {% if inf.Grupo == 'sin definir' %}btn-danger{%else%}btn-success{%endif%}">
-                            >
+                            <span class="spinner-border spinner-border-sm d-none" role="status"
+                                aria-hidden="true"></span>
+                            <span class="btn-text"><i class="fa-solid fa-caret-right"></i></span>
                         </button>
                     </form>
                 </td>
 
-                <td>
-                    <a class="btn btn-success btn-sm" target="_blank" href="https://wa.me/{{ inf.Telefono }}">
-                        <img src="{{ url_for('static', filename='img/whatsapp_ico.png') }}" class="img-fluid"
-                            style="width: 24px; height: 24px;">
-                    </a>
-                    <a class="btn btn-primary btn-sm" href="{{ url_for('teams_bp.edit_team', id=inf.ID) }}">
-                        <img src="{{ url_for('static', filename='img/settings_ico.png') }}" class="img-fluid"
-                            style="width: 24px; height: 24px;">
-                    </a>
+                <td width="236px">
+
+                    <div class="d-flex justify-content-end">
+                        <a target="_blank" class="btn btn-success" style="margin-right: 4px;"
+                            href="https://wa.me/{{ inf.Telefono }}">
+                            <i class="fa-brands fa-whatsapp fa-2x"></i>
+                        </a>
+
+                        <a class="btn btn-primary" style="margin-right: 4px;" href="{{ url_for('teams_bp.edit_team', id=inf.ID) }}">
+                            <i class="fa-solid fa-gear fa-2x"></i>
+                        </a>
+                    </div>
+
+
+
                 </td>
             </tr>
             {% endfor %}
@@ -476,23 +476,87 @@
 <script>
 
     document.addEventListener('DOMContentLoaded', function () {
-        const paginationLinks = document.querySelectorAll('.pagination a');
-        const tableBodies = document.querySelectorAll('tbody');
+        const pagination1Links = document.querySelectorAll('.pagination1 a');
+        const pagination2Links = document.querySelectorAll('.pagination2 a');
+        const tableBodies1 = document.querySelectorAll('.pagination1tbody');
+        const tableBodies2 = document.querySelectorAll('.pagination2tbody');
 
-        paginationLinks.forEach(link => {
+        pagination1Links.forEach(link => {
             link.addEventListener('click', function (e) {
                 e.preventDefault(); // Evita que el anchor cambie de página
 
                 // Ocultar todos los TBODIES
-                tableBodies.forEach(tbody => tbody.classList.add('d-none'));
+                tableBodies1.forEach(tbody => tbody.classList.add('d-none'));
+
+                // Mostrar el TBODY correspondiente
+                const page = this.getAttribute('data-page');
+                document.getElementById(`page1-${page}`).classList.remove('d-none');
+
+                // Actualizar el estado activo de los links
+                pagination1Links.forEach(link => link.classList.remove('current'));
+                this.classList.add('current');
+            });
+        });
+
+        pagination2Links.forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault(); // Evita que el anchor cambie de página
+
+                // Ocultar todos los TBODIES
+                tableBodies2.forEach(tbody => tbody.classList.add('d-none'));
 
                 // Mostrar el TBODY correspondiente
                 const page = this.getAttribute('data-page');
                 document.getElementById(`page2-${page}`).classList.remove('d-none');
 
                 // Actualizar el estado activo de los links
-                paginationLinks.forEach(link => link.classList.remove('current'));
+                pagination2Links.forEach(link => link.classList.remove('current'));
                 this.classList.add('current');
+            });
+        });
+
+        document.querySelectorAll("form[id^='grupoForm-']").forEach(form => {
+            form.addEventListener("submit", function (event) {
+                event.preventDefault(); // Evita el envío normal
+
+                const formData = new FormData(this);
+                const grupo = formData.get("grupo");
+                const id = this.id.split("-")[1]; // Extraer el ID del form
+                const button = this.querySelector("button");
+                const spinner = button.querySelector(".spinner-border");
+                const btnText = button.querySelector(".btn-text");
+
+                // Mostrar spinner y deshabilitar botón
+                spinner.classList.remove("d-none");
+                btnText.style.display = "none";
+                button.disabled = true;
+
+                fetch(`/asignar_grupo/${id}`, {
+                    method: "POST",
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("Grupo asignado correctamente");
+
+                            // Actualizar el botón según el grupo asignado
+                            button.classList.remove("btn-danger", "btn-success");
+                            button.classList.add(grupo ? "btn-success" : "btn-danger");
+
+                            // Actualizar la opción seleccionada en el select
+                            this.querySelector("select").value = grupo;
+                        } else {
+                            alert("Error: " + data.message);
+                        }
+                    })
+                    .catch(error => console.error("Error:", error))
+                    .finally(() => {
+                        // Ocultar spinner y restaurar botón
+                        spinner.classList.add("d-none");
+                        btnText.style.display = "inline";
+                        button.disabled = false;
+                    });
             });
         });
     });
@@ -515,6 +579,8 @@
             formularios.forEach(elemento => elemento.classList.add('d-none'));
         }
     }
+
+
 
     function initTables() {
         var checkbox1 = document.getElementById('checkbox1');
