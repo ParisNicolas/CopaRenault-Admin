@@ -86,9 +86,6 @@
         margin-bottom: 1rem;
     }
 
-    .form-row {
-        margin-bottom: 1rem;
-    }
 
     .table tbody tr:nth-child(odd) {
         background-color: #f9f9f9;
@@ -107,8 +104,51 @@
     .input-group {
         display: flex;
         flex-wrap: nowrap;
-        align-items: center;
         max-width: 80%;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
+    .form-check-input {
+        width: 54px;
+        /* 10% más grande que 40px */
+        height: 28px;
+        /* 10% más grande que 20px */
+        appearance: none;
+        background: red;
+        border-radius: 3px;
+        position: relative;
+        cursor: pointer;
+        transition: background 0.3s ease-in-out;
+    }
+
+    .form-check-input:checked {
+        background: green;
+    }
+
+    .form-check-input::before {
+        content: "";
+        width: 20px;
+        /* 10% más grande que 16px */
+        height: 20px;
+        /* 10% más grande que 16px */
+        background: white;
+        position: absolute;
+        top: 50%;
+        left: 4px;
+        transform: translateY(-50%);
+        border-radius: 2px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .form-check-input:checked::before {
+        transform: translate(26px, -50%);
+    }
+
+    .cupos-input {
+        padding-bottom: 40px;
+        padding-top: 5px;
+        max-width: 23%;
     }
 </style>
 
@@ -240,26 +280,52 @@
             <div class="modal-body">
                 <form method="POST" id="form-cupos" onsubmit="return false;">
                     <div class="form-row">
-                        <div class="col-12 mb-3" style="display: flex;">
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input border border-dark" type="checkbox" id="switch1"
-                                    style="border: 2px solid #000;">
-                                <label class="form-check-label" for="switch1">desactivar formulario de
-                                    inscripción</label>
+
+                        <div
+                            style="display: flex; margin-left: 4%; margin-right: 4%; justify-content: space-between; margin-bottom: 3%;">
+                            <div style="display: flex; flex-direction: column;">
+                                <div class="form-check form-check-inline mb-1 mt-2">
+                                    <input class="form-check-input" type="checkbox" id="switch">
+                                    <label class="form-check-label" for="switch">formulario de incripcion</label>
+                                </div>
+                                <div class="form-check form-check-inline mb-1 ">
+
+                                    <input class="form-check-input" type="checkbox" id="switch">
+                                    <label class="form-check-label" for="switch">paguina de incripciones</label>
+                                </div>
+                                <div class="form-check form-check-inline mb-1">
+                                    <input class="form-check-input" type="checkbox" id="switch">
+                                    <label class="form-check-label" for="switch">desactivar pagina de
+                                        inscripciones</label>
+                                </div>
+                                <div class="form-check form-check-inline mb-1">
+                                    <input class="form-check-input" type="checkbox" id="switch">
+                                    <label class="form-check-label" for="switch">desactivar pagina de
+                                        inscripciones</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="switch">
+                                    <label class="form-check-label" for="switch">desactivar pagina de
+                                        inscripciones</label>
+                                </div>
                             </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="switch2">
-                                <label class="form-check-label" for="switch2">desactivar pagina de inscripciones</label>
+                            <div style="width: 460px;">
+                                <label for="fechaCierre">Fecha de Cierre de Inscripciones </label>
+                                <input type="date" class="form-control" id="fechaCierre" name="fechaCierre"
+                                    value="{{ fecha_cierre }}">
+                                <label for="fechaCopa">Fecha de la Copa</label>
+                                <input type="date" class="form-control" id="fechaCopa" name="fechaCopa"
+                                    value="{{ fecha_copa }}">
                             </div>
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col-10 mb-3">
+
+                        <div class="mb-1">
                             <h5>Cupos Disponibles</h5>
                         </div>
                         <div class="form-row">
-                            <div class="col-10 d-flex">
-                                <select class="form-control" id="deporte" name="deporte" onchange="mostrarCategorias()">
+                            <div class="col-3 ">
+                                <select class="form-control ml-3" id="deporte" name="deporte"
+                                    onchange="mostrarCategorias()">
                                     <option value="" selected>Seleccione un deporte</option>
                                     {% for deporte, categorias in deportes_dict.items() %}
                                     <option value="{{ deporte }}">{{ deporte }}</option>
@@ -267,14 +333,14 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-row mt-4">
+                        <div class="form-row" style="overflow-x: auto; white-space: nowrap;">
                             <div class="col-12">
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th>Categoría</th>
                                             <th>Cupos actuales</th>
-                                            <th>Acción</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody id="tabla-categorias">
@@ -282,18 +348,6 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col-6">
-                            <label for="fechaCierre">Fecha de Cierre de Inscripciones</label>
-                            <input type="date" class="form-control" id="fechaCierre" name="fechaCierre"
-                                value="{{ fecha_cierre }}">
-                        </div>
-                        <div class="col-6">
-                            <label for="fechaCopa">Fecha de la Copa</label>
-                            <input type="date" class="form-control" id="fechaCopa" name="fechaCopa"
-                                value="{{ fecha_copa }}">
                         </div>
                     </div>
                 </form>
@@ -322,8 +376,8 @@
                     <td>${item.categoria}</td>
                     <td id="cupos${index}" >${item.cupos}/${item.cupos}</td>
                     <td class="input-group">
-                        <button class="btn btn-warning btn-sm" id="act_cupos_input" onclick="activarInput(${index})">Modificar Cupo</button>
-                        <input type="number" class="form-control" id="cuposRestantes${index}" style="display:none" value="${item.cupos}">
+                        <button class="btn btn-warning btn-sm" id="act_cupos_input${index}" onclick="activarInput(${index})">Modificar Cupo</button>
+                        <input type="number" class="form-control cupos-input" id="cuposRestantes${index}" style="display:none" value="${item.cupos}">
                         <button class="btn btn-success btn-sm" onclick="confirmarCambio(${index})" style="display:none" id="btnConfirmar${index}"><i class="fa fa-check"></i></button>
                         <button class="btn btn-danger btn-sm" onclick="abortarCambio(${index})" style="display:none" id="btnAbortar${index}"><i class="fa fa-times"></i></button>
                     </td>
@@ -335,11 +389,15 @@
     }
 
     function activarInput(index) {
+        document.querySelectorAll("[id^='cuposRestantes']").forEach(el => el.style.display = 'none');
+        document.querySelectorAll("[id^='btnConfirmar']").forEach(el => el.style.display = 'none');
+        document.querySelectorAll("[id^='btnAbortar']").forEach(el => el.style.display = 'none');
+        document.querySelectorAll("[id^='act_cupos_input']").forEach(el => el.style.display = 'inline-block');
+
         document.getElementById(`cuposRestantes${index}`).style.display = 'inline-block';
         document.getElementById(`btnConfirmar${index}`).style.display = 'inline-block';
         document.getElementById(`btnAbortar${index}`).style.display = 'inline-block';
-        document.getElementById(`act_cupos_input`).style.display = 'none';
-
+        document.getElementById(`act_cupos_input${index}`).style.display = 'none';
     }
 
     function confirmarCambio(index) {
@@ -349,7 +407,7 @@
         document.getElementById(`cuposRestantes${index}`).style.display = 'none';
         document.getElementById(`btnConfirmar${index}`).style.display = 'none';
         document.getElementById(`btnAbortar${index}`).style.display = 'none';
-        document.getElementById(`act_cupos_input`).style.display = 'inline-block';
+        document.getElementById(`act_cupos_input${index}`).style.display = 'inline-block';
 
         // Solo actualizar la tabla visualmente
         document.getElementById(`cupos${index}`).innerHTML = `${nuevosCupos}/${nuevosCupos}`;
@@ -365,22 +423,12 @@
         document.getElementById(`cuposRestantes${index}`).style.display = 'none';
         document.getElementById(`btnConfirmar${index}`).style.display = 'none';
         document.getElementById(`btnAbortar${index}`).style.display = 'none';
-        document.getElementById(`act_cupos_input`).style.display = 'inline-block';
+        document.getElementById(`act_cupos_input${index}`).style.display = 'inline-block';
     }
 
     // Función para enviar todos los cambios a la base de datos
     async function guardarCambios() {
         const datos = deportesCategorias;
-        /*{
-            "fútbol": [
-                { "categoria": "Masculino mayor", "cupos": 10, "cupos_restantes": 5 },
-                { "categoria": "Masculino menor", "cupos": 15, "cupos_restantes": 10 }
-            ],
-            "básquetbol": [
-                { "categoria": "infantiles", "cupos": 20, "cupos_restantes": 15 }
-            ]
-        };*/
-
         const response = await fetch('/guardar_cupos', {
             method: 'POST',
             headers: {

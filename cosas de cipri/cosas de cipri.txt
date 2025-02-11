@@ -2,14 +2,20 @@
 .... siempre se puede ver css, pero por ahora esta todos
 
 
-envio automatico de respuesta por appscrip (hacer mail)
-hacer mail confirmacion 
+hacer mail de confirmacion de solucitud de inscripcion (con las indicaciones de que debe ir a dejar la documentacion)
+hacer mail confirmacion de la inscripcion (felicitaciones eh informacion del evento)
 
 (----GENERAL----)
 
-calendario con los turnos y fechas importantes
-conetar botones
-invertir tablas cupos y settings
+rehacer tabla settings
+boton config
+-3ra checkbox
+-desactivar G-form
+-desactivar funcionamiento de inscripciones /edportes
+-revisar bugs cupos
+-enviar fictures (agragar archivo y enviar)
+-que las fechas se envien a settings
+
 
 (----PARTIDOS----)
 
