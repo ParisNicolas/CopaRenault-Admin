@@ -350,7 +350,7 @@
                 <td width="236px">
                     <div class="d-flex">
                         <a class="btn btn-success" style="margin-right: 4px;"
-                            href="{{ url_for('teams_bp.cargar_team', id=inf.ID) }}"
+                            href="{{ url_for('teams_bp.cargar_team', id=inf.ID, deporte=inf.Deporte, categoria=inf.Categoria) }}"
                             onclick="return confirm('¿Estás seguro de que deseas confirmar este equipo?');">
                             <i class="fa-solid fa-check fa-2x"></i>
                         </a>
@@ -364,10 +364,6 @@
                             <i class="fa-solid fa-gear fa-2x"></i>
                         </a>
                     </div>
-
-
-
-
                 </td>
             </tr>
             {% endfor %}
@@ -398,7 +394,9 @@
                 <th>Correo</th>
                 <th>Miembros</th>
                 <th>Grupo</th>
-                <th><hr class="border border-2" style="margin-top: 6%;"></th>
+                <th>
+                    <hr class="border border-2" style="margin-top: 6%;">
+                </th>
             </tr>
         </thead>
         {% for pagina in Table2_inf|batch(10) %}
@@ -455,7 +453,8 @@
                             <i class="fa-brands fa-whatsapp fa-2x"></i>
                         </a>
 
-                        <a class="btn btn-primary" style="margin-right: 4px;" href="{{ url_for('teams_bp.edit_team', id=inf.ID) }}">
+                        <a class="btn btn-primary" style="margin-right: 4px;"
+                            href="{{ url_for('teams_bp.edit_team', id=inf.ID) }}">
                             <i class="fa-solid fa-gear fa-2x"></i>
                         </a>
                     </div>

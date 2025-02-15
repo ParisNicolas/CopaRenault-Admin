@@ -1,14 +1,18 @@
 from flask import Blueprint, flash, redirect, render_template, url_for, abort, jsonify, request
 from flask_login import login_user, logout_user, current_user
+from datetime import datetime
 from functools import wraps
 from sqlalchemy import func
+import os
 
 from app import db
 from app.forms import LoginForm, RegisterForm
 from app.models import Usuario, Inscripcion, Settings, Cupos
 
+import requests
 #from app.models import Carrito, Producto, CarritoProducto, Transaccion
 #from app.forms import TarjetaForm
+APPSCRIPT_URL2 = os.getenv('APPSCRIPT_URL2')
 
 main = Blueprint('main', __name__, template_folder='templates')
 
@@ -37,7 +41,7 @@ def general():
                 cupo = Cupos.query.filter_by(deporte=deporte, categoria=categoria).first()
                 if cupo:
                     cupo.cupos_restantes = int(value)
-            
+
             # Confirmar cambios en la base de datos
             db.session.commit()
         except Exception as e:
@@ -46,20 +50,103 @@ def general():
 
     # Consultar los datos para mostrarlos
     usuarios = Usuario.query.all()
-    deportes = db.session.query(Cupos.deporte, Cupos.categoria, Cupos.cupos, Cupos.cupos_restantes).all()
+    deportes = db.session.query(Cupos.deporte, Cupos.categoria, Cupos.cupos_totales, Cupos.cupos_tomados).all()
 
     # Agrupar los datos por deporte
     deportes_dict = {}
-    for deporte, categoria, cupos, cupos_restantes in deportes:
+    for deporte, categoria, cupos_totales, cupos_tomados in deportes:
         if deporte not in deportes_dict:
             deportes_dict[deporte] = []
         deportes_dict[deporte].append({
             'categoria': categoria,
-            'cupos': cupos,
-            'cupos_restantes': cupos_restantes
+            'cupos_totales': cupos_totales,
+            'cupos_tomados': cupos_tomados
         })
 
-    return render_template('general.html', deportes_dict=deportes_dict, usuarios=usuarios)
+    # Obtener los ajustes generales
+    ajustes = Settings.query.first()
+
+
+    incripciones = Inscripcion.query.filter_by(Estado=True).all()
+
+    # Diccionario para almacenar los datos
+    categorias_data = {}
+    totales_data = {}
+
+    for equipo in incripciones:
+        deporte = equipo.Deporte  # Asume que Equipo tiene una relación con Deporte
+        categoria = equipo.Categoria  # Suponiendo que 'categoria' es un campo dentro de Equipo
+
+        if deporte not in categorias_data:
+            categorias_data[deporte] = {}
+
+        # Contar equipos por categoría dentro de cada deporte
+        if categoria not in categorias_data[deporte]:
+            categorias_data[deporte][categoria] = 0
+
+        categorias_data[deporte][categoria] += 1
+
+        # Contar equipos totales por deporte
+        if deporte not in totales_data:
+            totales_data[deporte] = 0
+        totales_data[deporte] += 1
+
+    graficos = {"categorias": categorias_data, "totales": totales_data}
+
+
+    # Pasar los ajustes y otros datos al template
+    return render_template('general.html', graficos=graficos, deportes_dict=deportes_dict, usuarios=usuarios, ajustes=ajustes)
+
+
+@main.route('/guardar-ajustes', methods=['POST'])
+def guardar_ajustes():
+    if request.method == 'POST':
+        # Obtener valores del formulario
+        fecha_cierre = request.form.get('fechaCierre')
+        fecha_copa = request.form.get('fechaCopa')
+        fecha_cierre = datetime.strptime(fecha_cierre, '%Y-%m-%d') if fecha_cierre else None
+        fecha_copa = datetime.strptime(fecha_copa, '%Y-%m-%d') if fecha_copa else None
+
+        switch1 = 'on' in request.form.getlist('switch1')  # Controla el formulario
+        switch2 = 'on' in request.form.getlist('switch2')
+        switch3 = 'on' in request.form.getlist('switch3')
+        switch4 = 'on' in request.form.getlist('switch4')
+        switch5 = 'on' in request.form.getlist('switch5')
+
+        # Guardar en la base de datos
+        ajustes = Settings.query.first()
+        if ajustes:
+            ajustes.switch1 = switch1
+            ajustes.switch2 = switch2
+            ajustes.switch3 = switch3
+            ajustes.switch4 = switch4
+            ajustes.switch5 = switch5
+            ajustes.inscrip_close = fecha_cierre
+            ajustes.copa_date = fecha_copa
+        else:
+            nuevo_ajuste = Settings(
+                switch1=switch1,
+                switch2=switch2,
+                switch3=switch3,
+                switch4=switch4,
+                switch5=switch5,
+                inscrip_close=fecha_cierre,
+                copa_date=fecha_copa
+            )
+            db.session.add(nuevo_ajuste)
+
+        db.session.commit()
+
+        print(switch1)
+
+        params = {"enable": str(switch1).lower()}
+        response = requests.get(APPSCRIPT_URL2, params=params)
+
+        print(response.text)  # Imprime la respuesta JSON del script
+
+    return redirect(url_for("main.general"))
+
+
 
 
 @main.route('/guardar_cupos', methods=['POST'])
@@ -67,7 +154,7 @@ def guardar_cupos():
     try:
         # Obtener los datos enviados desde el cliente
         cupos_actualizados = request.get_json()
-        print("Datos recibidos:", cupos_actualizados)
+        #print("Datos recibidos:", cupos_actualizados)
 
         # Procesar cada entrada y actualizar en la base de datos
         for deporte, categorias in cupos_actualizados.items():
@@ -79,9 +166,9 @@ def guardar_cupos():
 
                 if cupo:
                     # Actualizar los campos necesarios
-                    cupo.cupos = categoria['cupos']
-                    cupo.cupos_restantes = categoria.get('cupos_restantes', cupo.cupos_restantes)
-                    print(f"Actualizado: {cupo}")
+                    cupo.cupos_totales = categoria['cupos_totales']
+                    cupo.cupos_tomados = categoria.get('cupos_tomados', cupo.cupos_tomados)
+                    #print(f"Actualizado: {cupo}")
                 else:
                     print(f"No se encontró el registro para: Deporte={deporte}, Categoría={categoria['categoria']}")
 
@@ -94,12 +181,13 @@ def guardar_cupos():
             {
                 "deporte": cupo.deporte,
                 "categoria": cupo.categoria,
-                "cupos": cupo.cupos,
-                "cupos_restantes": cupo.cupos_restantes,
+                "cupos_totales": cupo.cupos_totales,
+                "cupos_tomados": cupo.cupos_tomados,
+
             }
             for cupo in cupos_guardados
         ]
-        print(resultado)
+        #print(resultado)
 
         return jsonify({"mensaje": "Cambios guardados correctamente", "cupos": resultado}), 200
 
@@ -107,6 +195,12 @@ def guardar_cupos():
         db.session.rollback()  # Revertir cambios en caso de error
         print("Error al guardar cupos:", e)
         return jsonify({"error": "Ocurrió un error al guardar los cupos"}), 500
+
+
+
+
+
+
 
 
 

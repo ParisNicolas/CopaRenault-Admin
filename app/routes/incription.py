@@ -4,7 +4,7 @@ from app import db
 import os
 
 
-from app.models import Inscripcion, Equipo
+from app.models import Inscripcion, Equipo, Cupos
 from app.forms import FilterForm
 from sqlalchemy import or_
 
@@ -46,8 +46,7 @@ def inscripciones():
         Table2_inf=equipos
     )
 
-#    return render_template('inscripciones/inscripciones.html', Table1_inf=inscripciones, Table2_inf = equipos)
-
+#agrega un equipo a la base de datos de manera manual (uso exclusivo para pruebas no se recomienda su uso)
 @teams_bp.route('/add_team', methods=['GET', 'POST'])
 def add_team():
     if request.method == 'POST':
@@ -72,22 +71,35 @@ def add_team():
     return render_template('inscripciones/add_team.html')
 
 
-# cargar al equipo en la copa
-@teams_bp.route('/cargar/<int:id>')
-def cargar_team(id):
+
+
+# confirmar la inscripcion de un equipo al evento
+@teams_bp.route('/cargar/<int:id>/<string:deporte>/<string:categoria>')
+def cargar_team(id, deporte, categoria):
+    # Buscar el equipo en la tabla Inscripcion
     equipo = Inscripcion.query.get_or_404(id)
-    equipo.Estado = True
-    db.session.commit()
+    equipo.Estado = True  # Actualizar estado del equipo
+
+    # Buscar el cupo correspondiente y actualizarlo
+    cupo = Cupos.query.filter_by(deporte=deporte, categoria=categoria).first()
+    if cupo:
+        if cupo.cupos_tomados < cupo.cupos_totales:  # Verificar que aún haya cupos disponibles
+            cupo.cupos_tomados += 1
+        else:
+            flash("No hay cupos disponibles para esta categoría y deporte.", "error")
+            return redirect(url_for('teams_bp.inscripciones'))
+
+    db.session.commit()  # Guardar cambios en ambas tablas
     
     # Imprimir el ID y la URL del Apps Script
     print(f"ID recibido en Flask: {id}")
     print(f"Enviando solicitud a: {APPSCRIPT_URL1}")
+    
     # Enviar la solicitud al Apps Script sin esperar respuesta
     try:
         # Crear la URL completa
         full_url = f"{APPSCRIPT_URL1}?id={id}"
         response = requests.get(full_url)  # Usar GET para pruebas simples
-        # Verificar la respuesta del Apps Script
         if response.status_code == 200:
             flash("Orden enviada exitosamente al Apps Script.", "success")
         else:
@@ -100,19 +112,15 @@ def cargar_team(id):
 
 
 
-
-
-
-
-
+#abre fromulario de edicion
 @teams_bp.route('/edit_form/<int:id>')
 def edit_team(id):
     equipo = Inscripcion.query.get_or_404(id)
     return render_template('inscripciones/edit_form.html', team=equipo)
 
+#actualiza los datos del equipo en la base de datos tras completar el formulario
 @teams_bp.route('/update_team/<int:id>', methods=['POST'])
 def update_team(id):
-
         equipo = Inscripcion.query.get_or_404(id)
         equipo.Equipo = request.form['Equipo']
         equipo.Colegio = request.form['Colegio']
@@ -130,6 +138,7 @@ def update_team(id):
         db.session.commit()
         return redirect(url_for('teams_bp.inscripciones'))
 
+#borra un equipo de la base de datos
 @teams_bp.route('/delete/<int:id>')
 def delete_team(id):
     inscripcion	 = Inscripcion.query.get_or_404(id)
@@ -137,7 +146,7 @@ def delete_team(id):
     db.session.commit()
     return redirect(url_for('teams_bp.inscripciones'))
 
-
+#asigna un grupo a un equipo
 @teams_bp.route('/asignar_grupo/<int:id>', methods=['POST'])
 def asignar_grupo(id):
     inscripto = Inscripcion.query.get_or_404(id)

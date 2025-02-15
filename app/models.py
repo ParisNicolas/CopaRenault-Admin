@@ -132,19 +132,25 @@ class Cupos(db.Model):
 
     deporte = db.Column(db.String(20), nullable=False, primary_key=True)
     categoria = db.Column(db.String(20), nullable=False, primary_key=True)
-    cupos = db.Column(db.Integer, nullable=False)
-    cupos_restantes = db.Column(db.Integer, nullable=False)
+    cupos_totales = db.Column(db.Integer, nullable=False)
+    cupos_tomados = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
-        return f"<Cupo(deporte='{self.deporte}', categoria='{self.categoria}', cupos={self.cupos}, cupos_restantes={self.cupos_restantes})>"
+        return f"<Cupo(deporte='{self.deporte}', categoria='{self.categoria}', cupos={self.cupos_totales}, cupos_restantes={self.cupos_tomados})>"
 
 class Settings(db.Model):
     __tablename__ = 'Settings'
 
-    deporte = db.Column(db.String(20), primary_key=True)  # Clave primaria
-    categoria = db.Column(db.String(20), nullable=False)
-    cupos = db.Column(db.Integer, nullable=False)
-    cierre = db.Column(db.Date, nullable=False)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    switch1 = db.Column(db.Boolean, nullable=False)
+    switch2 = db.Column(db.Boolean, nullable=False)
+    switch3 = db.Column(db.Boolean, nullable=False)
+    switch4 = db.Column(db.Boolean, nullable=False)
+    switch5 = db.Column(db.Boolean, nullable=False)
+    inscrip_close = db.Column(db.Date, nullable=False)
+    copa_date = db.Column(db.Date, nullable=False)
+    otro = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
-        return f'<Settings {self.deporte} - {self.categoria}>'
+        return f'<Settings {self.inscrip_close} - {self.copa_date}>'
+

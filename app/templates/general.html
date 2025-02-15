@@ -156,20 +156,18 @@
     <div class="row h-100">
         <div class="col-4 d-flex flex-column">
             <div class="h-70 border border-primary">
-                <!-- ingresos y estadisticas -->
-                <h4>Ingresos Totales</h4>
-                <h3>$</h3>
-                <p>Ultima Actualizacion 22/01 11:02</p>
-
-                <h1>##grafico de los ingresos##</h1>
-
+                
                 <h4>Equipos Inscriptos</h4>
-                <h3>83</h3>
-                <p>Ultima Actualizacion 22/01 11:02</p>
+                
+                <h2>Equipos por Categoría y Deporte</h2>
+                <canvas id="categoriaChart"></canvas>
+                <br/>
+                <h2>Total de Equipos por Deporte</h2>
+                <div style="width: 300px; height: 300px;">
+                    <canvas id="totalChart"></canvas>
+                </div>
 
-                <h4>Concurrencia estimada</h4>
-                <h3>1289</h3>
-                <p>Ultima Actualizacion 22/01 11:02</p>
+
             </div>
             <div class="h-30 border border-dark">
                 <!-- Panel de control -->
@@ -191,6 +189,8 @@
             <div class="h-40 border border-success">
                 <!-- graficos circulares -->
                 Segunda sección, poner graficos y estadisticas nesesarias
+                <h4>Concurrencia estimada</h4>
+                <h3>1289</h3>
             </div>
             <div class="h-60 border border-danger">
                 <!-- registro de inscripciones -->
@@ -278,44 +278,48 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST" id="form-cupos" onsubmit="return false;">
+                <!-- Formulario con el método POST para enviar los datos al backend -->
+                <form method="POST" action="{{ url_for('main.guardar_ajustes') }}" id="form-cupos">
                     <div class="form-row">
-
                         <div
                             style="display: flex; margin-left: 4%; margin-right: 4%; justify-content: space-between; margin-bottom: 3%;">
                             <div style="display: flex; flex-direction: column;">
                                 <div class="form-check form-check-inline mb-1 mt-2">
-                                    <input class="form-check-input" type="checkbox" id="switch">
-                                    <label class="form-check-label" for="switch">formulario de incripcion</label>
-                                </div>
-                                <div class="form-check form-check-inline mb-1 ">
-
-                                    <input class="form-check-input" type="checkbox" id="switch">
-                                    <label class="form-check-label" for="switch">paguina de incripciones</label>
+                                    <input class="form-check-input" type="checkbox" id="switch1" name="switch1" {% if
+                                        ajustes and ajustes.switch1 %} checked {% endif %}>
+                                    <label class="form-check-label" for="switch1">Formulario de inscripción</label>
                                 </div>
                                 <div class="form-check form-check-inline mb-1">
-                                    <input class="form-check-input" type="checkbox" id="switch">
-                                    <label class="form-check-label" for="switch">desactivar pagina de
+                                    <input class="form-check-input" type="checkbox" id="switch2" name="switch2" {% if
+                                        ajustes and ajustes.switch2 %} checked {% endif %}>
+                                    <label class="form-check-label" for="switch2">Página de inscripciones</label>
+                                </div>
+                                <div class="form-check form-check-inline mb-1">
+                                    <input class="form-check-input" type="checkbox" id="switch3" name="switch3" {% if
+                                        ajustes and ajustes.switch3 %} checked {% endif %}>
+                                    <label class="form-check-label" for="switch3">Desactivar página de
                                         inscripciones</label>
                                 </div>
                                 <div class="form-check form-check-inline mb-1">
-                                    <input class="form-check-input" type="checkbox" id="switch">
-                                    <label class="form-check-label" for="switch">desactivar pagina de
+                                    <input class="form-check-input" type="checkbox" id="switch4" name="switch4" {% if
+                                        ajustes and ajustes.switch4 %} checked {% endif %}>
+                                    <label class="form-check-label" for="switch4">Desactivar página de
                                         inscripciones</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="switch">
-                                    <label class="form-check-label" for="switch">desactivar pagina de
+                                    <input class="form-check-input" type="checkbox" id="switch5" name="switch5" {% if
+                                        ajustes and ajustes.switch5 %} checked {% endif %}>
+                                    <label class="form-check-label" for="switch5">Desactivar página de
                                         inscripciones</label>
                                 </div>
                             </div>
                             <div style="width: 460px;">
-                                <label for="fechaCierre">Fecha de Cierre de Inscripciones </label>
+                                <label for="fechaCierre">Fecha de Cierre de Inscripciones</label>
                                 <input type="date" class="form-control" id="fechaCierre" name="fechaCierre"
-                                    value="{{ fecha_cierre }}">
+                                    value="{{ ajustes.inscrip_close.strftime('%Y-%m-%d') if ajustes and ajustes.inscrip_close else '' }}">
                                 <label for="fechaCopa">Fecha de la Copa</label>
                                 <input type="date" class="form-control" id="fechaCopa" name="fechaCopa"
-                                    value="{{ fecha_copa }}">
+                                    value="{{ ajustes.copa_date.strftime('%Y-%m-%d') if ajustes and ajustes.copa_date else '' }}">
                             </div>
                         </div>
 
@@ -323,7 +327,7 @@
                             <h5>Cupos Disponibles</h5>
                         </div>
                         <div class="form-row">
-                            <div class="col-3 ">
+                            <div class="col-3">
                                 <select class="form-control ml-3" id="deporte" name="deporte"
                                     onchange="mostrarCategorias()">
                                     <option value="" selected>Seleccione un deporte</option>
@@ -339,7 +343,7 @@
                                     <thead>
                                         <tr>
                                             <th>Categoría</th>
-                                            <th>Cupos actuales</th>
+                                            <th>Cupos tomados</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -350,12 +354,13 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Botones de acción -->
+                    <div class="modal-footer d-flex">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary" onclick="guardarCambios()" id="guardarCambiosBtn">Guardar Cambios</button>
+                    </div>
                 </form>
-            </div>
-            <div class="modal-footer d-flex">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="guardarCambios()" id="guardarCambiosBtn"
-                    style="display:none;">Guardar Cambios</button>
             </div>
         </div>
     </div>
@@ -371,13 +376,13 @@
 
         if (deporteSeleccionado && deportesCategorias[deporteSeleccionado]) {
             deportesCategorias[deporteSeleccionado].forEach((item, index) => {
-                const fila = `
+                const fila = `  
                 <tr id="fila${index}">
                     <td>${item.categoria}</td>
-                    <td id="cupos${index}" >${item.cupos}/${item.cupos}</td>
+                    <td id="cupos${index}">${item.cupos_tomados}/${item.cupos_totales}</td>
                     <td class="input-group">
                         <button class="btn btn-warning btn-sm" id="act_cupos_input${index}" onclick="activarInput(${index})">Modificar Cupo</button>
-                        <input type="number" class="form-control cupos-input" id="cuposRestantes${index}" style="display:none" value="${item.cupos}">
+                        <input type="number" class="form-control cupos-input" id="cuposTotales${index}" style="display:none" value="${item.cupos_totales}">
                         <button class="btn btn-success btn-sm" onclick="confirmarCambio(${index})" style="display:none" id="btnConfirmar${index}"><i class="fa fa-check"></i></button>
                         <button class="btn btn-danger btn-sm" onclick="abortarCambio(${index})" style="display:none" id="btnAbortar${index}"><i class="fa fa-times"></i></button>
                     </td>
@@ -389,44 +394,55 @@
     }
 
     function activarInput(index) {
-        document.querySelectorAll("[id^='cuposRestantes']").forEach(el => el.style.display = 'none');
+        document.querySelectorAll("[id^='cuposTotales']").forEach(el => el.style.display = 'none');
         document.querySelectorAll("[id^='btnConfirmar']").forEach(el => el.style.display = 'none');
         document.querySelectorAll("[id^='btnAbortar']").forEach(el => el.style.display = 'none');
         document.querySelectorAll("[id^='act_cupos_input']").forEach(el => el.style.display = 'inline-block');
 
-        document.getElementById(`cuposRestantes${index}`).style.display = 'inline-block';
+        document.getElementById(`cuposTotales${index}`).style.display = 'inline-block';
         document.getElementById(`btnConfirmar${index}`).style.display = 'inline-block';
         document.getElementById(`btnAbortar${index}`).style.display = 'inline-block';
         document.getElementById(`act_cupos_input${index}`).style.display = 'none';
     }
 
     function confirmarCambio(index) {
-        const nuevosCupos = document.getElementById(`cuposRestantes${index}`).value;
+        const nuevosCupos = document.getElementById(`cuposTotales${index}`).value;
         const deporte = document.getElementById('deporte').value;
         const categoria = deportesCategorias[deporte][index].categoria;
-        document.getElementById(`cuposRestantes${index}`).style.display = 'none';
+        document.getElementById(`cuposTotales${index}`).style.display = 'none';
         document.getElementById(`btnConfirmar${index}`).style.display = 'none';
         document.getElementById(`btnAbortar${index}`).style.display = 'none';
         document.getElementById(`act_cupos_input${index}`).style.display = 'inline-block';
 
         // Solo actualizar la tabla visualmente
-        document.getElementById(`cupos${index}`).innerHTML = `${nuevosCupos}/${nuevosCupos}`;
+        document.getElementById(`cupos${index}`).innerHTML = `${deportesCategorias[deporte][index].cupos_tomados}/${nuevosCupos}`;
 
-        // Mostrar el botón de "Guardar Cambios"
-        document.getElementById('guardarCambiosBtn').style.display = 'inline-block';
 
         // Almacenar el cambio para el envío posterior
-        deportesCategorias[deporte][index].cupos = nuevosCupos;
+        deportesCategorias[deporte][index].cupos_totales = nuevosCupos;
     }
 
     function abortarCambio(index) {
-        document.getElementById(`cuposRestantes${index}`).style.display = 'none';
+        document.getElementById(`cuposTotales${index}`).style.display = 'none';
         document.getElementById(`btnConfirmar${index}`).style.display = 'none';
         document.getElementById(`btnAbortar${index}`).style.display = 'none';
         document.getElementById(`act_cupos_input${index}`).style.display = 'inline-block';
     }
 
-    // Función para enviar todos los cambios a la base de datos
+    // Función para manejar el envío del formulario y cerrar el modal
+    document.getElementById('form-cupos').addEventListener('submit', function(event) {
+        event.preventDefault();  // Evitar el envío predeterminado
+
+        // Usamos AJAX para enviar los datos sin recargar la página
+        var formData = new FormData(this);
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '{{ url_for("main.guardar_ajustes") }}', true);
+
+        xhr.send(formData);
+
+        
+    });
+
     async function guardarCambios() {
         const datos = deportesCategorias;
         const response = await fetch('/guardar_cupos', {
@@ -445,7 +461,75 @@
             alert(resultado.error);
         }
     }
-</script>
+    
+    Chart.register(ChartDataLabels);
 
+    const data = {{ graficos | tojson }};    //arreglar sintaxis para evitar errores 
+    
+
+    const categorias = data.categorias;
+    const totales = data.totales;
+
+    // Preparar datos para categorías
+    const deportes = Object.keys(categorias);
+    const categoriasUnicas = [...new Set(Object.values(categorias).flatMap(obj => Object.keys(obj)))];
+
+    const coloresCategorias = {
+        "Masculino mayor": "red",
+        "Masculino menor": "blue",
+        "Femenino mayor": "green",
+        "Femenino menor": "orange"
+    };
+
+    const datasets = categoriasUnicas.map(categoria => ({
+        label: categoria,
+        data: deportes.map(deporte => categorias[deporte][categoria] || 0),
+        backgroundColor: coloresCategorias[categoria] || getRandomColor(), // Asignar colores predefinidos
+    }));
+
+    new Chart(document.getElementById("categoriaChart"), {
+        type: "bar",
+        data: {
+            labels: deportes,
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: "top" },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'top',
+                    color: 'black',
+                    font: { weight: 'bold' },
+                    formatter: (value) => value !== 0 ? value : ''
+                }
+            }
+        }
+    });
+
+    // Preparar datos para el total de cada deporte (Gráfico de pie)
+    new Chart(document.getElementById("totalChart"), {
+        type: "pie",
+        data: {
+            labels: Object.keys(totales),
+            datasets: [{
+                data: Object.values(totales),
+                backgroundColor: Object.keys(totales).map(() => getRandomColor()),
+            }]
+        }
+    });
+
+    // Función para obtener un color aleatorio
+    function getRandomColor() {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+</script>
 
 {% endblock %}
